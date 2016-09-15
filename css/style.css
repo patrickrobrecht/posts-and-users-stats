@@ -1,0 +1,8 @@
+@charset "UTF-8";
+
+.posts-and-users-stats table{border-collapse:collapse;clear:both;}
+.posts-and-users-stats tr:nth-child(2n){background:#ddd;}
+.posts-and-users-stats th,.posts-and-users-stats td{padding:.7em;vertical-align:top;}
+.posts-and-users-stats .number{text-align:right;}
+
+.posts-and-users-stats li{display:inline;}
