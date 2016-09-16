@@ -5,7 +5,7 @@ This WordPress plugin displays statistics about posts and users.
 
 ## How to use this plugin
 
-Just install and the statistics are shown in the admin area as subpages of 'Tools'.
+Just install the plugin and the statistics are shown in the admin area as subpages of 'Tools'.
 
 
 ## Development
@@ -22,8 +22,6 @@ Developer: [Patrick Robrecht](https://patrick-robrecht.de/)
 * posts per taxonomies, i. e. per category, per tag and per custom taxonomy
 * posts per author and type
 * posts per status
- 
 * users per role
 * users timeline
-
 * visualization as a diagram which can be exported as image or PDF
