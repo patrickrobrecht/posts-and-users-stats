@@ -39,9 +39,17 @@
 		$posts_per_year = $wpdb->get_results( "SELECT YEAR(post_date) as year, count(ID) as count
 				FROM {$wpdb->posts}
 				WHERE post_status = 'publish'
-				GROUP BY year", OBJECT_K);
+				GROUP BY year
+				ORDER BY year DESC", OBJECT_K);
 	?>
 	<div>
+		<ul>
+			<li><a href="#monthly"><?php _e( 'Posts per Month', 'posts-and-users-stats' ); ?></a>
+		<?php foreach( $posts_per_year as $year_object ) { ?>
+			<li><a href="#<?php echo $year_object->year; ?>"><?php echo $year_object->year; ?></a></li>
+		<?php } ?>
+		</ul>
+		
 		<div id="chart-monthly"></div>
 		<script>
 		jQuery(function() {
@@ -147,8 +155,13 @@
 		});
 		</script>
 				
-		<h3><?php _e( 'Posts per Month', 'posts-and-users-stats' ); ?></h3>
-		<table class="wp-list-table widefat">
+		<h3 id="monthly"><?php _e( 'Posts per Month', 'posts-and-users-stats' ); ?>
+			<?php posts_and_users_stats_echo_export_button (
+				'csv-monthly',
+				'table-monthly',
+				posts_and_users_stats_get_export_file_name( __('Posts per Month', 'posts-and-users-stats' ) )
+			); ?></h3>
+		<table id="table-monthly" class="wp-list-table widefat">
 			<thead>
 				<tr>
 					<th scope="row"><?php _e( 'Month', 'posts-and-users-stats' ); ?></th>
@@ -166,13 +179,13 @@
 					<?php foreach( range( 1, 12, 1) as $month ) { ?>
 					<td class="number"><?php 
 							$date = date('Y-m', strtotime( $year . '-' . $month . '-1' ) );
-							if ( array_key_exists( $date, $posts_per_month) ) { ?>
-								<a href="<?php echo get_month_link( $year, $month ); ?>"><?php echo $posts_per_month[$date]->count; ?></a>
-						<?php } else {
+							if ( array_key_exists( $date, $posts_per_month) ) {
+								posts_and_users_stats_echo_link( get_month_link( $year, $month ), $posts_per_month[$date]->count );
+							} else {
 								echo 0;
 							} ?></td>
 					<?php } ?>
-					<td class="number"><a href="<?php echo get_year_link( $year ); ?>"><?php echo $year_object->count; ?></a></td>
+					<td class="number"><?php echo posts_and_users_stats_echo_link( get_year_link( $year ), $year_object->count ); ?></td>
 				</tr>
 				<?php } ?>
 			</tbody>
@@ -180,8 +193,13 @@
 		
 		<?php foreach( $posts_per_year as $year_object ) {
 			$year = $year_object->year; ?>
-		<h3 id="<?php echo $year?>"><?php echo __( 'Year', 'posts-and-users-stats' ) . ' ' . $year; ?></h3>
-		<table class="wp-list-table widefat">
+		<h3 id="<?php echo $year?>"><?php echo __( 'Year', 'posts-and-users-stats' ) . ' ' . $year; ?>
+			<?php posts_and_users_stats_echo_export_button (
+				'csv-daily-' . $year,
+				'table-daily-' . $year,
+				posts_and_users_stats_get_export_file_name( __('Posts per Day', 'posts-and-users-stats' ) . '-' . $year )
+			); ?></h3>
+		<table id="table-daily-<?php echo $year?>" class="wp-list-table widefat">
 			<thead>
 				<tr>
 					<th scope="row"><?php _e( 'Month', 'posts-and-users-stats' ); ?></th>
@@ -198,11 +216,11 @@
 					<td class="number"><?php 
 							if ( checkdate( $month, $day, $year ) ) {
 								$date = date('Y-m-d', strtotime( $year . '-' . $month . '-' . $day ) );
-								if ( array_key_exists( $date, $posts_per_date ) ) { ?>
-									<a href="<?php echo get_day_link( $year, $month, $day ); ?>"><?php echo $posts_per_date[$date]->count; ?></a>
-						<?php 	} else {
+								if ( array_key_exists( $date, $posts_per_date ) ) {
+									posts_and_users_stats_echo_link( get_day_link( $year, $month, $day ), $posts_per_date[$date]->count );
+								} else {
 									echo 0;
-								} 
+								}
 							} else {
 								echo '-';
 							} ?></td>
@@ -214,13 +232,12 @@
 					<?php foreach( range( 1, 12, 1) as $month ) { ?>
 					<td class="number"><strong><?php 
 							$date = date('Y-m', strtotime( $year . '-' . $month . '-1' ) );
-							if ( array_key_exists( $date, $posts_per_month) ) { ?>
-								<a href="<?php echo get_month_link( $year, $month ); ?>"><?php echo $posts_per_month[$date]->count; ?></a>
-						<?php } else {
+							if ( array_key_exists( $date, $posts_per_month) ) {
+								posts_and_users_stats_echo_link( get_month_link( $year, $month ), $posts_per_month[$date]->count );
+							} else {
 								echo 0;
 							} ?></strong></td>
 					<?php } ?>
-				</tr>
 				</tr>
 			</tbody>
 		</table>
@@ -247,10 +264,15 @@
 			$headline = sprintf( __( 'Published Posts per %s', 'posts-and-users-stats' ), $taxonomy_label );
 			$terms = get_terms( $taxonomy );
 		?>
-		<h3 id="<?php echo $taxonomy; ?>"><?php echo $headline; ?></h3>
+		<h3 id="<?php echo $taxonomy; ?>"><?php echo $headline; ?>
+			<?php posts_and_users_stats_echo_export_button (
+				'csv-' . $taxonomy,
+				'table-' . $taxonomy,
+				posts_and_users_stats_get_export_file_name( $headline )
+			); ?></h3>
 		<?php if ( is_array( $terms ) && sizeof( $terms ) > 0) { ?>
 		<div id="chart-<?php echo $taxonomy; ?>"></div>
-		<table class="wp-list-table widefat">
+		<table id="table-<?php echo $taxonomy; ?>" class="wp-list-table widefat">
 			<thead>
 				<tr>
 					<th scope="col"><?php echo $taxonomy_label; ?></th>
@@ -348,7 +370,12 @@
 	<div>
 		<div id="chart-authors"></div>
 		<div id="chart-types"></div>
-		<table class="wp-list-table widefat">
+		<h3><?php posts_and_users_stats_echo_export_button (
+				'csv-authors-and-types',
+				'table-authors-and-types',
+				posts_and_users_stats_get_export_file_name( __('Posts per Author and Type', 'posts-and-users-stats' ) )
+			); ?></h3>
+		<table id="table-authors-and-types" class="wp-list-table widefat">
 			<thead>
 				<tr>
 					<th scope="col"><?php _e( 'Author', 'posts-and-users-stats' ); ?></th>
@@ -364,9 +391,9 @@
 				<tr>
 					<td><?php echo $author['name']; ?></td>
 					<?php foreach( $post_types as $post_type ) { ?>
-					<td class="number"><?php if ( $post_type == 'post' ) { ?>
-						<a href="<?php echo get_author_posts_url( $author['ID'] ); ?>"><?php echo $author['post']; ?></a>
-						<?php } else {
+					<td class="number"><?php if ( $post_type == 'post' ) {
+							posts_and_users_stats_echo_link( get_author_posts_url( $author['ID'] ), $author['post'] );
+						} else {
 							echo $author[$post_type]; 
 						} ?></td>
 					<?php } ?>
@@ -477,7 +504,12 @@
 	?>
 	<div>
 		<div id="chart-status"></div>
-		<table class="wp-list-table widefat">
+		<h3><?php posts_and_users_stats_echo_export_button (
+				'csv-status',
+				'table-status',
+				posts_and_users_stats_get_export_file_name( __('Posts per Status', 'posts-and-users-stats' ) )
+			); ?></h3>
+		<table id="table-status" class="wp-list-table widefat">
 			<thead>
 				<tr>
 					<th scope="col"><?php _e( 'Status', 'posts-and-users-stats' ); ?></th>

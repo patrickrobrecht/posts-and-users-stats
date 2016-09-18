@@ -60,10 +60,18 @@ function posts_and_users_stats_register_and_load_scripts() {
 					__FILE__
 			)
 	);
+	wp_register_script(
+			'table-to-csv',
+			plugins_url(
+					'/js/table-to-csv.js',
+					__FILE__
+			)
+	);	
 	
-	wp_enqueue_script( 'jquery' );
+// 	wp_enqueue_script( 'jquery' );
 	wp_enqueue_script( 'highcharts' );
 	wp_enqueue_script( 'highcharts-exporting' );
+	wp_enqueue_script( 'table-to-csv' );
 }
 // Load JavaScript libraries.
 add_action( 'admin_print_scripts', 'posts_and_users_stats_register_and_load_scripts' );
@@ -117,13 +125,53 @@ function posts_and_users_stats_show_users() {
 	}
 }
 
+/**
+ * Returns a file name for the export (without file extension).
+ * 
+ * @param string $name the name of the export
+ * @return string the file name
+ */
 function posts_and_users_stats_get_export_file_name( $name ) {
-	return strtolower( str_replace(' ', '-', get_bloginfo( 'name' ) . '-' . $name ) );
+	$name = strtolower( str_replace(' ', '-', get_bloginfo( 'name' ) . '-' . $name ) );
+	return $name . '-' . date( 'Y-m-d-H-i-s' );
 }
 
+/**
+ * Echo the class attribute of a navigation tab.
+ * 
+ * @param unknown $is_active_tab true if and only if the tab is active
+ */
 function posts_and_users_stats_echo_tab_class( $is_active_tab ) {
 	echo 'nav-tab';
 	if ( $is_active_tab ) {
 		echo ' nav-tab-active';
 	}
 }
+
+/**
+ * Outputs a link to the given URL.
+ * 
+ * @param string $url the URL
+ * @param string|int $text the text of the link
+ */
+function posts_and_users_stats_echo_link( $url, $text ) {
+	echo '<a href="' . $url . '">' . $text . '</a>';
+}
+
+/**
+ * Output the link to a csv export.
+ * 
+ * @param unknown $button_id the ID of the link
+ * @param unknown $table_id the ID of the table to export
+ * @param unknown $filename the file name
+ */
+function posts_and_users_stats_echo_export_button( $button_id, $table_id, $filename ) { ?>
+    <a class="page-title-action" href="#" id="<?php echo $button_id; ?>" role="button"><?php _e( 'Export as CSV File', 'posts-and-users-stats' ); ?></a>
+	<script type='text/javascript'>
+	jQuery(document).ready(function () {
+		jQuery("#<?php echo $button_id; ?>").click(function (event) {
+			exportTableToCSV.apply(this, [jQuery('#<?php echo $table_id; ?>'), '<?php echo $filename; ?>.csv']);
+		});
+	});
+    </script>
+<?php } ?>
