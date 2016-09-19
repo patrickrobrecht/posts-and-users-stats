@@ -257,7 +257,7 @@
 		</ul>
 		
 		<?php foreach( $taxonomies as $taxonomy ) {
-			$taxonomy_label = get_taxonomy( $taxonomy )->labels->name;
+			$taxonomy_label = get_taxonomy( $taxonomy )->labels->singular_name;
 			$headline = sprintf( __( 'Published Posts per %s', 'posts-and-users-stats' ), $taxonomy_label );
 			$terms = get_terms( $taxonomy );
 		?>
@@ -495,7 +495,7 @@
 	<?php } else if ( $selected_tab == 'status' ) {
 		// Get a full list of possible post status.
 		$statuses = get_post_statuses();
-		$statuses['future'] = __( 'Published in the future');
+		$statuses['future'] = __( 'Published in the future', 'posts-and-users-stats' );
 		
 		// Get the number of posts per status.
 		$posts_per_status = wp_count_posts();
