@@ -30,25 +30,7 @@
 		$roles = array_diff( $roles, array( 0 ) ); // removes roles with count = 0
 	?>
 	<div>
-		<h2><?php _e( 'Users per Role', 'posts-and-users-stats' ) ?></h2>
-		<p><?php echo sprintf( __('There are %s total users.', 'posts-and-users-stats' ), $users['total_users'] ); ?></p>
 		<div id="chart-roles"></div>
-		<table class="wp-list-table widefat">
-			<thead>
-				<tr>
-					<th scope="col"><?php _e( 'Role', 'posts-and-users-stats' ); ?></th>
-					<th scope="col"><?php _e( 'Number of users', 'posts-and-users-stats' ); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach( $roles as $role => $count ) { ?>
-					<tr>
-						<td><?php echo $role; ?></td>
-						<td><?php echo $count; ?></td>
-					</tr>
-				<?php } ?>
-			</tbody>
-		</table>
 		<script>
 		jQuery(function() {
 			jQuery('#chart-roles').highcharts({
@@ -76,7 +58,7 @@
 					enabled: false,
 				},
 				series: [ {
-					data: [ <?php foreach( $users['avail_roles'] as $role => $count ) {
+					data: [ <?php foreach( $roles as $role => $count ) {
 						echo $count . ','; 
 						}?> ]
 				} ],
@@ -84,11 +66,34 @@
 					enabled: false	
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( __('Users per Role', 'posts-and-users-stats' ) ); ?>'
+					filename: '<?php echo posts_and_users_stats_get_export_file_name( __( 'Users per Role', 'posts-and-users-stats' ) ); ?>'
 				}
 			});
 		});
 		</script>
+		<h3><?php _e( 'Users per Role', 'posts-and-users-stats' ) ?>
+			<?php posts_and_users_stats_echo_export_button (
+				'csv-users-per-role',
+				'table-users-per-role',
+				posts_and_users_stats_get_export_file_name( __( 'Users per Role', 'posts-and-users-stats' ) )
+			); ?></h3>
+		<p><?php echo sprintf( __( 'There are %s total users.', 'posts-and-users-stats' ), $users['total_users'] ); ?></p>
+		<table id="table-users-per-role" class="wp-list-table widefat">
+			<thead>
+				<tr>
+					<th scope="col"><?php _e( 'Role', 'posts-and-users-stats' ); ?></th>
+					<th scope="col"><?php _e( 'Number of users', 'posts-and-users-stats' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach( $roles as $role => $count ) { ?>
+					<tr>
+						<td><?php echo $role; ?></td>
+						<td><?php echo $count; ?></td>
+					</tr>
+				<?php } ?>
+			</tbody>
+		</table>
 	</div>
 	
 	<?php } else if ( $selected_tab == 'date' ) {
@@ -98,26 +103,10 @@
 				GROUP BY date ASC");
 	?>
 	<div>
-		<div id="chart-registration"></div>
-		<table class="wp-list-table widefat">
-			<thead>
-				<tr>
-					<th><?php _e( 'Date', 'posts-and-users-stats' ); ?></th>
-					<th><?php _e( 'Number of new users', 'posts-and-users-stats' ); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-		<?php foreach( $user_registration_dates as $registration ) { ?>
-				<tr>
-					<td><?php echo $registration->date; ?></td>
-					<td><?php echo $registration->count; ?></td>
-				</tr>
-		<?php } ?>
-			</tbody>
-		</table>
+		<div id="chart-users-date"></div>
 		<script>
 		jQuery(function() {
-			jQuery('#chart-registration').highcharts({
+			jQuery('#chart-users-date').highcharts({
 				chart: {
 					type: 'spline'
 				},
@@ -161,11 +150,33 @@
 					enabled: false	
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( __('User Accounts', 'posts-and-users-stats' ) ); ?>'
+					filename: '<?php echo posts_and_users_stats_get_export_file_name( __( 'Users Accounts', 'posts-and-users-stats' ) ); ?>'
 				}
 			});
 		});
 		</script>
+		<h3><?php _e( 'Users Accounts', 'posts-and-users-stats' ) ?>
+			<?php posts_and_users_stats_echo_export_button (
+				'csv-users-date',
+				'table-users-date',
+				posts_and_users_stats_get_export_file_name( __( 'Users Accounts', 'posts-and-users-stats' ) )
+			); ?></h3>
+		<table id="table-users-date" class="wp-list-table widefat">
+			<thead>
+				<tr>
+					<th><?php _e( 'Date', 'posts-and-users-stats' ); ?></th>
+					<th><?php _e( 'Number of new users', 'posts-and-users-stats' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+		<?php foreach( $user_registration_dates as $registration ) { ?>
+				<tr>
+					<td><?php echo $registration->date; ?></td>
+					<td><?php echo $registration->count; ?></td>
+				</tr>
+		<?php } ?>
+			</tbody>
+		</table>		
 	</div>
 	<?php } ?>
 	<?php $end_time = microtime( true ); ?>

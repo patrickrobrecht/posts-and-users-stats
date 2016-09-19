@@ -242,9 +242,6 @@
 			</tbody>
 		</table>
 		<?php } ?>
-		<script>
-			
-		</script>
 	</div>
 	
 	<?php } else if ($selected_tab == 'taxonomy') {
@@ -264,30 +261,8 @@
 			$headline = sprintf( __( 'Published Posts per %s', 'posts-and-users-stats' ), $taxonomy_label );
 			$terms = get_terms( $taxonomy );
 		?>
-		<h3 id="<?php echo $taxonomy; ?>"><?php echo $headline; ?>
-			<?php posts_and_users_stats_echo_export_button (
-				'csv-' . $taxonomy,
-				'table-' . $taxonomy,
-				posts_and_users_stats_get_export_file_name( $headline )
-			); ?></h3>
 		<?php if ( is_array( $terms ) && sizeof( $terms ) > 0) { ?>
 		<div id="chart-<?php echo $taxonomy; ?>"></div>
-		<table id="table-<?php echo $taxonomy; ?>" class="wp-list-table widefat">
-			<thead>
-				<tr>
-					<th scope="col"><?php echo $taxonomy_label; ?></th>
-					<th scope="col"><?php _e( 'Posts', 'posts-and-users-stats' ); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ( $terms as $term ) { ?>
-				<tr>
-					<td><?php echo $term->name; ?></td>
-					<td class="number"><?php echo $term->count; ?></td>
-				<?php } ?>
-				</tr>
-			</tbody>
-		</table>
 		<script>
 		jQuery(function() {
 			jQuery('#chart-<?php echo $taxonomy; ?>').highcharts({
@@ -328,6 +303,28 @@
 			});
 		});
 		</script>
+		<h3 id="<?php echo $taxonomy; ?>"><?php echo $headline; ?>
+			<?php posts_and_users_stats_echo_export_button (
+				'csv-' . $taxonomy,
+				'table-' . $taxonomy,
+				posts_and_users_stats_get_export_file_name( $headline )
+			); ?></h3>
+		<table id="table-<?php echo $taxonomy; ?>" class="wp-list-table widefat">
+			<thead>
+				<tr>
+					<th scope="col"><?php echo $taxonomy_label; ?></th>
+					<th scope="col"><?php _e( 'Posts', 'posts-and-users-stats' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $terms as $term ) { ?>
+				<tr>
+					<td><?php echo $term->name; ?></td>
+					<td class="number"><?php echo $term->count; ?></td>
+				<?php } ?>
+				</tr>
+			</tbody>
+		</table>		
 		<?php 	} else { // no terms ?>
 		<p><?php echo sprintf( __( 'No entries for %s found.', 'posts-and-users-stats' ), $taxonomy_label ); ?></p>
 		<?php 	}
@@ -370,44 +367,6 @@
 	<div>
 		<div id="chart-authors"></div>
 		<div id="chart-types"></div>
-		<h3><?php posts_and_users_stats_echo_export_button (
-				'csv-authors-and-types',
-				'table-authors-and-types',
-				posts_and_users_stats_get_export_file_name( __('Posts per Author and Type', 'posts-and-users-stats' ) )
-			); ?></h3>
-		<table id="table-authors-and-types" class="wp-list-table widefat">
-			<thead>
-				<tr>
-					<th scope="col"><?php _e( 'Author', 'posts-and-users-stats' ); ?></th>
-					<?php foreach( $post_types as $post_type ) {
-						$type_object = get_post_type_object( $post_type ); ?>
-					<th><?php echo $type_object->label; ?></th>
-					<?php } ?>
-					<th><?php _e( 'All Types', 'posts-and-users-stats' ); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ( $posts_per_author as $author ) { ?>
-				<tr>
-					<td><?php echo $author['name']; ?></td>
-					<?php foreach( $post_types as $post_type ) { ?>
-					<td class="number"><?php if ( $post_type == 'post' ) {
-							posts_and_users_stats_echo_link( get_author_posts_url( $author['ID'] ), $author['post'] );
-						} else {
-							echo $author[$post_type]; 
-						} ?></td>
-					<?php } ?>
-					<td class="number"><strong><?php echo $author['total']; ?></strong></td>
-				</tr>
-				<?php } ?>
-				<tr>
-					<td><strong><?php _e( 'All Authors', 'posts-and-users-stats' ); ?></strong></td>
-					<?php foreach ( $posts_per_type as $type => $count ) { ?>
-					<td class="number"><strong><?php echo $count; ?></strong></td>
-				<?php } ?>
-				</tr>
-			</tbody>
-		</table>
 		<script>
 		jQuery(function() {
 			jQuery('#chart-authors').highcharts({
@@ -492,6 +451,45 @@
 			});
 		});
 		</script>
+		<h3><?php echo __( 'Posts per Author and Type', 'posts-and-users-stats' ); ?>
+			<?php posts_and_users_stats_echo_export_button (
+				'csv-authors-and-types',
+				'table-authors-and-types',
+				posts_and_users_stats_get_export_file_name( __('Posts per Author and Type', 'posts-and-users-stats' ) )
+			); ?></h3>
+		<table id="table-authors-and-types" class="wp-list-table widefat">
+			<thead>
+				<tr>
+					<th scope="col"><?php _e( 'Author', 'posts-and-users-stats' ); ?></th>
+					<?php foreach( $post_types as $post_type ) {
+						$type_object = get_post_type_object( $post_type ); ?>
+					<th><?php echo $type_object->label; ?></th>
+					<?php } ?>
+					<th><?php _e( 'All Types', 'posts-and-users-stats' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $posts_per_author as $author ) { ?>
+				<tr>
+					<td><?php echo $author['name']; ?></td>
+					<?php foreach( $post_types as $post_type ) { ?>
+					<td class="number"><?php if ( $post_type == 'post' ) {
+							posts_and_users_stats_echo_link( get_author_posts_url( $author['ID'] ), $author['post'] );
+						} else {
+							echo $author[$post_type]; 
+						} ?></td>
+					<?php } ?>
+					<td class="number"><strong><?php echo $author['total']; ?></strong></td>
+				</tr>
+				<?php } ?>
+				<tr>
+					<td><strong><?php _e( 'All Authors', 'posts-and-users-stats' ); ?></strong></td>
+					<?php foreach ( $posts_per_type as $type => $count ) { ?>
+					<td class="number"><strong><?php echo $count; ?></strong></td>
+				<?php } ?>
+				</tr>
+			</tbody>
+		</table>		
 	</div>
 	
 	<?php } else if ( $selected_tab == 'status' ) {
@@ -504,27 +502,6 @@
 	?>
 	<div>
 		<div id="chart-status"></div>
-		<h3><?php posts_and_users_stats_echo_export_button (
-				'csv-status',
-				'table-status',
-				posts_and_users_stats_get_export_file_name( __('Posts per Status', 'posts-and-users-stats' ) )
-			); ?></h3>
-		<table id="table-status" class="wp-list-table widefat">
-			<thead>
-				<tr>
-					<th scope="col"><?php _e( 'Status', 'posts-and-users-stats' ); ?></th>
-					<th scope="col"><?php _e( 'Posts', 'posts-and-users-stats' ); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ( $statuses as $status_slug => $status_name ) { ?>
-				<tr>
-					<td><?php echo $status_name; ?></td>
-					<td class="number"><?php echo $posts_per_status->$status_slug; ?></td>
-				</tr>
-				<?php } ?>
-			</tbody>
-		</table>
 		<script>
 		jQuery(function() {
 			jQuery('#chart-status').highcharts({
@@ -565,6 +542,28 @@
 			});
 		});
 		</script>
+		<h3><?php echo __( 'Posts per Status', 'posts-and-users-stats' ); ?>
+			<?php posts_and_users_stats_echo_export_button (
+				'csv-status',
+				'table-status',
+				posts_and_users_stats_get_export_file_name( __('Posts per Status', 'posts-and-users-stats' ) )
+			); ?></h3>
+		<table id="table-status" class="wp-list-table widefat">
+			<thead>
+				<tr>
+					<th scope="col"><?php _e( 'Status', 'posts-and-users-stats' ); ?></th>
+					<th scope="col"><?php _e( 'Posts', 'posts-and-users-stats' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $statuses as $status_slug => $status_name ) { ?>
+				<tr>
+					<td><?php echo $status_name; ?></td>
+					<td class="number"><?php echo $posts_per_status->$status_slug; ?></td>
+				</tr>
+				<?php } ?>
+			</tbody>
+		</table>		
 	</div>
 	<?php } ?>
 	<?php $end_time = microtime( true ); ?>

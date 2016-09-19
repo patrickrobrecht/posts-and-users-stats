@@ -166,7 +166,7 @@ function posts_and_users_stats_echo_link( $url, $text ) {
  * @param unknown $filename the file name
  */
 function posts_and_users_stats_echo_export_button( $button_id, $table_id, $filename ) { ?>
-    <a class="page-title-action" href="#" id="<?php echo $button_id; ?>" role="button"><?php _e( 'Export as CSV File', 'posts-and-users-stats' ); ?></a>
+    <a class="page-title-action" href="#" id="<?php echo $button_id; ?>" role="button"><?php _e( 'Export as CSV', 'posts-and-users-stats' ); ?></a>
 	<script type='text/javascript'>
 	jQuery(document).ready(function () {
 		jQuery("#<?php echo $button_id; ?>").click(function (event) {
