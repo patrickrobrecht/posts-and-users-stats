@@ -24,6 +24,15 @@
 	if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
+ * Load text domain for translation.
+ */
+function posts_and_users_stats_load_plugin_textdomain() {
+	load_plugin_textdomain( 'posts-and-users-stats' );
+}
+// Add text domain during initialization.
+add_action( 'init', 'posts_and_users_stats_load_plugin_textdomain' );
+	
+/**
  * Register and load the style sheet.
  */
 function posts_and_users_stats_register_and_load_css() {
