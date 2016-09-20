@@ -2,10 +2,13 @@
 	// Exit if accessed directly.
 	if ( ! defined( 'ABSPATH' ) ) exit;
 
+	// Define tabs.
 	$tabs = array(
 			'role' 		=> __( 'Users per Role', 'posts-and-users-stats' ),
 			'date'		=> __( 'Users Accounts', 'posts-and-users-stats' ),
 	);
+	
+	// Get the selected tab.
 	if ( isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $tabs ) ) {
 		$selected_tab = $_GET['tab'];
 	} else {

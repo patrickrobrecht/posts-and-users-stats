@@ -2,17 +2,23 @@
 	// Exit if accessed directly.
 	if ( ! defined( 'ABSPATH' ) ) exit;
 	
+	// Define tabs.
 	$tabs = array(
 			'date' 		=> __( 'Posts per Publication Date', 'posts-and-users-stats' ),
 			'taxonomy'	=> __( 'Posts per Category and Tag', 'posts-and-users-stats' ),
-			'author'	=> __( 'Posts per Author and Type', 'posts-and-users-stats' ),
+			'author'	=> __( 'Posts per Author and Post Type', 'posts-and-users-stats' ),
 			'status'	=> __( 'Posts per Status', 'posts-and-users-stats' ),
 	);
+	
+	// Get the selected tab.
 	if ( isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $tabs ) ) {
 		$selected_tab = $_GET['tab'];
 	} else {
 		$selected_tab = 'date';
 	}
+	
+	// Get the list of all post types, including custom post types, but without revisions and menu items.
+	$post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' ) );
 	
 	$start_time = microtime( true );
 ?>
@@ -28,25 +34,66 @@
 	
 	<?php if ( $selected_tab == 'date' ) {
 		global $wpdb;
-		$posts_per_date = $wpdb->get_results( "SELECT DATE(post_date) as date, count(ID) as count
+		
+		// Get the selected post type.
+		if ( isset( $_POST['type'] ) && in_array( $_POST['type'], $post_types ) ) {
+			$selected_post_type = $_POST['type'];
+		} else {
+			$selected_post_type = '';
+		}
+		
+		// Get the numbers of posts per date, month, year.
+		if ( $selected_post_type == '' ) {
+			$post_type_query = "";
+			$selected_post_type_name = __( 'Content', 'posts-and-users-stats' );
+		} else {
+			$post_type_query = " AND post_type = '" . $selected_post_type . "'";
+			$selected_post_type_object = get_post_type_object( $selected_post_type );
+			$selected_post_type_labels = $selected_post_type_object->labels;
+			$selected_post_type_name = $selected_post_type_object->label;
+		}
+		
+		$posts_per_date = $wpdb->get_results(
+				"SELECT DATE(post_date) as date, count(ID) as count
 				FROM {$wpdb->posts}
-				WHERE post_status = 'publish'
-				GROUP BY date", OBJECT_K);
-		$posts_per_month = $wpdb->get_results( "SELECT DATE_FORMAT(post_date, '%Y-%m') as month, count(ID) as count
+				WHERE post_status = 'publish'" . $post_type_query .
+				"GROUP BY date", OBJECT_K);
+		$posts_per_month = $wpdb->get_results(
+				"SELECT DATE_FORMAT(post_date, '%Y-%m') as month, count(ID) as count
 				FROM {$wpdb->posts}
-				WHERE post_status = 'publish'
-				GROUP BY month", OBJECT_K);
-		$posts_per_year = $wpdb->get_results( "SELECT YEAR(post_date) as year, count(ID) as count
+				WHERE post_status = 'publish'" . $post_type_query .
+				"GROUP BY month", OBJECT_K);
+		$posts_per_year = $wpdb->get_results(
+				"SELECT YEAR(post_date) as year, count(ID) as count
 				FROM {$wpdb->posts}
-				WHERE post_status = 'publish'
-				GROUP BY year
+				WHERE post_status = 'publish'". $post_type_query .
+				"GROUP BY year
 				ORDER BY year DESC", OBJECT_K);
+		
+		$per_date_string = sprintf( __( '%s per Date', 'posts-and-users-stats' ), $selected_post_type_name );
+		$per_month_string = sprintf( __( '%s per Month', 'posts-and-users-stats' ), $selected_post_type_name );
 	?>
 	<div>
+		<form method="POST" action="">
+			<fieldset>
+				<legend><?php _e( 'With a selection only the posts defined are counted, otherwise any content.', 'posts-and-users-stats' ); ?></legend>
+				<select id="type" name="type">
+					<option value="content" <?php selected( $selected_post_type, '', true ); ?>><?php _e( 'all post types', 'posts-and-users-stats' ); ?></option>
+					<?php foreach ( $post_types as $post_type ) { ?>
+					<option value="<?php echo $post_type; ?>" <?php selected( $selected_post_type, $post_type, true ); ?>><?php echo get_post_type_object( $post_type )->label; ?></option>
+					<?php } ?>
+				</select>
+				<button type="submit" class="button-secondary" ><?php _e( 'Select', 'posts-and-users-stats' ); ?></button>
+			</fieldset>
+		</form>
+		
+		<?php if ( !is_array( $posts_per_date ) || sizeof( $posts_per_date ) <= 0) { ?>
+		<p><?php echo $selected_post_type_labels->not_found ?>
+		<?php } else { ?>
 		<ul>
-			<li><a href="#monthly"><?php _e( 'Posts per Month', 'posts-and-users-stats' ); ?></a>
+			<li><a href="#monthly"><?php echo $per_month_string; ?></a>
 		<?php foreach( $posts_per_year as $year_object ) { ?>
-			<li><a href="#<?php echo $year_object->year; ?>"><?php echo $year_object->year; ?></a></li>
+			<li><a href="#<?php echo $year_object->year; ?>"><?php echo __( 'Year', 'posts-and-users-stats' ) . ' ' . $year_object->year; ?></a></li>
 		<?php } ?>
 		</ul>
 		
@@ -58,7 +105,7 @@
 					type: 'column'
 				},
 				title: {
-					text: '<?php _e( 'Posts per Month', 'posts-and-users-stats' ); ?>'
+					text: '<?php echo $per_month_string; ?>'
 				},
 				subtitle: {
 					text: '<?php echo get_bloginfo( 'name' ); ?>'
@@ -66,10 +113,10 @@
 				xAxis: {
 					type: 'datetime',
 					dateTimeLabelFormats: {
-						month: '%m \'%y',
+						month: '%m/%Y',
 					},
 		            title: {
-		                text: '<?php _e( 'Date', 'posts-and-users-stats' ); ?>'
+		                text: '<?php _e( 'Month', 'posts-and-users-stats' ); ?>'
 		            }
 				},
 				yAxis: {
@@ -94,7 +141,7 @@
 					enabled: false	
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( __('Posts per Month', 'posts-and-users-stats' ) ); ?>'
+					filename: '<?php echo posts_and_users_stats_get_export_file_name( $per_month_string ); ?>'
 				}
 			});
 		});
@@ -108,7 +155,7 @@
 					type: 'column'
 				},
 				title: {
-					text: '<?php _e( 'Posts per Date', 'posts-and-users-stats' ); ?>'
+					text: '<?php echo $per_date_string; ?>'
 				},
 				subtitle: {
 					text: '<?php echo get_bloginfo( 'name' ); ?>'
@@ -149,17 +196,17 @@
 					enabled: false	
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( __('Posts per Month', 'posts-and-users-stats' ) ); ?>'
+					filename: '<?php echo posts_and_users_stats_get_export_file_name( $per_date_string ); ?>'
 				}
 			});
 		});
 		</script>
 				
-		<h3 id="monthly"><?php _e( 'Posts per Month', 'posts-and-users-stats' ); ?>
-			<?php posts_and_users_stats_echo_export_button (
+		<h3 id="monthly"><?php echo $per_month_string; ?>
+			<?php posts_and_users_stats_echo_export_button(
 				'csv-monthly',
 				'table-monthly',
-				posts_and_users_stats_get_export_file_name( __('Posts per Month', 'posts-and-users-stats' ) )
+				posts_and_users_stats_get_export_file_name( $per_month_string )
 			); ?></h3>
 		<table id="table-monthly" class="wp-list-table widefat">
 			<thead>
@@ -194,10 +241,10 @@
 		<?php foreach( $posts_per_year as $year_object ) {
 			$year = $year_object->year; ?>
 		<h3 id="<?php echo $year?>"><?php echo __( 'Year', 'posts-and-users-stats' ) . ' ' . $year; ?>
-			<?php posts_and_users_stats_echo_export_button (
+			<?php posts_and_users_stats_echo_export_button(
 				'csv-daily-' . $year,
 				'table-daily-' . $year,
-				posts_and_users_stats_get_export_file_name( __('Posts per Day', 'posts-and-users-stats' ) . '-' . $year )
+				posts_and_users_stats_get_export_file_name( $per_date_string . '-' . $year )
 			); ?></h3>
 		<table id="table-daily-<?php echo $year?>" class="wp-list-table widefat">
 			<thead>
@@ -241,7 +288,8 @@
 				</tr>
 			</tbody>
 		</table>
-		<?php } ?>
+		<?php 	}
+			} // end if ?>
 	</div>
 	
 	<?php } else if ($selected_tab == 'taxonomy') {
@@ -252,16 +300,19 @@
 	<div>
 		<ul>
 		<?php foreach( $taxonomies as $taxonomy ) { ?>
-			<li><a href="#<?php echo $taxonomy; ?>"><?php echo $taxonomy_label = get_taxonomy( $taxonomy )->labels->name; ?></a></li>
+			<li><a href="#<?php echo $taxonomy; ?>"><?php echo get_taxonomy( $taxonomy )->labels->name; ?></a></li>
 		<?php } ?>
 		</ul>
 		
 		<?php foreach( $taxonomies as $taxonomy ) {
-			$taxonomy_label = get_taxonomy( $taxonomy )->labels->singular_name;
-			$headline = sprintf( __( 'Published Posts per %s', 'posts-and-users-stats' ), $taxonomy_label );
+			$taxonomy_labels = get_taxonomy( $taxonomy )->labels;
+			$headline = sprintf( __( 'Published Posts per %s', 'posts-and-users-stats' ), $taxonomy_labels->singular_name );
 			$terms = get_terms( $taxonomy );
 		?>
-		<?php if ( is_array( $terms ) && sizeof( $terms ) > 0) { ?>
+		<?php if ( !is_array( $terms ) || sizeof( $terms ) <= 0) { ?>
+		<h3 id="<?php echo $taxonomy; ?>"><?php echo $headline; ?></h3>
+		<p><?php echo $taxonomy_labels->not_found; ?></p>
+		<?php } else { ?>
 		<div id="chart-<?php echo $taxonomy; ?>"></div>
 		<script>
 		jQuery(function() {
@@ -312,7 +363,7 @@
 		<table id="table-<?php echo $taxonomy; ?>" class="wp-list-table widefat">
 			<thead>
 				<tr>
-					<th scope="col"><?php echo $taxonomy_label; ?></th>
+					<th scope="col"><?php echo $taxonomy_labels->singular_name; ?></th>
 					<th scope="col"><?php _e( 'Posts', 'posts-and-users-stats' ); ?></th>
 				</tr>
 			</thead>
@@ -324,18 +375,13 @@
 				<?php } ?>
 				</tr>
 			</tbody>
-		</table>		
-		<?php 	} else { // no terms ?>
-		<p><?php echo sprintf( __( 'No entries for %s found.', 'posts-and-users-stats' ), $taxonomy_label ); ?></p>
+		</table>	
 		<?php 	}
 			} 
 		?>
 	</div>
 	
 	<?php } else if ( $selected_tab == 'author' ) {
-		// Get the list of all post types, including custom post types, but without revisions and menu items.
-		$post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' ) );
-		
 		// Get the total number of published posts per post type.
 		$posts_per_type = array();
 		$total = 0;
@@ -455,7 +501,7 @@
 			<?php posts_and_users_stats_echo_export_button (
 				'csv-authors-and-types',
 				'table-authors-and-types',
-				posts_and_users_stats_get_export_file_name( __('Posts per Author and Type', 'posts-and-users-stats' ) )
+				posts_and_users_stats_get_export_file_name( __('Posts per Author and Post Type', 'posts-and-users-stats' ) )
 			); ?></h3>
 		<table id="table-authors-and-types" class="wp-list-table widefat">
 			<thead>
@@ -465,7 +511,7 @@
 						$type_object = get_post_type_object( $post_type ); ?>
 					<th><?php echo $type_object->label; ?></th>
 					<?php } ?>
-					<th><?php _e( 'All Types', 'posts-and-users-stats' ); ?></th>
+					<th><?php _e( 'all post types', 'posts-and-users-stats' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -483,7 +529,7 @@
 				</tr>
 				<?php } ?>
 				<tr>
-					<td><strong><?php _e( 'All Authors', 'posts-and-users-stats' ); ?></strong></td>
+					<td><strong><?php _e( 'all authors', 'posts-and-users-stats' ); ?></strong></td>
 					<?php foreach ( $posts_per_type as $type => $count ) { ?>
 					<td class="number"><strong><?php echo $count; ?></strong></td>
 				<?php } ?>

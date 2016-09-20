@@ -8,14 +8,20 @@ This WordPress plugin displays statistics about posts and users.
 Just install the plugin and the statistics are shown in the admin area as subpages of 'Tools'.
 
 
-## Development
+## Development and Translation
 
 You can report issues or suggest new features in the [Issue Tracker](https://github.com/patrickrobrecht/posts-and-users-stats/issues). Pull requests are also welcome!
+
+If you speak languages other than English and German, you can contribute to the [translation of this plugin](https://translate.wordpress.org/projects/wp-plugins/posts-and-users-stats).
 
 Developer: [Patrick Robrecht](https://patrick-robrecht.de/)
 
 
 ## Changelog
+
+### Version 0.2
+* CSV export for all table data (client-side via JavaScript)
+* posts per publication date: selection of one post type possible
 
 ### Version 0.1
 * posts per publication date
