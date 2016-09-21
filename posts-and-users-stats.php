@@ -3,7 +3,7 @@
 	Plugin Name: Posts and Users Stats
 	Plugin URI: https://patrick-robrecht.de/wordpress/
 	Description: Statistics about the number of posts and users
-	Version: 0.2
+	Version: 0.3
 	Author: Patrick Robrecht
 	Author URI: https://patrick-robrecht.de/
 	License: GPLv2 or later

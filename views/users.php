@@ -91,7 +91,7 @@
 			<tbody>
 				<?php foreach( $roles as $role => $count ) { ?>
 					<tr>
-						<td><?php echo $role; ?></td>
+						<td><?php echo translate_user_role( $role ); ?></td>
 						<td><?php echo $count; ?></td>
 					</tr>
 				<?php } ?>
@@ -101,7 +101,8 @@
 	
 	<?php } else if ( $selected_tab == 'date' ) {
 		global $wpdb;
-		$user_registration_dates = $wpdb->get_results( "SELECT DATE(user_registered) AS date, count(*) as count
+		$user_registration_dates = $wpdb->get_results(
+				"SELECT DATE(user_registered) AS date, count(*) as count
 				FROM " . $wpdb->prefix . "users
 				GROUP BY date ASC");
 	?>

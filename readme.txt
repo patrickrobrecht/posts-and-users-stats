@@ -3,23 +3,23 @@ Contributors: patrickrobrecht
 Tags: dashboard, statistics
 Requires at least: 4.4
 Tested up to: 4.6.1
-Stable tag: 0.2
+Stable tag: 0.3
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Statistics about the number of posts and users 
+Statistics about the number of posts and users, provided as diagrams, tables and csv export.
 
 
 == Description ==
-Posts and Users Stats offers statistics about the content and the users of the WordPress installation:
+Posts and Users Stats offers statistics about the content and the users of a WordPress installation:
 
-* posts per publication date
-* posts per taxonomies, i. e. per category, per tag and per custom taxonomies
-* posts per author and type
-* posts per status
-* users per role
-* users timeline
-* visualization as a diagram which can be exported as image or PDF
+* Posts per Publication Date
+* Posts per Taxonomies, i. e. per category, per tag and per custom taxonomies
+* Posts per Author and Type
+* Posts per Status
+* Users per Role
+* Users over Time
+* Diagrams which can be exported as image or PDF
 * CSV export
 
 == Installation ==
@@ -27,7 +27,7 @@ Posts and Users Stats offers statistics about the content and the users of the W
 2. Search for *Posts and Users Stats* and install it
 	(alternative: Download the zip file from wordpress.org and upload the files to the `/wp-content/plugins/` directory).
 3. Activate the plugin in the WordPress Plugins Area.
-4. See the stastics in the admin area: *Posts Statistics* and *Users Statistics* are subpages of *Tools*.
+4. See the *Posts Statistics* and *Users Statistics*, subpages of *Tools*.
 
 
 == Frequently Asked Questions ==
@@ -35,11 +35,16 @@ Posts and Users Stats offers statistics about the content and the users of the W
 
 == Screenshots ==
 
-
+1. Posts per Publication Date
+2. Posts per Taxonomies, i. e. per category, per tag and per custom taxonomies
+3. Posts per Author and Type
+4. Posts per Status
+5. Users per Role
+6. Users over Time
 
 == Changelog ==
 
-Please see [the changelog at GitHub](https://github.com/patrickrobrecht/posts-and-users-stats#changelog) for the changelog.
+If interested, please check up the [changelog at GitHub](https://github.com/patrickrobrecht/posts-and-users-stats#changelog).
 
 
 == Upgrade Notice ==

@@ -19,6 +19,9 @@ Developer: [Patrick Robrecht](https://patrick-robrecht.de/)
 
 ## Changelog
 
+### Version 0.3
+* improved styles and readme.txt documentation
+
 ### Version 0.2
 * CSV export for all table data (client-side via JavaScript)
 * posts per publication date: selection of one post type possible
