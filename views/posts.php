@@ -73,20 +73,19 @@
 		$per_date_string = sprintf( __( '%s per Date', 'posts-and-users-stats' ), $selected_post_type_name );
 		$per_month_string = sprintf( __( '%s per Month', 'posts-and-users-stats' ), $selected_post_type_name );
 	?>
-	<div>
-		<form method="POST" action="">
-			<fieldset>
-				<legend><?php _e( 'With a selection only the posts defined are counted, otherwise any content.', 'posts-and-users-stats' ); ?></legend>
-				<select id="type" name="type">
-					<option value="content" <?php selected( $selected_post_type, '', true ); ?>><?php _e( 'all post types', 'posts-and-users-stats' ); ?></option>
-					<?php foreach ( $post_types as $post_type ) { ?>
-					<option value="<?php echo $post_type; ?>" <?php selected( $selected_post_type, $post_type, true ); ?>><?php echo get_post_type_object( $post_type )->label; ?></option>
-					<?php } ?>
-				</select>
-				<button type="submit" class="button-secondary" ><?php _e( 'Select', 'posts-and-users-stats' ); ?></button>
-			</fieldset>
-		</form>
-		
+	<form method="POST" action="">
+		<fieldset>
+			<legend><?php _e( 'With a selection only the posts defined are counted, otherwise any content.', 'posts-and-users-stats' ); ?></legend>
+			<select id="type" name="type">
+				<option value="content" <?php selected( $selected_post_type, '', true ); ?>><?php _e( 'all post types', 'posts-and-users-stats' ); ?></option>
+				<?php foreach ( $post_types as $post_type ) { ?>
+				<option value="<?php echo $post_type; ?>" <?php selected( $selected_post_type, $post_type, true ); ?>><?php echo get_post_type_object( $post_type )->label; ?></option>
+				<?php } ?>
+			</select>
+			<button type="submit" class="button-secondary" ><?php _e( 'Select', 'posts-and-users-stats' ); ?></button>
+		</fieldset>
+	</form>
+	<nav>
 		<?php if ( !is_array( $posts_per_date ) || sizeof( $posts_per_date ) <= 0) { ?>
 		<p><?php echo $selected_post_type_labels->not_found ?>
 		<?php } else { ?>
@@ -96,8 +95,9 @@
 			<li><a href="#<?php echo $year_object->year; ?>"><?php echo __( 'Year', 'posts-and-users-stats' ) . ' ' . $year_object->year; ?></a></li>
 		<?php } ?>
 		</ul>
-		
-		<div id="chart-monthly"></div>
+	</nav>	
+	<section>	
+		<div id="chart-monthly" class="chart"></div>
 		<script>
 		jQuery(function() {
 			jQuery('#chart-monthly').highcharts({
@@ -147,7 +147,7 @@
 		});
 		</script>
 		
-		<div id="chart-daily"></div>
+		<div id="chart-daily" class="chart"></div>
 		<script>
 		jQuery(function() {
 			jQuery('#chart-daily').highcharts({
@@ -201,7 +201,6 @@
 			});
 		});
 		</script>
-				
 		<h3 id="monthly"><?php echo $per_month_string; ?>
 			<?php posts_and_users_stats_echo_export_button(
 				'csv-monthly',
@@ -237,9 +236,10 @@
 				<?php } ?>
 			</tbody>
 		</table>
-		
+	</section>	
 		<?php foreach( $posts_per_year as $year_object ) {
 			$year = $year_object->year; ?>
+	<section>
 		<h3 id="<?php echo $year?>"><?php echo __( 'Year', 'posts-and-users-stats' ) . ' ' . $year; ?>
 			<?php posts_and_users_stats_echo_export_button(
 				'csv-daily-' . $year,
@@ -288,32 +288,35 @@
 				</tr>
 			</tbody>
 		</table>
+	</section>
 		<?php 	}
 			} // end if ?>
-	</div>
 	
 	<?php } else if ($selected_tab == 'taxonomy') {
 		// Get the list of all taxonomies except nav_menu and link_category
 		$taxonomies = get_taxonomies();
 		$taxonomies = array_diff( $taxonomies, array( 'nav_menu', 'link_category' ) );
 	?>
-	<div>
+	<nav>
 		<ul>
 		<?php foreach( $taxonomies as $taxonomy ) { ?>
 			<li><a href="#<?php echo $taxonomy; ?>"><?php echo get_taxonomy( $taxonomy )->labels->name; ?></a></li>
 		<?php } ?>
 		</ul>
-		
+	</nav>
 		<?php foreach( $taxonomies as $taxonomy ) {
 			$taxonomy_labels = get_taxonomy( $taxonomy )->labels;
 			$headline = sprintf( __( 'Published Posts per %s', 'posts-and-users-stats' ), $taxonomy_labels->singular_name );
 			$terms = get_terms( $taxonomy );
 		?>
 		<?php if ( !is_array( $terms ) || sizeof( $terms ) <= 0) { ?>
+	<section>
 		<h3 id="<?php echo $taxonomy; ?>"><?php echo $headline; ?></h3>
 		<p><?php echo $taxonomy_labels->not_found; ?></p>
+	</section>
 		<?php } else { ?>
-		<div id="chart-<?php echo $taxonomy; ?>"></div>
+	<section>
+		<div id="chart-<?php echo $taxonomy; ?>" class="chart"></div>
 		<script>
 		jQuery(function() {
 			jQuery('#chart-<?php echo $taxonomy; ?>').highcharts({
@@ -341,6 +344,7 @@
 					enabled: false,
 				},
 				series: [ {
+					name: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
 					data: [ <?php foreach( $terms as $term ) {
 						echo $term->count . ','; 
 						}?> ]
@@ -375,11 +379,11 @@
 				<?php } ?>
 				</tr>
 			</tbody>
-		</table>	
+		</table>
+	</section>
 		<?php 	}
 			} 
 		?>
-	</div>
 	
 	<?php } else if ( $selected_tab == 'author' ) {
 		// Get the total number of published posts per post type.
@@ -410,9 +414,9 @@
 			array_push( $posts_per_author, $user_data );
 		}
 	?>
-	<div>
-		<div id="chart-authors"></div>
-		<div id="chart-types"></div>
+	<section>
+		<div id="chart-authors" class="chart"></div>
+		<div id="chart-types" class="chart"></div>
 		<script>
 		jQuery(function() {
 			jQuery('#chart-authors').highcharts({
@@ -536,7 +540,7 @@
 				</tr>
 			</tbody>
 		</table>		
-	</div>
+	</section>
 	
 	<?php } else if ( $selected_tab == 'status' ) {
 		// Get a full list of possible post status.
@@ -546,8 +550,8 @@
 		// Get the number of posts per status.
 		$posts_per_status = wp_count_posts();
 	?>
-	<div>
-		<div id="chart-status"></div>
+	<section>
+		<div id="chart-status" class="chart"></div>
 		<script>
 		jQuery(function() {
 			jQuery('#chart-status').highcharts({
@@ -575,6 +579,7 @@
 					enabled: false,
 				},
 				series: [ {
+					name: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
 					data: [ <?php foreach( $statuses as $status_slug => $status_name ) {
 						echo $posts_per_status->$status_slug . ','; 
 						}?> ]
@@ -610,7 +615,7 @@
 				<?php } ?>
 			</tbody>
 		</table>		
-	</div>
+	</section>
 	<?php } ?>
 	<?php $end_time = microtime( true ); ?>
 	<p><?php echo sprintf( __( 'Statistics generated in %s seconds.', 'posts-and-users-stats' ), number_format_i18n( $end_time - $start_time, 2 ) ); ?></p>

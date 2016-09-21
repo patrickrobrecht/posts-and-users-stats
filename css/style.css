@@ -1,8 +1,10 @@
 @charset "UTF-8";
 
-.posts-and-users-stats legend{margin:.5em 0;font-weight:bold;}
+.posts-and-users-stats nav li{display:inline;}
+.posts-and-users-stats section{margin-bottom:3em;}
 
-.posts-and-users-stats li{display:inline;}
+.posts-and-users-stats legend{margin:.5em 0;font-weight:bold;}
+.posts-and-users-stats .chart{margin:1em 0;}
 
 .posts-and-users-stats table{border-collapse:collapse;clear:both;}
 .posts-and-users-stats tr:nth-child(2n){background:#ddd;}

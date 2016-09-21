@@ -5,7 +5,7 @@
 	// Define tabs.
 	$tabs = array(
 			'role' 		=> __( 'Users per Role', 'posts-and-users-stats' ),
-			'date'		=> __( 'Users Accounts', 'posts-and-users-stats' ),
+			'date'		=> __( 'Users over Time', 'posts-and-users-stats' ),
 	);
 	
 	// Get the selected tab.
@@ -32,8 +32,8 @@
 		$roles = $users['avail_roles'];
 		$roles = array_diff( $roles, array( 0 ) ); // removes roles with count = 0
 	?>
-	<div>
-		<div id="chart-roles"></div>
+	<section>
+		<div id="chart-roles" class="chart"></div>
 		<script>
 		jQuery(function() {
 			jQuery('#chart-roles').highcharts({
@@ -97,7 +97,7 @@
 				<?php } ?>
 			</tbody>
 		</table>
-	</div>
+	</section>
 	
 	<?php } else if ( $selected_tab == 'date' ) {
 		global $wpdb;
@@ -105,8 +105,8 @@
 				FROM " . $wpdb->prefix . "users
 				GROUP BY date ASC");
 	?>
-	<div>
-		<div id="chart-users-date"></div>
+	<section>
+		<div id="chart-users-date" class="chart"></div>
 		<script>
 		jQuery(function() {
 			jQuery('#chart-users-date').highcharts({
@@ -114,7 +114,7 @@
 					type: 'spline'
 				},
 				title: {
-					text: '<?php _e( 'Users Accounts', 'posts-and-users-stats' ); ?>'
+					text: '<?php _e( 'Users over Time', 'posts-and-users-stats' ); ?>'
 				},
 				subtitle: {
 					text: '<?php echo get_bloginfo( 'name' ); ?>'
@@ -125,12 +125,12 @@
 						month: '%m \'%y',
 					},
 		            title: {
-		                text: '<?php _e( 'Users Accounts', 'posts-and-users-stats' ); ?>'
+		                text: '<?php _e( 'Users over Time', 'posts-and-users-stats' ); ?>'
 		            }
 				},
 				yAxis: {
 					title: {
-						text: '<?php _e( 'Users Accounts', 'posts-and-users-stats' ); ?>',
+						text: '<?php _e( 'Users', 'posts-and-users-stats' ); ?>',
 						min: 0
 					}
 				},
@@ -153,16 +153,16 @@
 					enabled: false	
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( __( 'Users Accounts', 'posts-and-users-stats' ) ); ?>'
+					filename: '<?php echo posts_and_users_stats_get_export_file_name( __( 'Users over Time', 'posts-and-users-stats' ) ); ?>'
 				}
 			});
 		});
 		</script>
-		<h3><?php _e( 'Users Accounts', 'posts-and-users-stats' ) ?>
+		<h3><?php _e( 'Users over Time', 'posts-and-users-stats' ) ?>
 			<?php posts_and_users_stats_echo_export_button (
 				'csv-users-date',
 				'table-users-date',
-				posts_and_users_stats_get_export_file_name( __( 'Users Accounts', 'posts-and-users-stats' ) )
+				posts_and_users_stats_get_export_file_name( __( 'Users over Time', 'posts-and-users-stats' ) )
 			); ?></h3>
 		<table id="table-users-date" class="wp-list-table widefat">
 			<thead>
@@ -180,7 +180,7 @@
 		<?php } ?>
 			</tbody>
 		</table>		
-	</div>
+	</section>
 	<?php } ?>
 	<?php $end_time = microtime( true ); ?>
 	<p><?php echo sprintf( __( 'Statistics generated in %s seconds.', 'posts-and-users-stats' ), number_format_i18n( $end_time - $start_time, 2 ) ); ?></p>
