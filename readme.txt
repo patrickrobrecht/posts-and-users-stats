@@ -15,7 +15,7 @@ Posts and Users Stats offers statistics about the content and the users of a Wor
 
 * Posts per Publication Date
 * Posts per Taxonomies, i. e. per category, per tag and per custom taxonomies
-* Posts per Author and Type
+* Posts per Author and Post Type
 * Posts per Status
 * Users per Role
 * Users over Time
@@ -37,7 +37,7 @@ Posts and Users Stats offers statistics about the content and the users of a Wor
 
 1. Posts per Publication Date
 2. Posts per Taxonomies, i. e. per category, per tag and per custom taxonomies
-3. Posts per Author and Type
+3. Posts per Author and Post Type
 4. Posts per Status
 5. Users per Role
 6. Users over Time

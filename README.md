@@ -29,7 +29,7 @@ Developer: [Patrick Robrecht](https://patrick-robrecht.de/)
 ### Version 0.1
 * posts per publication date
 * posts per taxonomies, i. e. per category, per tag and per custom taxonomy
-* posts per author and type
+* posts per author and post type
 * posts per status
 * users per role
 * users timeline

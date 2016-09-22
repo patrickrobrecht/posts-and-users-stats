@@ -501,7 +501,7 @@
 			});
 		});
 		</script>
-		<h3><?php echo __( 'Posts per Author and Type', 'posts-and-users-stats' ); ?>
+		<h3><?php echo __( 'Posts per Author and Post Type', 'posts-and-users-stats' ); ?>
 			<?php posts_and_users_stats_echo_export_button (
 				'csv-authors-and-types',
 				'table-authors-and-types',
