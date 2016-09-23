@@ -47,10 +47,10 @@
 					text: '<?php echo get_bloginfo( 'name' ); ?>'
 				},
 				xAxis: {
-					categories: [ 
+					categories: [
 						<?php foreach( $roles as $role => $count ) {
 							echo "'" . $role . "',";
-						}?> ],
+						} ?> ],
 				},
 				yAxis: {
 					title: {
@@ -63,11 +63,11 @@
 				},
 				series: [ {
 					data: [ <?php foreach( $roles as $role => $count ) {
-						echo $count . ','; 
-						}?> ]
+								echo $count . ',';
+							} ?> ]
 				} ],
 				credits: {
-					enabled: false	
+					enabled: false
 				},
 				exporting: {
 					filename: '<?php echo posts_and_users_stats_get_export_file_name( __( 'Users per Role', 'posts-and-users-stats' ) ); ?>'
@@ -105,7 +105,9 @@
 		$user_registration_dates = $wpdb->get_results(
 				"SELECT DATE(user_registered) AS date, count(*) as count
 				FROM " . $wpdb->prefix . "users
-				GROUP BY date ASC");
+				GROUP BY date ASC",
+				OBJECT_K
+		);
 	?>
 	<section>
 		<div id="chart-users-date" class="chart"></div>
@@ -148,11 +150,11 @@
 							$month = date( 'm', $date );
 							$day = date( 'd', $date );
 							$users += $registration->count;
-							echo '[Date.UTC(' . $year . ',' . ( $month - 1 ) . ',' . $day . '), ' . $users . '], '; 
-						}?> ]
+							echo '[Date.UTC(' . $year . ',' . ( $month - 1 ) . ',' . $day . '), ' . $users . '], ';
+						} ?> ]
 				} ],
 				credits: {
-					enabled: false	
+					enabled: false
 				},
 				exporting: {
 					filename: '<?php echo posts_and_users_stats_get_export_file_name( __( 'Users over Time', 'posts-and-users-stats' ) ); ?>'
@@ -181,7 +183,7 @@
 				</tr>
 		<?php } ?>
 			</tbody>
-		</table>		
+		</table>
 	</section>
 	<?php } ?>
 	<?php $end_time = microtime( true ); ?>

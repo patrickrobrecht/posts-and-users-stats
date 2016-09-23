@@ -156,8 +156,7 @@ function posts_and_users_stats_show_users() {
  * @return string the file name
  */
 function posts_and_users_stats_get_export_file_name( $name ) {
-	return str_replace( ' ', '-', get_bloginfo( 'name' ) . '-' . $name ) 
-		. '-' . date( 'Y-m-d-H-i-s' );
+	return str_replace( ' ', '-', get_bloginfo( 'name' ) . '-' . $name ) . '-' . date( 'Y-m-d-H-i-s' );
 }
 
 /**

@@ -33,8 +33,6 @@
 	</h2>
 	
 	<?php if ( $selected_tab == 'date' ) {
-		global $wpdb;
-		
 		// Get the selected post type.
 		if ( isset( $_POST['type'] ) && in_array( $_POST['type'], $post_types ) ) {
 			$selected_post_type = $_POST['type'];
@@ -53,22 +51,29 @@
 			$selected_post_type_name = $selected_post_type_object->label;
 		}
 		
+		global $wpdb;
 		$posts_per_date = $wpdb->get_results(
 				"SELECT DATE(post_date) as date, count(ID) as count
 				FROM {$wpdb->posts}
 				WHERE post_status = 'publish'" . $post_type_query .
-				"GROUP BY date", OBJECT_K);
+				"GROUP BY date",
+				OBJECT_K
+		);
 		$posts_per_month = $wpdb->get_results(
 				"SELECT DATE_FORMAT(post_date, '%Y-%m') as month, count(ID) as count
 				FROM {$wpdb->posts}
 				WHERE post_status = 'publish'" . $post_type_query .
-				"GROUP BY month", OBJECT_K);
+				"GROUP BY month",
+				OBJECT_K
+		);
 		$posts_per_year = $wpdb->get_results(
 				"SELECT YEAR(post_date) as year, count(ID) as count
 				FROM {$wpdb->posts}
 				WHERE post_status = 'publish'". $post_type_query .
 				"GROUP BY year
-				ORDER BY year DESC", OBJECT_K);
+				ORDER BY year DESC",
+				OBJECT_K
+		);
 		
 		$per_date_string = sprintf( __( '%s per Date', 'posts-and-users-stats' ), $selected_post_type_name );
 		$per_month_string = sprintf( __( '%s per Month', 'posts-and-users-stats' ), $selected_post_type_name );
@@ -87,7 +92,7 @@
 	</form>
 	<nav>
 		<?php if ( !is_array( $posts_per_date ) || sizeof( $posts_per_date ) <= 0) { ?>
-		<p><?php echo $selected_post_type_labels->not_found ?>
+		<p><?php echo $selected_post_type_labels->not_found; ?>
 		<?php } else { ?>
 		<ul>
 			<li><a href="#monthly"><?php echo $per_month_string; ?></a>
@@ -131,14 +136,14 @@
 				series: [ {
 					name: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
 					data: [ <?php foreach( $posts_per_month as $posts_of_month ) {
-						$date = strtotime( $posts_of_month->month . '-01' );
-						$year = date( 'Y', $date );
-						$month = date( 'm', $date );
-						echo '[Date.UTC(' . $year . ',' . ( $month - 1 ) . ',1),' . $posts_of_month->count . '], '; 
-						}?> ]
+								$date = strtotime( $posts_of_month->month . '-01' );
+								$year = date( 'Y', $date );
+								$month = date( 'm', $date );
+								echo '[Date.UTC(' . $year . ',' . ( $month - 1 ) . ',1),' . $posts_of_month->count . '], ';
+							} ?> ]
 				} ],
 				credits: {
-					enabled: false	
+					enabled: false
 				},
 				exporting: {
 					filename: '<?php echo posts_and_users_stats_get_export_file_name( $per_month_string ); ?>'
@@ -185,12 +190,12 @@
 				series: [ {
 					name: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
 					data: [ <?php foreach( $posts_per_date as $posts_of_date ) {
-						$date = strtotime( $posts_of_date->date );
-						$year = date( 'Y', $date );
-						$month = date( 'm', $date );
-						$day = date( 'd', $date );
-						echo '[Date.UTC(' . $year . ',' . ( $month - 1 ) . ',' . $day .'),' . $posts_of_date->count . '], '; 
-						}?> ]
+								$date = strtotime( $posts_of_date->date );
+								$year = date( 'Y', $date );
+								$month = date( 'm', $date );
+								$day = date( 'd', $date );
+								echo '[Date.UTC(' . $year . ',' . ( $month - 1 ) . ',' . $day .'),' . $posts_of_date->count . '], ';
+							} ?> ]
 				} ],
 				credits: {
 					enabled: false	
@@ -225,8 +230,8 @@
 					<?php foreach( range( 1, 12, 1) as $month ) { ?>
 					<td class="number"><?php 
 							$date = date('Y-m', strtotime( $year . '-' . $month . '-1' ) );
-							if ( array_key_exists( $date, $posts_per_month) ) {
-								posts_and_users_stats_echo_link( get_month_link( $year, $month ), $posts_per_month[$date]->count );
+							if ( array_key_exists( $date, $posts_per_month ) ) {
+								posts_and_users_stats_echo_link( get_month_link( $year, $month ), $posts_per_month[ $date ]->count );
 							} else {
 								echo 0;
 							} ?></td>
@@ -264,7 +269,7 @@
 							if ( checkdate( $month, $day, $year ) ) {
 								$date = date('Y-m-d', strtotime( $year . '-' . $month . '-' . $day ) );
 								if ( array_key_exists( $date, $posts_per_date ) ) {
-									posts_and_users_stats_echo_link( get_day_link( $year, $month, $day ), $posts_per_date[$date]->count );
+									posts_and_users_stats_echo_link( get_day_link( $year, $month, $day ), $posts_per_date[ $date ]->count );
 								} else {
 									echo 0;
 								}
@@ -279,8 +284,8 @@
 					<?php foreach( range( 1, 12, 1) as $month ) { ?>
 					<td class="number"><strong><?php 
 							$date = date('Y-m', strtotime( $year . '-' . $month . '-1' ) );
-							if ( array_key_exists( $date, $posts_per_month) ) {
-								posts_and_users_stats_echo_link( get_month_link( $year, $month ), $posts_per_month[$date]->count );
+							if ( array_key_exists( $date, $posts_per_month ) ) {
+								posts_and_users_stats_echo_link( get_month_link( $year, $month ), $posts_per_month[ $date ]->count );
 							} else {
 								echo 0;
 							} ?></strong></td>
@@ -333,7 +338,7 @@
 					categories: [ 
 						<?php foreach( $terms as $term ) {
 							echo "'" . $term->name. "',";
-						}?> ],
+						} ?> ],
 				},
 				yAxis: {
 					title: {
@@ -347,8 +352,8 @@
 				series: [ {
 					name: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
 					data: [ <?php foreach( $terms as $term ) {
-						echo $term->count . ','; 
-						}?> ]
+								echo $term->count . ','; 
+							} ?> ]
 				} ],
 				credits: {
 					enabled: false	
@@ -431,7 +436,7 @@
 					text: '<?php echo get_bloginfo( 'name' ); ?>'
 				},
 				xAxis: {
-					categories: [ 
+					categories: [
 						<?php foreach( $posts_per_author as $author ) {
 							echo "'" . $author['name'] . "',";
 						}?> ],
@@ -448,11 +453,11 @@
 				series: [ {
 					name: 'all',
 					data: [ <?php foreach( $posts_per_author as $author ) {
-						echo $author['total'] . ','; 
-						}?> ]
+								echo $author['total'] . ',';
+							} ?> ]
 				} ],
 				credits: {
-					enabled: false	
+					enabled: false
 				},
 				exporting: {
 					filename: '<?php echo posts_and_users_stats_get_export_file_name( __('Posts per Author', 'posts-and-users-stats' ) ); ?>'
@@ -473,10 +478,10 @@
 				xAxis: {
 					categories: [ 
 						<?php foreach( $posts_per_type as $type => $count ) {
-							if ( $type != 'total' && $count > 0)  {
+							if ( $type != 'total' && $count > 0) {
 								echo "'" . $type . "',";
 							}
-						}?> ],
+						} ?> ],
 				},
 				yAxis: {
 					title: {
@@ -490,10 +495,10 @@
 				series: [ {
 					name: 'all',
 					data: [ <?php foreach( $posts_per_type as $type => $count ) {
-							if ( $type != 'total' && $count > 0)  {
-								echo $count . ','; 
-							} 
-						} ?> ]
+								if ( $type != 'total' && $count > 0)  {
+									echo $count . ',';
+								}
+							} ?> ]
 				} ],
 				credits: {
 					enabled: false	
@@ -529,7 +534,7 @@
 					<td class="number"><?php if ( $post_type == 'post' ) {
 							posts_and_users_stats_echo_link( get_author_posts_url( $author['ID'] ), $author['post'] );
 						} else {
-							echo $author[$post_type]; 
+							echo $author[ $post_type ]; 
 						} ?></td>
 					<?php } ?>
 					<td class="number"><strong><?php echo $author['total']; ?></strong></td>
@@ -542,7 +547,7 @@
 				<?php } ?>
 				</tr>
 			</tbody>
-		</table>		
+		</table>
 	</section>
 	
 	<?php } else if ( $selected_tab == 'status' ) {
@@ -571,7 +576,7 @@
 					categories: [ 
 						<?php foreach( $statuses as $status_slug => $status_name ) {
 							echo "'" . $status_name . "',";
-						}?> ],
+						} ?> ],
 				},
 				yAxis: {
 					title: {
@@ -585,11 +590,11 @@
 				series: [ {
 					name: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
 					data: [ <?php foreach( $statuses as $status_slug => $status_name ) {
-						echo $posts_per_status->$status_slug . ','; 
-						}?> ]
+								echo $posts_per_status->$status_slug . ',';
+							} ?> ]
 				} ],
 				credits: {
-					enabled: false	
+					enabled: false
 				},
 				exporting: {
 					filename: '<?php echo posts_and_users_stats_get_export_file_name( __('Posts per Status', 'posts-and-users-stats' ) ); ?>'
@@ -618,7 +623,7 @@
 				</tr>
 				<?php } ?>
 			</tbody>
-		</table>		
+		</table>
 	</section>
 	<?php } ?>
 	<?php $end_time = microtime( true ); ?>
