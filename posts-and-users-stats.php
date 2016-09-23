@@ -96,6 +96,13 @@ function posts_and_users_stats_add_menu() {
 			'posts_and_users_stats_show_posts'
 	);
 	add_management_page(
+			__( 'Comments Statistics', 'posts-and-users-stats' ),
+			__( 'Comments Statistics', 'posts-and-users-stats' ),
+			'export',
+			'posts_and_users_stats_comments',
+			'posts_and_users_stats_show_comments'
+	);	
+	add_management_page(
 			__( 'Users Statistics', 'posts-and-users-stats' ),
 			__( 'Users Statistics', 'posts-and-users-stats' ),
 			'export',
@@ -121,6 +128,15 @@ function posts_and_users_stats_current_user_can() {
 function posts_and_users_stats_show_posts() {
 	if ( posts_and_users_stats_current_user_can() ) {
 		include_once 'views/posts.php';
+	}
+}
+
+/**
+ * Show the comments stats page.
+ */
+function posts_and_users_stats_show_comments() {
+	if ( posts_and_users_stats_current_user_can() ) {
+		include_once 'views/comments.php';
 	}
 }
 
