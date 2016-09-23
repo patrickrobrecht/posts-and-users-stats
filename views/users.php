@@ -55,7 +55,8 @@
 				yAxis: {
 					title: {
 						text: '<?php _e( 'Users', 'posts-and-users-stats' ); ?>'
-					}
+					},
+					min: 0
 				},
 				legend: {
 					enabled: false,
@@ -131,9 +132,9 @@
 				},
 				yAxis: {
 					title: {
-						text: '<?php _e( 'Users', 'posts-and-users-stats' ); ?>',
-						min: 0
-					}
+						text: '<?php _e( 'Users', 'posts-and-users-stats' ); ?>'
+					},
+					min: 0
 				},
 				legend: {
 					enabled: false,

@@ -122,8 +122,8 @@
 				yAxis: {
 					title: {
 						text: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
-						min: 0
-					}
+					},
+					min: 0
 				},
 				legend: {
 					enabled: false,
@@ -169,8 +169,8 @@
 				yAxis: {
 					title: {
 						text: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
-						min: 0
-					}
+					},
+					min: 0
 				},
 		        plotOptions: {
 		            spline: {
@@ -338,7 +338,8 @@
 				yAxis: {
 					title: {
 						text: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>'
-					}
+					},
+					min: 0
 				},
 				legend: {
 					enabled: false,
@@ -438,7 +439,8 @@
 				yAxis: {
 					title: {
 						text: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>'
-					}
+					},
+					min: 0
 				},
 				legend: {
 					enabled: false,
@@ -479,7 +481,8 @@
 				yAxis: {
 					title: {
 						text: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>'
-					}
+					},
+					min: 0
 				},
 				legend: {
 					enabled: false,
@@ -573,7 +576,8 @@
 				yAxis: {
 					title: {
 						text: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>'
-					}
+					},
+					min: 0
 				},
 				legend: {
 					enabled: false,
