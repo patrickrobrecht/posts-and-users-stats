@@ -274,7 +274,7 @@
 									echo 0;
 								}
 							} else {
-								echo '-';
+								echo '&mdash;';
 							} ?></td>
 					<?php } ?>
 				</tr>

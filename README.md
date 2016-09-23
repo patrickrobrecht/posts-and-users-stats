@@ -19,6 +19,12 @@ Developer: [Patrick Robrecht](https://patrick-robrecht.de/)
 
 ## Changelog
 
+### Version 1.0
+* comments per date
+* comments per author
+* comments per status
+* consistent formatting of the source code
+
 ### Version 0.3
 * improved styles and readme.txt documentation
 
