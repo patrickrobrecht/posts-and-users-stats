@@ -2,7 +2,7 @@
 Contributors: patrickrobrecht
 Tags: dashboard, statistics
 Requires at least: 4.4
-Tested up to: 4.6.1
+Tested up to: 4.7
 Stable tag: 1.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -25,12 +25,7 @@ Posts and Users Stats offers statistics about the content and the users of a Wor
 * Diagrams which can be exported as image or PDF
 * CSV export
 
-== Installation ==
-1. Go to Plugins > Add New.
-2. Search for *Posts and Users Stats* and install it
-	(alternative: Download the zip file from wordpress.org and upload the files to the `/wp-content/plugins/` directory).
-3. Activate the plugin in the WordPress Plugins Area.
-4. See the *Posts Statistics* and *Users Statistics*, subpages of *Tools*.
+After the installation you can find the statistics as subpages of *Tools*.
 
 
 == Frequently Asked Questions ==
@@ -60,5 +55,3 @@ If interested, please check up the [changelog at GitHub](https://github.com/patr
 
 == Upgrade Notice ==
 
-= 0.2 =
-The first published version ever!
