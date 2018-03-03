@@ -22,16 +22,14 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 } else {
 	$selected_tab = 'role';
 }
-
-$start_time = microtime( true );
 ?>
 <div class="wrap posts-and-users-stats">
-	<h1><?php _e( 'Users Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo $tabs[ $selected_tab ]; ?></h1>
+	<h1><?php _e( 'Users Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $tabs[ $selected_tab ] ); ?></h1>
 
 	<h2 class="nav-tab-wrapper">
 	<?php foreach ( $tabs as $tab_slug => $tab_title ) { ?>
-		<a href="<?php echo admin_url( 'tools.php?page=posts_and_users_stats_users' ) . '&tab=' . sanitize_text_field( $tab_slug ); ?>" 
-			class="<?php posts_and_users_stats_echo_tab_class( $selected_tab == $tab_slug ); ?>"><?php echo $tab_title; ?></a>
+		<a href="<?php echo esc_url( admin_url( 'tools.php?page=posts_and_users_stats_users&tab=' ) . sanitize_text_field( $tab_slug ) ); ?>"
+			class="<?php posts_and_users_stats_echo_tab_class( $selected_tab == $tab_slug ); ?>"><?php echo esc_html( $tab_title ); ?></a>
 	<?php } ?>
 	</h2>
 	
@@ -53,16 +51,16 @@ $start_time = microtime( true );
 					text: '<?php _e( 'Users per Role', 'posts-and-users-stats' ); ?>'
 				},
 				subtitle: {
-					text: '<?php echo get_bloginfo( 'name' ); ?>'
+					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
 				},
 				xAxis: {
 					categories: [
 						<?php
 						foreach ( $roles as $role => $count ) {
-							echo "'" . $role . "',";
+							echo "'" . esc_js( $role ) . "',";
 						}
 						?>
-						 ],
+					]
 				},
 				yAxis: {
 					title: {
@@ -71,22 +69,22 @@ $start_time = microtime( true );
 					min: 0
 				},
 				legend: {
-					enabled: false,
+					enabled: false
 				},
 				series: [ {
 					data: [ 
 					<?php
 					foreach ( $roles as $role => $count ) {
-								echo $count . ',';
+						echo esc_js( $count ) . ',';
 					}
-							?>
-							 ]
+					?>
+					]
 				} ],
 				credits: {
 					enabled: false
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( __( 'Users per Role', 'posts-and-users-stats' ) ); ?>'
+					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( __( 'Users per Role', 'posts-and-users-stats' ) ) ); ?>'
 				}
 			});
 		});
@@ -104,8 +102,8 @@ $start_time = microtime( true );
 		<?php
 		echo sprintf(
 			// translators: the number of users.
-			__( 'There are %s total users.', 'posts-and-users-stats' ),
-			$users['total_users']
+			esc_html( __( 'There are %s total users.', 'posts-and-users-stats' ) ),
+			esc_html( $users['total_users'] )
 		);
 			?>
 			</p>
@@ -119,8 +117,8 @@ $start_time = microtime( true );
 			<tbody>
 				<?php foreach ( $roles as $role => $count ) { ?>
 					<tr>
-						<td><?php echo translate_user_role( $role ); ?></td>
-						<td><?php echo $count; ?></td>
+						<td><?php echo esc_html( translate_user_role( $role ) ); ?></td>
+						<td><?php echo esc_html( $count ); ?></td>
 					</tr>
 				<?php } ?>
 			</tbody>
@@ -149,12 +147,12 @@ $start_time = microtime( true );
 					text: '<?php _e( 'Users over Time', 'posts-and-users-stats' ); ?>'
 				},
 				subtitle: {
-					text: '<?php echo get_bloginfo( 'name' ); ?>'
+					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
 				},
 				xAxis: {
 					type: 'datetime',
 					dateTimeLabelFormats: {
-						month: '%m \'%y',
+						month: '%m \'%y'
 					},
 					title: {
 						text: '<?php _e( 'Users over Time', 'posts-and-users-stats' ); ?>'
@@ -180,16 +178,16 @@ $start_time = microtime( true );
 						$month = date( 'm', $date );
 						$day = date( 'd', $date );
 						$users += $registration->count;
-						echo '[Date.UTC(' . $year . ',' . ( $month - 1 ) . ',' . $day . '), ' . $users . '], ';
+						echo '[Date.UTC(' . esc_js( $year ) . ',' . esc_js( $month - 1 ) . ',' . esc_js( $day ) . '), ' . esc_js( $users ) . '], ';
 					}
-						?>
-						 ]
+					?>
+					]
 				} ],
 				credits: {
 					enabled: false
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( __( 'Users over Time', 'posts-and-users-stats' ) ); ?>'
+					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( __( 'Users over Time', 'posts-and-users-stats' ) ) ); ?>'
 				}
 			});
 		});
@@ -211,23 +209,14 @@ $start_time = microtime( true );
 				</tr>
 			</thead>
 			<tbody>
-		<?php foreach ( $user_registration_dates as $registration ) { ?>
+				<?php foreach ( $user_registration_dates as $registration ) { ?>
 				<tr>
-					<td><?php echo $registration->date; ?></td>
-					<td><?php echo $registration->count; ?></td>
+					<td><?php echo esc_html( $registration->date ); ?></td>
+					<td><?php echo esc_html( $registration->count ); ?></td>
 				</tr>
-		<?php } ?>
+				<?php } ?>
 			</tbody>
 		</table>
 	</section>
 	<?php } ?>
-	<?php $end_time = microtime( true ); ?>
-	<p>
-		<?php
-		echo sprintf(
-			// translators: seconds.
-			__( 'Statistics generated in %s seconds.', 'posts-and-users-stats' ), number_format_i18n( $end_time - $start_time, 2 )
-		);
-		?>
-	</p>
 </div>

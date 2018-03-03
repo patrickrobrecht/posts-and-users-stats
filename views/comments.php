@@ -23,16 +23,14 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 } else {
 	$selected_tab = 'date';
 }
-
-$start_time = microtime( true );
 ?>
 <div class="wrap posts-and-users-stats">
-	<h1><?php _e( 'Comments Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo $tabs[ $selected_tab ]; ?></h1>
+	<h1><?php _e( 'Comments Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $tabs[ $selected_tab ] ); ?></h1>
 	
 	<h2 class="nav-tab-wrapper">
 	<?php foreach ( $tabs as $tab_slug => $tab_title ) { ?>
-		<a href="<?php echo admin_url( 'tools.php?page=posts_and_users_stats_comments' ) . '&tab=' . sanitize_text_field( $tab_slug ); ?>" 
-			class="<?php posts_and_users_stats_echo_tab_class( $selected_tab == $tab_slug ); ?>"><?php echo $tab_title; ?></a>
+		<a href="<?php echo esc_url( admin_url( 'tools.php?page=posts_and_users_stats_comments&tab=' ) . sanitize_text_field( $tab_slug ) ); ?>"
+			class="<?php posts_and_users_stats_echo_tab_class( $selected_tab == $tab_slug ); ?>"><?php echo esc_html( $tab_title ); ?></a>
 	<?php } ?>
 	</h2>
 	
@@ -69,9 +67,11 @@ $start_time = microtime( true );
 		<p><?php _e( 'No approved comments found!', 'posts-and-users-stats' ); ?>
 		<?php } else { ?>
 		<ul>
-			<li><a href="#monthly"><?php echo $per_month_string; ?></a>
+			<li><a href="#monthly"><?php echo esc_html( $per_month_string ); ?></a>
 		<?php foreach ( $comments_per_year as $year_object ) { ?>
-			<li><a href="#<?php echo $year_object->year; ?>"><?php echo __( 'Year', 'posts-and-users-stats' ) . ' ' . $year_object->year; ?></a></li>
+			<li><a href="#<?php echo esc_attr( $year_object->year ); ?>">
+					<?php _e( 'Year', 'posts-and-users-stats' ); ?>
+					<?php echo esc_html( $year_object->year ); ?></a></li>
 		<?php } ?>
 		</ul>
 	</nav>
@@ -84,15 +84,15 @@ $start_time = microtime( true );
 					type: 'column'
 				},
 				title: {
-					text: '<?php echo $per_month_string; ?>'
+					text: '<?php echo esc_js( $per_month_string ); ?>'
 				},
 				subtitle: {
-					text: '<?php echo get_bloginfo( 'name' ); ?>'
+					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
 				},
 				xAxis: {
 					type: 'datetime',
 					dateTimeLabelFormats: {
-						month: '%m/%Y',
+						month: '%m/%Y'
 					},
 					title: {
 						text: '<?php _e( 'Month', 'posts-and-users-stats' ); ?>'
@@ -105,26 +105,26 @@ $start_time = microtime( true );
 					min: 0
 				},
 				legend: {
-					enabled: false,
+					enabled: false
 				},
 				series: [ {
 					name: '<?php _e( 'Comments', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					foreach ( $comments_per_month as $comments_of_month ) {
-								$date = strtotime( $comments_of_month->month . '-01' );
-								$year = date( 'Y', $date );
-								$month = date( 'm', $date );
-								echo '[Date.UTC(' . $year . ',' . ( $month - 1 ) . ',1),' . $comments_of_month->count . '], ';
+						$date = strtotime( $comments_of_month->month . '-01' );
+						$year = date( 'Y', $date );
+						$month = date( 'm', $date );
+						echo '[Date.UTC(' . esc_js( $year ) . ',' . esc_js( $month - 1 ) . ',1),' . esc_js( $comments_of_month->count ) . '], ';
 					}
-							?>
-							 ]
+					?>
+					]
 				} ],
 				credits: {
 					enabled: false	
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( $per_month_string ); ?>'
+					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( $per_month_string ) ); ?>'
 				}
 			});
 		});
@@ -138,10 +138,10 @@ $start_time = microtime( true );
 					type: 'column'
 				},
 				title: {
-					text: '<?php echo $per_date_string; ?>'
+					text: '<?php echo esc_js( $per_date_string ); ?>'
 				},
 				subtitle: {
-					text: '<?php echo get_bloginfo( 'name' ); ?>'
+					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
 				},
 				xAxis: {
 					type: 'datetime',
@@ -163,27 +163,27 @@ $start_time = microtime( true );
 					}
 				},
 				legend: {
-					enabled: false,
+					enabled: false
 				},
 				series: [ {
 					name: '<?php _e( 'Comments', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					foreach ( $comments_per_date as $comments_of_date ) {
-								$date = strtotime( $comments_of_date->date );
-								$year = date( 'Y', $date );
-								$month = date( 'm', $date );
-								$day = date( 'd', $date );
-								echo '[Date.UTC(' . $year . ',' . ( $month - 1 ) . ',' . $day . '),' . $comments_of_date->count . '], ';
+						$date = strtotime( $comments_of_date->date );
+						$year = date( 'Y', $date );
+						$month = date( 'm', $date );
+						$day = date( 'd', $date );
+						echo '[Date.UTC(' . esc_js( $year ) . ',' . esc_js( $month - 1 ) . ',' . esc_js( $day ) . '),' . esc_js( $comments_of_date->count ) . '], ';
 					}
-							?>
-							 ]
+					?>
+					]
 				} ],
 				credits: {
 					enabled: false	
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( $per_date_string ); ?>'
+					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( $per_date_string ) ); ?>'
 				}
 			});
 		});
@@ -202,7 +202,7 @@ $start_time = microtime( true );
 				<tr>
 					<th scope="row"><?php _e( 'Month', 'posts-and-users-stats' ); ?></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
-					<th scope="col"><?php echo date_i18n( 'M', strtotime( '2016-' . $month . '-1' ) ); ?></th>
+					<th scope="col"><?php echo esc_html( date_i18n( 'M', strtotime( '2016-' . $month . '-1' ) ) ); ?></th>
 					<?php } ?>
 					<th scope="col"><?php _e( 'Sum', 'posts-and-users-stats' ); ?></th>
 				</tr>
@@ -213,20 +213,20 @@ $start_time = microtime( true );
 					$year = $year_object->year;
 					?>
 				<tr>
-					<th scope="row"><a href="#<?php echo $year; ?>"><?php echo $year; ?></a></th>
+					<th scope="row"><a href="#<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></a></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
 					<td class="number">
 					<?php
-							$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
+					$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
 					if ( array_key_exists( $date, $comments_per_month ) ) {
-						echo $comments_per_month[ $date ]->count;
+						echo esc_html( $comments_per_month[ $date ]->count );
 					} else {
 						echo 0;
 					}
-							?>
-							</td>
+					?>
+					</td>
 					<?php } ?>
-					<td class="number"><?php echo $year_object->count; ?></td>
+					<td class="number"><?php echo esc_html( $year_object->count ); ?></td>
 				</tr>
 				<?php } ?>
 			</tbody>
@@ -235,10 +235,12 @@ $start_time = microtime( true );
 		<?php
 		foreach ( $comments_per_year as $year_object ) {
 			$year = $year_object->year;
-			?>
+		?>
 	<section>
-		<h3 id="<?php echo $year; ?>"><?php echo __( 'Year', 'posts-and-users-stats' ) . ' ' . $year; ?>
+		<h3 id="<?php echo esc_attr( $year ); ?>">
 			<?php
+			_e( 'Year', 'posts-and-users-stats' );
+			echo ' ' . esc_html( $year );
 			posts_and_users_stats_echo_export_button(
 				'csv-daily-' . $year,
 				'table-daily-' . $year,
@@ -246,26 +248,26 @@ $start_time = microtime( true );
 			);
 			?>
 			</h3>
-		<table id="table-daily-<?php echo $year; ?>" class="wp-list-table widefat">
+		<table id="table-daily-<?php echo esc_attr( $year ); ?>" class="wp-list-table widefat">
 			<thead>
 				<tr>
 					<th scope="row"><?php _e( 'Month', 'posts-and-users-stats' ); ?></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
-					<th scope="col"><?php echo date_i18n( 'M', strtotime( '2016-' . $month . '-1' ) ); ?></th>
+					<th scope="col"><?php echo esc_html( date_i18n( 'M', strtotime( '2016-' . $month . '-1' ) ) ); ?></th>
 					<?php } ?>
 				</tr>
 			</thead>
 			<tbody>
 				<?php foreach ( range( 1, 31, 1 ) as $day ) { ?>
 				<tr>
-					<th scope="row"><?php echo __( 'Day', 'posts-and-users-stats' ) . ' ' . $day; ?></th>
+					<th scope="row"><?php _e( 'Day', 'posts-and-users-stats' ); ?> <?php echo esc_html( $day ); ?></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
 					<td class="number">
 					<?php
 					if ( checkdate( $month, $day, $year ) ) {
 						$date = date( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $day ) );
 						if ( array_key_exists( $date, $comments_per_date ) ) {
-							echo $comments_per_date[ $date ]->count;
+							echo esc_html( $comments_per_date[ $date ]->count );
 						} else {
 							echo 0;
 						}
@@ -282,14 +284,14 @@ $start_time = microtime( true );
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
 					<td class="number"><strong>
 					<?php
-							$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
+					$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
 					if ( array_key_exists( $date, $comments_per_month ) ) {
-						echo $comments_per_month[ $date ]->count;
+						echo esc_html( $comments_per_month[ $date ]->count );
 					} else {
 						echo 0;
 					}
-							?>
-							</strong></td>
+					?>
+					</strong></td>
 					<?php } ?>
 				</tr>
 			</tbody>
@@ -323,16 +325,16 @@ $start_time = microtime( true );
 					text: '<?php _e( 'Comments per Author', 'posts-and-users-stats' ); ?>'
 				},
 				subtitle: {
-					text: '<?php echo get_bloginfo( 'name' ); ?>'
+					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
 				},
 				xAxis: {
 					categories: [
 						<?php
 						foreach ( $comments_per_author as $author ) {
-							echo "'" . $author->author . "',";
+							echo "'" . esc_js( $author->author ) . "',";
 						}
 						?>
-						 ],
+					]
 				},
 				yAxis: {
 					title: {
@@ -341,28 +343,28 @@ $start_time = microtime( true );
 					min: 0
 				},
 				legend: {
-					enabled: false,
+					enabled: false
 				},
 				series: [ {
 					name: '<?php _e( 'Comments', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					foreach ( $comments_per_author as $author ) {
-								echo $author->count . ',';
+						echo esc_js( $author->count ) . ',';
 					}
-							?>
-							 ]
+					?>
+					]
 				} ],
 				credits: {
 					enabled: false
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( __( 'Comments per Author', 'posts-and-users-stats' ) ); ?>'
+					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( __( 'Comments per Author', 'posts-and-users-stats' ) ) ); ?>'
 				}
 			});
 		});
 		</script>
-		<h3><?php echo __( 'Comments per Author', 'posts-and-users-stats' ); ?>
+		<h3><?php _e( 'Comments per Author', 'posts-and-users-stats' ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
 				'csv-authors',
@@ -381,8 +383,8 @@ $start_time = microtime( true );
 			<tbody>
 				<?php foreach ( $comments_per_author as $author ) { ?>
 				<tr>
-					<td><?php echo $author->author; ?></td>
-					<td class="number"><?php echo $author->count; ?></td>
+					<td><?php echo esc_html( $author->author ); ?></td>
+					<td class="number"><?php echo esc_html( $author->count ); ?></td>
 				</tr>
 				<?php } ?>
 			</tbody>
@@ -414,16 +416,16 @@ $start_time = microtime( true );
 					text: '<?php _e( 'Comments per Status', 'posts-and-users-stats' ); ?>'
 				},
 				subtitle: {
-					text: '<?php echo get_bloginfo( 'name' ); ?>'
+					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
 				},
 				xAxis: {
 					categories: [ 
 						<?php
 						foreach ( $comment_statuses as $status => $name ) {
-							echo "'" . $name . "',";
+							echo "'" . esc_js( $name ) . "',";
 						}
 						?>
-						 ],
+					]
 				},
 				yAxis: {
 					title: {
@@ -432,23 +434,23 @@ $start_time = microtime( true );
 					min: 0
 				},
 				legend: {
-					enabled: false,
+					enabled: false
 				},
 				series: [ {
 					name: '<?php _e( 'Comments', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					foreach ( $comment_statuses as $status => $name ) {
-								echo $comments_per_status->$status . ',';
+						echo esc_js( $comments_per_status->$status ) . ',';
 					}
-							?>
-							 ]
+					?>
+					]
 				} ],
 				credits: {
 					enabled: false
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( __( 'Comments per Status', 'posts-and-users-stats' ) ); ?>'
+					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( __( 'Comments per Status', 'posts-and-users-stats' ) ) ); ?>'
 				}
 			});
 		});
@@ -472,21 +474,12 @@ $start_time = microtime( true );
 			<tbody>
 				<?php foreach ( $comment_statuses as $status => $name ) { ?>
 				<tr>
-					<td><?php echo $name; ?></td>
-					<td class="number"><?php echo $comments_per_status->$status; ?></td>
+					<td><?php echo esc_html( $name ); ?></td>
+					<td class="number"><?php echo esc_html( $comments_per_status->$status ); ?></td>
 				</tr>
 				<?php } ?>
 			</tbody>
 		</table>
 	</section>
 	<?php } ?>
-	<?php $end_time = microtime( true ); ?>
-	<p>
-		<?php
-		echo sprintf(
-			// translators: seconds.
-			__( 'Statistics generated in %s seconds.', 'posts-and-users-stats' ), number_format_i18n( $end_time - $start_time, 2 )
-		);
-		?>
-	</p>
 </div>

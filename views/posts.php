@@ -27,19 +27,17 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 
 // Get the list of all post types, including custom post types, but without revisions and menu items.
 $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' ) );
-
-$start_time = microtime( true );
 ?>
 <div class="wrap posts-and-users-stats">
-	<h1><?php _e( 'Posts Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo $tabs[ $selected_tab ]; ?></h1>
-	
+	<h1><?php _e( 'Posts Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $tabs[ $selected_tab ] ); ?></h1>
+
 	<h2 class="nav-tab-wrapper">
 	<?php foreach ( $tabs as $tab_slug => $tab_title ) { ?>
-		<a href="<?php echo admin_url( 'tools.php?page=posts_and_users_stats_posts' ) . '&tab=' . sanitize_text_field( $tab_slug ); ?>" 
-			class="<?php posts_and_users_stats_echo_tab_class( $selected_tab == $tab_slug ); ?>"><?php echo $tab_title; ?></a>
+		<a href="<?php echo esc_url( admin_url( 'tools.php?page=posts_and_users_stats_posts' ) . '&tab=' . sanitize_text_field( $tab_slug ) ); ?>"
+			class="<?php posts_and_users_stats_echo_tab_class( $selected_tab == $tab_slug ); ?>"><?php echo esc_html( $tab_title ); ?></a>
 	<?php } ?>
 	</h2>
-	
+
 	<?php
 	if ( 'date' == $selected_tab ) {
 		// Get the selected post type.
@@ -99,7 +97,7 @@ $start_time = microtime( true );
 			<select id="type" name="type">
 				<option value="content" <?php selected( $selected_post_type, '', true ); ?>><?php _e( 'all post types', 'posts-and-users-stats' ); ?></option>
 				<?php foreach ( $post_types as $post_type ) { ?>
-				<option value="<?php echo $post_type; ?>" <?php selected( $selected_post_type, $post_type, true ); ?>><?php echo get_post_type_object( $post_type )->label; ?></option>
+				<option value="<?php echo esc_attr( $post_type ); ?>" <?php selected( $selected_post_type, $post_type, true ); ?>><?php echo esc_html( get_post_type_object( $post_type )->label ); ?></option>
 				<?php } ?>
 			</select>
 			<button type="submit" class="button-secondary" ><?php _e( 'Select', 'posts-and-users-stats' ); ?></button>
@@ -107,12 +105,12 @@ $start_time = microtime( true );
 	</form>
 	<nav>
 		<?php if ( ! is_array( $posts_per_date ) || count( $posts_per_date ) <= 0 ) { ?>
-		<p><?php echo $selected_post_type_labels->not_found; ?>
+		<p><?php echo esc_html( $selected_post_type_labels->not_found ); ?>
 		<?php } else { ?>
 		<ul>
-			<li><a href="#monthly"><?php echo $per_month_string; ?></a>
+			<li><a href="#monthly"><?php echo esc_html( $per_month_string ); ?></a>
 		<?php foreach ( $posts_per_year as $year_object ) { ?>
-			<li><a href="#<?php echo $year_object->year; ?>"><?php echo __( 'Year', 'posts-and-users-stats' ) . ' ' . $year_object->year; ?></a></li>
+			<li><a href="#<?php echo esc_attr( $year_object->year ); ?>"><?php _e( 'Year', 'posts-and-users-stats' ); ?> <?php echo esc_html( $year_object->year ); ?></a></li>
 		<?php } ?>
 		</ul>
 	</nav>	
@@ -125,15 +123,15 @@ $start_time = microtime( true );
 					type: 'column'
 				},
 				title: {
-					text: '<?php echo $per_month_string; ?>'
+					text: '<?php echo esc_js( $per_month_string ); ?>'
 				},
 				subtitle: {
-					text: '<?php echo get_bloginfo( 'name' ); ?>'
+					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
 				},
 				xAxis: {
 					type: 'datetime',
 					dateTimeLabelFormats: {
-						month: '%m/%Y',
+						month: '%m/%Y'
 					},
 					title: {
 						text: '<?php _e( 'Month', 'posts-and-users-stats' ); ?>'
@@ -141,31 +139,31 @@ $start_time = microtime( true );
 				},
 				yAxis: {
 					title: {
-						text: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
+						text: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>'
 					},
 					min: 0
 				},
 				legend: {
-					enabled: false,
+					enabled: false
 				},
 				series: [ {
 					name: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					foreach ( $posts_per_month as $posts_of_month ) {
-								$date = strtotime( $posts_of_month->month . '-01' );
-								$year = date( 'Y', $date );
-								$month = date( 'm', $date );
-								echo '[Date.UTC(' . $year . ',' . ( $month - 1 ) . ',1),' . $posts_of_month->count . '], ';
+						$date = strtotime( $posts_of_month->month . '-01' );
+						$year = date( 'Y', $date );
+						$month = date( 'm', $date );
+						echo '[Date.UTC(' . esc_js( $year ) . ',' . esc_js( $month - 1 ) . ',1),' . esc_js( $posts_of_month->count ) . '], ';
 					}
-							?>
-							 ]
+					?>
+					]
 				} ],
 				credits: {
 					enabled: false
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( $per_month_string ); ?>'
+					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( $per_month_string ) ); ?>'
 				}
 			});
 		});
@@ -179,10 +177,10 @@ $start_time = microtime( true );
 					type: 'column'
 				},
 				title: {
-					text: '<?php echo $per_date_string; ?>'
+					text: '<?php echo esc_js( $per_date_string ); ?>'
 				},
 				subtitle: {
-					text: '<?php echo get_bloginfo( 'name' ); ?>'
+					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
 				},
 				xAxis: {
 					type: 'datetime',
@@ -204,32 +202,32 @@ $start_time = microtime( true );
 					}
 				},
 				legend: {
-					enabled: false,
+					enabled: false
 				},
 				series: [ {
 					name: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					foreach ( $posts_per_date as $posts_of_date ) {
-								$date = strtotime( $posts_of_date->date );
-								$year = date( 'Y', $date );
-								$month = date( 'm', $date );
-								$day = date( 'd', $date );
-								echo '[Date.UTC(' . $year . ',' . ( $month - 1 ) . ',' . $day . '),' . $posts_of_date->count . '], ';
+						$date = strtotime( $posts_of_date->date );
+						$year = date( 'Y', $date );
+						$month = date( 'm', $date );
+						$day = date( 'd', $date );
+						echo '[Date.UTC(' . esc_js( $year ) . ',' . esc_js( $month - 1 ) . ',' . esc_js( $day ) . '),' . esc_js( $posts_of_date->count ) . '], ';
 					}
-							?>
-							 ]
+					?>
+					]
 				} ],
 				credits: {
 					enabled: false	
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( $per_date_string ); ?>'
+					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( $per_date_string ) ); ?>'
 				}
 			});
 		});
 		</script>
-		<h3 id="monthly"><?php echo $per_month_string; ?>
+		<h3 id="monthly"><?php echo esc_html( $per_month_string ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
 				'csv-monthly',
@@ -243,7 +241,7 @@ $start_time = microtime( true );
 				<tr>
 					<th scope="row"><?php _e( 'Month', 'posts-and-users-stats' ); ?></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
-					<th scope="col"><?php echo date_i18n( 'M', strtotime( '2016-' . $month . '-1' ) ); ?></th>
+					<th scope="col"><?php echo esc_html( date_i18n( 'M', strtotime( '2016-' . $month . '-1' ) ) ); ?></th>
 					<?php } ?>
 					<th scope="col"><?php _e( 'Sum', 'posts-and-users-stats' ); ?></th>
 				</tr>
@@ -252,22 +250,22 @@ $start_time = microtime( true );
 				<?php
 				foreach ( $posts_per_year as $year_object ) {
 					$year = $year_object->year;
-					?>
+				?>
 				<tr>
-					<th scope="row"><a href="#<?php echo $year; ?>"><?php echo $year; ?></a></th>
+					<th scope="row"><a href="#<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></a></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
 					<td class="number">
-					<?php
-							$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
-					if ( array_key_exists( $date, $posts_per_month ) ) {
-						posts_and_users_stats_echo_link( get_month_link( $year, $month ), $posts_per_month[ $date ]->count );
-					} else {
-						echo 0;
-					}
-							?>
-							</td>
+						<?php
+						$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
+						if ( array_key_exists( $date, $posts_per_month ) ) {
+							posts_and_users_stats_echo_link( get_month_link( $year, $month ), $posts_per_month[ $date ]->count );
+						} else {
+							echo 0;
+						}
+						?>
+					</td>
 					<?php } ?>
-					<td class="number"><?php echo posts_and_users_stats_echo_link( get_year_link( $year ), $year_object->count ); ?></td>
+					<td class="number"><?php echo esc_js( posts_and_users_stats_echo_link( get_year_link( $year ), $year_object->count ) ); ?></td>
 				</tr>
 				<?php } ?>
 			</tbody>
@@ -276,10 +274,12 @@ $start_time = microtime( true );
 		<?php
 		foreach ( $posts_per_year as $year_object ) {
 			$year = $year_object->year;
-			?>
+		?>
 	<section>
-		<h3 id="<?php echo $year; ?>"><?php echo __( 'Year', 'posts-and-users-stats' ) . ' ' . $year; ?>
+		<h3 id="<?php echo esc_attr( $year ); ?>">
 			<?php
+			_e( 'Year', 'posts-and-users-stats' );
+			echo ' ' . esc_html( $year );
 			posts_and_users_stats_echo_export_button(
 				'csv-daily-' . $year,
 				'table-daily-' . $year,
@@ -287,19 +287,19 @@ $start_time = microtime( true );
 			);
 			?>
 			</h3>
-		<table id="table-daily-<?php echo $year; ?>" class="wp-list-table widefat">
+		<table id="table-daily-<?php echo esc_attr( $year ); ?>" class="wp-list-table widefat">
 			<thead>
 				<tr>
 					<th scope="row"><?php _e( 'Month', 'posts-and-users-stats' ); ?></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
-					<th scope="col"><?php echo date_i18n( 'M', strtotime( '2016-' . $month . '-1' ) ); ?></th>
+					<th scope="col"><?php echo esc_html( date_i18n( 'M', strtotime( '2016-' . $month . '-1' ) ) ); ?></th>
 					<?php } ?>
 				</tr>
 			</thead>
 			<tbody>
 				<?php foreach ( range( 1, 31, 1 ) as $day ) { ?>
 				<tr>
-					<th scope="row"><?php echo __( 'Day', 'posts-and-users-stats' ) . ' ' . $day; ?></th>
+					<th scope="row"><?php _e( 'Day', 'posts-and-users-stats' ); ?> <?php echo esc_html( $day ); ?></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
 					<td class="number">
 					<?php
@@ -322,15 +322,15 @@ $start_time = microtime( true );
 					<th scope="row"><strong><?php _e( 'Sum', 'posts-and-users-stats' ); ?></strong></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
 					<td class="number"><strong>
-					<?php
-							$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
-					if ( array_key_exists( $date, $posts_per_month ) ) {
-						posts_and_users_stats_echo_link( get_month_link( $year, $month ), $posts_per_month[ $date ]->count );
-					} else {
-						echo 0;
-					}
-							?>
-							</strong></td>
+						<?php
+						$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
+						if ( array_key_exists( $date, $posts_per_month ) ) {
+							posts_and_users_stats_echo_link( get_month_link( $year, $month ), $posts_per_month[ $date ]->count );
+						} else {
+							echo 0;
+						}
+						?>
+						</strong></td>
 					<?php } ?>
 				</tr>
 			</tbody>
@@ -350,7 +350,7 @@ $start_time = microtime( true );
 	<nav>
 		<ul>
 		<?php foreach ( $taxonomies as $taxonomy ) { ?>
-			<li><a href="#<?php echo $taxonomy; ?>"><?php echo get_taxonomy( $taxonomy )->labels->name; ?></a></li>
+			<li><a href="#<?php echo esc_attr( $taxonomy ); ?>"><?php echo esc_html( get_taxonomy( $taxonomy )->labels->name ); ?></a></li>
 		<?php } ?>
 		</ul>
 	</nav>
@@ -365,32 +365,32 @@ $start_time = microtime( true );
 		?>
 		<?php if ( ! is_array( $terms ) || count( $terms ) <= 0 ) { ?>
 	<section>
-		<h3 id="<?php echo $taxonomy; ?>"><?php echo $headline; ?></h3>
-		<p><?php echo $taxonomy_labels->not_found; ?></p>
+		<h3 id="<?php echo esc_attr( $taxonomy ); ?>"><?php echo esc_html( $headline ); ?></h3>
+		<p><?php echo esc_html( $taxonomy_labels->not_found ); ?></p>
 	</section>
 		<?php } else { ?>
 	<section>
-		<div id="chart-<?php echo $taxonomy; ?>" class="chart"></div>
+		<div id="chart-<?php echo esc_attr( $taxonomy ); ?>" class="chart"></div>
 		<script>
 		jQuery(function() {
-			jQuery('#chart-<?php echo $taxonomy; ?>').highcharts({
+			jQuery('#chart-<?php echo esc_js( $taxonomy ); ?>').highcharts({
 				chart: {
 					type: 'column'
 				},
 				title: {
-					text: '<?php echo $headline; ?>'
+					text: '<?php echo esc_js( $headline ); ?>'
 				},
 				subtitle: {
-					text: '<?php echo get_bloginfo( 'name' ); ?>'
+					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
 				},
 				xAxis: {
 					categories: [ 
 						<?php
 						foreach ( $terms as $term ) {
-							echo "'" . $term->name . "',";
+							echo "'" . esc_js( $term->name ) . "',";
 						}
 						?>
-						 ],
+					]
 				},
 				yAxis: {
 					title: {
@@ -399,28 +399,29 @@ $start_time = microtime( true );
 					min: 0
 				},
 				legend: {
-					enabled: false,
+					enabled: false
 				},
 				series: [ {
 					name: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					foreach ( $terms as $term ) {
-								echo $term->count . ',';
+						echo esc_js( $term->count ) . ',';
 					}
-							?>
-							 ]
+					?>
+					]
 				} ],
 				credits: {
 					enabled: false	
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( $headline ); ?>'
+					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( $headline ) ); ?>'
 				}
 			});
 		});
 		</script>
-		<h3 id="<?php echo $taxonomy; ?>"><?php echo $headline; ?>
+		<h3 id="<?php echo esc_attr( $taxonomy ); ?>">
+			<?php echo esc_html( $headline ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
 				'csv-' . $taxonomy,
@@ -429,18 +430,18 @@ $start_time = microtime( true );
 			);
 			?>
 			</h3>
-		<table id="table-<?php echo $taxonomy; ?>" class="wp-list-table widefat">
+		<table id="table-<?php echo esc_attr( $taxonomy ); ?>" class="wp-list-table widefat">
 			<thead>
 				<tr>
-					<th scope="col"><?php echo $taxonomy_labels->singular_name; ?></th>
+					<th scope="col"><?php echo esc_html( $taxonomy_labels->singular_name ); ?></th>
 					<th scope="col"><?php _e( 'Posts', 'posts-and-users-stats' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php foreach ( $terms as $term ) { ?>
 				<tr>
-					<td><?php echo $term->name; ?></td>
-					<td class="number"><?php echo $term->count; ?></td>
+					<td><?php echo esc_html( $term->name ); ?></td>
+					<td class="number"><?php echo esc_html( $term->count ); ?></td>
 				<?php } ?>
 				</tr>
 			</tbody>
@@ -494,16 +495,16 @@ $start_time = microtime( true );
 					text: '<?php _e( 'Posts per Author', 'posts-and-users-stats' ); ?>'
 				},
 				subtitle: {
-					text: '<?php echo get_bloginfo( 'name' ); ?>'
+					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
 				},
 				xAxis: {
 					categories: [
 						<?php
 						foreach ( $posts_per_author as $author ) {
-							echo "'" . $author['name'] . "',";
+							echo "'" . esc_js( $author['name'] ) . "',";
 						}
 						?>
-						 ],
+					]
 				},
 				yAxis: {
 					title: {
@@ -512,23 +513,23 @@ $start_time = microtime( true );
 					min: 0
 				},
 				legend: {
-					enabled: false,
+					enabled: false
 				},
 				series: [ {
 					name: 'all',
 					data: [ 
 					<?php
 					foreach ( $posts_per_author as $author ) {
-								echo $author['total'] . ',';
+						echo esc_js( $author['total'] ) . ',';
 					}
-							?>
-							 ]
+					?>
+					]
 				} ],
 				credits: {
 					enabled: false
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( __( 'Posts per Author', 'posts-and-users-stats' ) ); ?>'
+					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( __( 'Posts per Author', 'posts-and-users-stats' ) ) ); ?>'
 				}
 			});
 		});
@@ -541,18 +542,18 @@ $start_time = microtime( true );
 					text: '<?php _e( 'Posts per Type', 'posts-and-users-stats' ); ?>'
 				},
 				subtitle: {
-					text: '<?php echo get_bloginfo( 'name' ); ?>'
+					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
 				},
 				xAxis: {
 					categories: [ 
 						<?php
 						foreach ( $posts_per_type as $type => $count ) {
 							if ( 'total' != $type && $count > 0 ) {
-								echo "'" . $type . "',";
+								echo "'" . esc_js( $type ) . "',";
 							}
 						}
 						?>
-						 ],
+					]
 				},
 				yAxis: {
 					title: {
@@ -569,22 +570,22 @@ $start_time = microtime( true );
 					<?php
 					foreach ( $posts_per_type as $type => $count ) {
 						if ( 'total' != $type && $count > 0 ) {
-							echo $count . ',';
+							echo esc_js( $count ) . ',';
 						}
 					}
-							?>
-							 ]
+					?>
+					]
 				} ],
 				credits: {
 					enabled: false	
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( __( 'Posts per Type', 'posts-and-users-stats' ) ); ?>'
+					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( __( 'Posts per Type', 'posts-and-users-stats' ) ) ); ?>'
 				}
 			});
 		});
 		</script>
-		<h3><?php echo __( 'Posts per Author and Post Type', 'posts-and-users-stats' ); ?>
+		<h3><?php _e( 'Posts per Author and Post Type', 'posts-and-users-stats' ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
 				'csv-authors-and-types',
@@ -601,7 +602,7 @@ $start_time = microtime( true );
 					foreach ( $post_types as $post_type ) {
 						$type_object = get_post_type_object( $post_type );
 						?>
-					<th><?php echo $type_object->label; ?></th>
+					<th><?php echo esc_html( $type_object->label ); ?></th>
 					<?php } ?>
 					<th><?php _e( 'all post types', 'posts-and-users-stats' ); ?></th>
 				</tr>
@@ -609,25 +610,25 @@ $start_time = microtime( true );
 			<tbody>
 				<?php foreach ( $posts_per_author as $author ) { ?>
 				<tr>
-					<td><?php echo $author['name']; ?></td>
+					<td><?php echo esc_html( $author['name'] ); ?></td>
 					<?php foreach ( $post_types as $post_type ) { ?>
 					<td class="number">
-					<?php
-					if ( 'post' == $post_type ) {
+						<?php
+						if ( 'post' == $post_type ) {
 							posts_and_users_stats_echo_link( get_author_posts_url( $author['ID'] ), $author['post'] );
-					} else {
-						echo $author[ $post_type ];
-					}
+						} else {
+							echo esc_html( $author[ $post_type ] );
+						}
 						?>
 						</td>
 					<?php } ?>
-					<td class="number"><strong><?php echo $author['total']; ?></strong></td>
+					<td class="number"><strong><?php echo esc_html( $author['total'] ); ?></strong></td>
 				</tr>
 				<?php } ?>
 				<tr>
 					<td><strong><?php _e( 'all authors', 'posts-and-users-stats' ); ?></strong></td>
 					<?php foreach ( $posts_per_type as $type => $count ) { ?>
-					<td class="number"><strong><?php echo $count; ?></strong></td>
+					<td class="number"><strong><?php echo esc_html( $count ); ?></strong></td>
 				<?php } ?>
 				</tr>
 			</tbody>
@@ -655,16 +656,16 @@ $start_time = microtime( true );
 					text: '<?php _e( 'Posts per Status', 'posts-and-users-stats' ); ?>'
 				},
 				subtitle: {
-					text: '<?php echo get_bloginfo( 'name' ); ?>'
+					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
 				},
 				xAxis: {
 					categories: [ 
 						<?php
 						foreach ( $statuses as $status_slug => $status_name ) {
-							echo "'" . $status_name . "',";
+							echo "'" . esc_js( $status_name ) . "',";
 						}
 						?>
-						 ],
+					]
 				},
 				yAxis: {
 					title: {
@@ -680,21 +681,21 @@ $start_time = microtime( true );
 					data: [ 
 					<?php
 					foreach ( $statuses as $status_slug => $status_name ) {
-								echo $posts_per_status->$status_slug . ',';
+						echo esc_js( $posts_per_status->$status_slug ) . ',';
 					}
-							?>
-							 ]
+					?>
+					]
 				} ],
 				credits: {
 					enabled: false
 				},
 				exporting: {
-					filename: '<?php echo posts_and_users_stats_get_export_file_name( __( 'Posts per Status', 'posts-and-users-stats' ) ); ?>'
+					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( __( 'Posts per Status', 'posts-and-users-stats' ) ) ); ?>'
 				}
 			});
 		});
 		</script>
-		<h3><?php echo __( 'Posts per Status', 'posts-and-users-stats' ); ?>
+		<h3><?php _e( 'Posts per Status', 'posts-and-users-stats' ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
 				'csv-status',
@@ -713,21 +714,12 @@ $start_time = microtime( true );
 			<tbody>
 				<?php foreach ( $statuses as $status_slug => $status_name ) { ?>
 				<tr>
-					<td><?php echo $status_name; ?></td>
-					<td class="number"><?php echo $posts_per_status->$status_slug; ?></td>
+					<td><?php echo esc_html( $status_name ); ?></td>
+					<td class="number"><?php echo esc_html( $posts_per_status->$status_slug ); ?></td>
 				</tr>
 				<?php } ?>
 			</tbody>
 		</table>
 	</section>
 	<?php } ?>
-	<?php $end_time = microtime( true ); ?>
-	<p>
-		<?php
-		echo sprintf(
-			// translators: seconds.
-			__( 'Statistics generated in %s seconds.', 'posts-and-users-stats' ), number_format_i18n( $end_time - $start_time, 2 )
-		);
-		?>
-	</p>
 </div>
