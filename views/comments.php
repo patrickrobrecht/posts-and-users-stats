@@ -25,7 +25,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 }
 ?>
 <div class="wrap posts-and-users-stats">
-	<h1><?php _e( 'Comments Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $tabs[ $selected_tab ] ); ?></h1>
+	<h1><?php esc_html_e( 'Comments Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $tabs[ $selected_tab ] ); ?></h1>
 	
 	<h2 class="nav-tab-wrapper">
 	<?php foreach ( $tabs as $tab_slug => $tab_title ) { ?>
@@ -64,13 +64,13 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 	?>
 	<nav>
 		<?php if ( ! is_array( $comments_per_date ) || count( $comments_per_date ) <= 0 ) { ?>
-		<p><?php _e( 'No approved comments found!', 'posts-and-users-stats' ); ?>
+		<p><?php esc_html_e( 'No approved comments found!', 'posts-and-users-stats' ); ?>
 		<?php } else { ?>
 		<ul>
 			<li><a href="#monthly"><?php echo esc_html( $per_month_string ); ?></a>
 		<?php foreach ( $comments_per_year as $year_object ) { ?>
 			<li><a href="#<?php echo esc_attr( $year_object->year ); ?>">
-					<?php _e( 'Year', 'posts-and-users-stats' ); ?>
+					<?php esc_html_e( 'Year', 'posts-and-users-stats' ); ?>
 					<?php echo esc_html( $year_object->year ); ?></a></li>
 		<?php } ?>
 		</ul>
@@ -95,12 +95,12 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 						month: '%m/%Y'
 					},
 					title: {
-						text: '<?php _e( 'Month', 'posts-and-users-stats' ); ?>'
+						text: '<?php esc_html_e( 'Month', 'posts-and-users-stats' ); ?>'
 					}
 				},
 				yAxis: {
 					title: {
-						text: '<?php _e( 'Comments', 'posts-and-users-stats' ); ?>',
+						text: '<?php esc_html_e( 'Comments', 'posts-and-users-stats' ); ?>',
 					},
 					min: 0
 				},
@@ -108,7 +108,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 					enabled: false
 				},
 				series: [ {
-					name: '<?php _e( 'Comments', 'posts-and-users-stats' ); ?>',
+					name: '<?php esc_html_e( 'Comments', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					foreach ( $comments_per_month as $comments_of_month ) {
@@ -146,12 +146,12 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 				xAxis: {
 					type: 'datetime',
 					title: {
-						text: '<?php _e( 'Date', 'posts-and-users-stats' ); ?>'
+						text: '<?php esc_html_e( 'Date', 'posts-and-users-stats' ); ?>'
 					}
 				},
 				yAxis: {
 					title: {
-						text: '<?php _e( 'Comments', 'posts-and-users-stats' ); ?>',
+						text: '<?php esc_html_e( 'Comments', 'posts-and-users-stats' ); ?>',
 					},
 					min: 0
 				},
@@ -166,7 +166,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 					enabled: false
 				},
 				series: [ {
-					name: '<?php _e( 'Comments', 'posts-and-users-stats' ); ?>',
+					name: '<?php esc_html_e( 'Comments', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					foreach ( $comments_per_date as $comments_of_date ) {
@@ -200,11 +200,11 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 		<table id="table-monthly" class="wp-list-table widefat">
 			<thead>
 				<tr>
-					<th scope="row"><?php _e( 'Month', 'posts-and-users-stats' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Month', 'posts-and-users-stats' ); ?></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
 					<th scope="col"><?php echo esc_html( date_i18n( 'M', strtotime( '2016-' . $month . '-1' ) ) ); ?></th>
 					<?php } ?>
-					<th scope="col"><?php _e( 'Sum', 'posts-and-users-stats' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Sum', 'posts-and-users-stats' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -239,7 +239,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 	<section>
 		<h3 id="<?php echo esc_attr( $year ); ?>">
 			<?php
-			_e( 'Year', 'posts-and-users-stats' );
+			esc_html_e( 'Year', 'posts-and-users-stats' );
 			echo ' ' . esc_html( $year );
 			posts_and_users_stats_echo_export_button(
 				'csv-daily-' . $year,
@@ -251,7 +251,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 		<table id="table-daily-<?php echo esc_attr( $year ); ?>" class="wp-list-table widefat">
 			<thead>
 				<tr>
-					<th scope="row"><?php _e( 'Month', 'posts-and-users-stats' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Month', 'posts-and-users-stats' ); ?></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
 					<th scope="col"><?php echo esc_html( date_i18n( 'M', strtotime( '2016-' . $month . '-1' ) ) ); ?></th>
 					<?php } ?>
@@ -260,7 +260,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 			<tbody>
 				<?php foreach ( range( 1, 31, 1 ) as $day ) { ?>
 				<tr>
-					<th scope="row"><?php _e( 'Day', 'posts-and-users-stats' ); ?> <?php echo esc_html( $day ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Day', 'posts-and-users-stats' ); ?> <?php echo esc_html( $day ); ?></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
 					<td class="number">
 					<?php
@@ -280,7 +280,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 				</tr>
 				<?php } ?>
 				<tr>
-					<th scope="row"><strong><?php _e( 'Sum', 'posts-and-users-stats' ); ?></strong></th>
+					<th scope="row"><strong><?php esc_html_e( 'Sum', 'posts-and-users-stats' ); ?></strong></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
 					<td class="number"><strong>
 					<?php
@@ -322,7 +322,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 					type: 'column'
 				},
 				title: {
-					text: '<?php _e( 'Comments per Author', 'posts-and-users-stats' ); ?>'
+					text: '<?php esc_html_e( 'Comments per Author', 'posts-and-users-stats' ); ?>'
 				},
 				subtitle: {
 					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
@@ -338,7 +338,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 				},
 				yAxis: {
 					title: {
-						text: '<?php _e( 'Comments', 'posts-and-users-stats' ); ?>'
+						text: '<?php esc_html_e( 'Comments', 'posts-and-users-stats' ); ?>'
 					},
 					min: 0
 				},
@@ -346,7 +346,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 					enabled: false
 				},
 				series: [ {
-					name: '<?php _e( 'Comments', 'posts-and-users-stats' ); ?>',
+					name: '<?php esc_html_e( 'Comments', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					foreach ( $comments_per_author as $author ) {
@@ -364,7 +364,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 			});
 		});
 		</script>
-		<h3><?php _e( 'Comments per Author', 'posts-and-users-stats' ); ?>
+		<h3><?php esc_html_e( 'Comments per Author', 'posts-and-users-stats' ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
 				'csv-authors',
@@ -376,8 +376,8 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 		<table id="table-authors" class="wp-list-table widefat">
 			<thead>
 				<tr>
-					<th scope="col"><?php _e( 'Author', 'posts-and-users-stats' ); ?></th>
-					<th scope="col"><?php _e( 'Comments', 'posts-and-users-stats' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Author', 'posts-and-users-stats' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Comments', 'posts-and-users-stats' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -413,7 +413,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 					type: 'column'
 				},
 				title: {
-					text: '<?php _e( 'Comments per Status', 'posts-and-users-stats' ); ?>'
+					text: '<?php esc_html_e( 'Comments per Status', 'posts-and-users-stats' ); ?>'
 				},
 				subtitle: {
 					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
@@ -429,7 +429,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 				},
 				yAxis: {
 					title: {
-						text: '<?php _e( 'Comments', 'posts-and-users-stats' ); ?>'
+						text: '<?php esc_html_e( 'Comments', 'posts-and-users-stats' ); ?>'
 					},
 					min: 0
 				},
@@ -437,7 +437,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 					enabled: false
 				},
 				series: [ {
-					name: '<?php _e( 'Comments', 'posts-and-users-stats' ); ?>',
+					name: '<?php esc_html_e( 'Comments', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					foreach ( $comment_statuses as $status => $name ) {
@@ -455,7 +455,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 			});
 		});
 		</script>
-		<h3><?php _e( 'Comments per Status', 'posts-and-users-stats' ); ?>
+		<h3><?php esc_html_e( 'Comments per Status', 'posts-and-users-stats' ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
 				'csv-status',
@@ -467,8 +467,8 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 		<table id="table-status" class="wp-list-table widefat">
 			<thead>
 				<tr>
-					<th scope="col"><?php _e( 'Status', 'posts-and-users-stats' ); ?></th>
-					<th scope="col"><?php _e( 'Comments', 'posts-and-users-stats' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Status', 'posts-and-users-stats' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Comments', 'posts-and-users-stats' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>

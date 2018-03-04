@@ -29,7 +29,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' ) );
 ?>
 <div class="wrap posts-and-users-stats">
-	<h1><?php _e( 'Posts Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $tabs[ $selected_tab ] ); ?></h1>
+	<h1><?php esc_html_e( 'Posts Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $tabs[ $selected_tab ] ); ?></h1>
 
 	<h2 class="nav-tab-wrapper">
 	<?php foreach ( $tabs as $tab_slug => $tab_title ) { ?>
@@ -93,14 +93,14 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 	?>
 	<form method="POST" action="">
 		<fieldset>
-			<legend><?php _e( 'With a selection only the posts defined are counted, otherwise any content.', 'posts-and-users-stats' ); ?></legend>
+			<legend><?php esc_html_e( 'With a selection only the posts defined are counted, otherwise any content.', 'posts-and-users-stats' ); ?></legend>
 			<select id="type" name="type">
-				<option value="content" <?php selected( $selected_post_type, '', true ); ?>><?php _e( 'all post types', 'posts-and-users-stats' ); ?></option>
+				<option value="content" <?php selected( $selected_post_type, '', true ); ?>><?php esc_html_e( 'all post types', 'posts-and-users-stats' ); ?></option>
 				<?php foreach ( $post_types as $post_type ) { ?>
 				<option value="<?php echo esc_attr( $post_type ); ?>" <?php selected( $selected_post_type, $post_type, true ); ?>><?php echo esc_html( get_post_type_object( $post_type )->label ); ?></option>
 				<?php } ?>
 			</select>
-			<button type="submit" class="button-secondary" ><?php _e( 'Select', 'posts-and-users-stats' ); ?></button>
+			<button type="submit" class="button-secondary" ><?php esc_html_e( 'Select', 'posts-and-users-stats' ); ?></button>
 		</fieldset>
 	</form>
 	<nav>
@@ -110,7 +110,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 		<ul>
 			<li><a href="#monthly"><?php echo esc_html( $per_month_string ); ?></a>
 		<?php foreach ( $posts_per_year as $year_object ) { ?>
-			<li><a href="#<?php echo esc_attr( $year_object->year ); ?>"><?php _e( 'Year', 'posts-and-users-stats' ); ?> <?php echo esc_html( $year_object->year ); ?></a></li>
+			<li><a href="#<?php echo esc_attr( $year_object->year ); ?>"><?php esc_html_e( 'Year', 'posts-and-users-stats' ); ?> <?php echo esc_html( $year_object->year ); ?></a></li>
 		<?php } ?>
 		</ul>
 	</nav>	
@@ -134,12 +134,12 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 						month: '%m/%Y'
 					},
 					title: {
-						text: '<?php _e( 'Month', 'posts-and-users-stats' ); ?>'
+						text: '<?php esc_html_e( 'Month', 'posts-and-users-stats' ); ?>'
 					}
 				},
 				yAxis: {
 					title: {
-						text: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>'
+						text: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
 					},
 					min: 0
 				},
@@ -147,7 +147,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 					enabled: false
 				},
 				series: [ {
-					name: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
+					name: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					foreach ( $posts_per_month as $posts_of_month ) {
@@ -185,12 +185,12 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 				xAxis: {
 					type: 'datetime',
 					title: {
-						text: '<?php _e( 'Date', 'posts-and-users-stats' ); ?>'
+						text: '<?php esc_html_e( 'Date', 'posts-and-users-stats' ); ?>'
 					}
 				},
 				yAxis: {
 					title: {
-						text: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
+						text: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>',
 					},
 					min: 0
 				},
@@ -205,7 +205,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 					enabled: false
 				},
 				series: [ {
-					name: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
+					name: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					foreach ( $posts_per_date as $posts_of_date ) {
@@ -239,11 +239,11 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 		<table id="table-monthly" class="wp-list-table widefat">
 			<thead>
 				<tr>
-					<th scope="row"><?php _e( 'Month', 'posts-and-users-stats' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Month', 'posts-and-users-stats' ); ?></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
 					<th scope="col"><?php echo esc_html( date_i18n( 'M', strtotime( '2016-' . $month . '-1' ) ) ); ?></th>
 					<?php } ?>
-					<th scope="col"><?php _e( 'Sum', 'posts-and-users-stats' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Sum', 'posts-and-users-stats' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -278,7 +278,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 	<section>
 		<h3 id="<?php echo esc_attr( $year ); ?>">
 			<?php
-			_e( 'Year', 'posts-and-users-stats' );
+			esc_html_e( 'Year', 'posts-and-users-stats' );
 			echo ' ' . esc_html( $year );
 			posts_and_users_stats_echo_export_button(
 				'csv-daily-' . $year,
@@ -290,7 +290,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 		<table id="table-daily-<?php echo esc_attr( $year ); ?>" class="wp-list-table widefat">
 			<thead>
 				<tr>
-					<th scope="row"><?php _e( 'Month', 'posts-and-users-stats' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Month', 'posts-and-users-stats' ); ?></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
 					<th scope="col"><?php echo esc_html( date_i18n( 'M', strtotime( '2016-' . $month . '-1' ) ) ); ?></th>
 					<?php } ?>
@@ -299,7 +299,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 			<tbody>
 				<?php foreach ( range( 1, 31, 1 ) as $day ) { ?>
 				<tr>
-					<th scope="row"><?php _e( 'Day', 'posts-and-users-stats' ); ?> <?php echo esc_html( $day ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Day', 'posts-and-users-stats' ); ?> <?php echo esc_html( $day ); ?></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
 					<td class="number">
 					<?php
@@ -313,13 +313,13 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 					} else {
 						echo '&mdash;';
 					}
-							?>
-							</td>
+					?>
+					</td>
 					<?php } ?>
 				</tr>
 				<?php } ?>
 				<tr>
-					<th scope="row"><strong><?php _e( 'Sum', 'posts-and-users-stats' ); ?></strong></th>
+					<th scope="row"><strong><?php esc_html_e( 'Sum', 'posts-and-users-stats' ); ?></strong></th>
 					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
 					<td class="number"><strong>
 						<?php
@@ -394,7 +394,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 				},
 				yAxis: {
 					title: {
-						text: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>'
+						text: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
 					},
 					min: 0
 				},
@@ -402,7 +402,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 					enabled: false
 				},
 				series: [ {
-					name: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
+					name: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					foreach ( $terms as $term ) {
@@ -434,7 +434,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 			<thead>
 				<tr>
 					<th scope="col"><?php echo esc_html( $taxonomy_labels->singular_name ); ?></th>
-					<th scope="col"><?php _e( 'Posts', 'posts-and-users-stats' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -492,7 +492,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 					type: 'column'
 				},
 				title: {
-					text: '<?php _e( 'Posts per Author', 'posts-and-users-stats' ); ?>'
+					text: '<?php esc_html_e( 'Posts per Author', 'posts-and-users-stats' ); ?>'
 				},
 				subtitle: {
 					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
@@ -508,7 +508,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 				},
 				yAxis: {
 					title: {
-						text: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>'
+						text: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
 					},
 					min: 0
 				},
@@ -539,7 +539,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 					type: 'column'
 				},
 				title: {
-					text: '<?php _e( 'Posts per Type', 'posts-and-users-stats' ); ?>'
+					text: '<?php esc_html_e( 'Posts per Type', 'posts-and-users-stats' ); ?>'
 				},
 				subtitle: {
 					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
@@ -557,12 +557,12 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 				},
 				yAxis: {
 					title: {
-						text: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>'
+						text: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
 					},
 					min: 0
 				},
 				legend: {
-					enabled: false,
+					enabled: false
 				},
 				series: [ {
 					name: 'all',
@@ -585,7 +585,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 			});
 		});
 		</script>
-		<h3><?php _e( 'Posts per Author and Post Type', 'posts-and-users-stats' ); ?>
+		<h3><?php esc_html_e( 'Posts per Author and Post Type', 'posts-and-users-stats' ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
 				'csv-authors-and-types',
@@ -597,14 +597,14 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 		<table id="table-authors-and-types" class="wp-list-table widefat">
 			<thead>
 				<tr>
-					<th scope="col"><?php _e( 'Author', 'posts-and-users-stats' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Author', 'posts-and-users-stats' ); ?></th>
 					<?php
 					foreach ( $post_types as $post_type ) {
 						$type_object = get_post_type_object( $post_type );
 						?>
 					<th><?php echo esc_html( $type_object->label ); ?></th>
 					<?php } ?>
-					<th><?php _e( 'all post types', 'posts-and-users-stats' ); ?></th>
+					<th><?php esc_html_e( 'all post types', 'posts-and-users-stats' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -626,7 +626,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 				</tr>
 				<?php } ?>
 				<tr>
-					<td><strong><?php _e( 'all authors', 'posts-and-users-stats' ); ?></strong></td>
+					<td><strong><?php esc_html_e( 'all authors', 'posts-and-users-stats' ); ?></strong></td>
 					<?php foreach ( $posts_per_type as $type => $count ) { ?>
 					<td class="number"><strong><?php echo esc_html( $count ); ?></strong></td>
 				<?php } ?>
@@ -653,7 +653,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 					type: 'column'
 				},
 				title: {
-					text: '<?php _e( 'Posts per Status', 'posts-and-users-stats' ); ?>'
+					text: '<?php esc_html_e( 'Posts per Status', 'posts-and-users-stats' ); ?>'
 				},
 				subtitle: {
 					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
@@ -669,15 +669,15 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 				},
 				yAxis: {
 					title: {
-						text: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>'
+						text: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
 					},
 					min: 0
 				},
 				legend: {
-					enabled: false,
+					enabled: false
 				},
 				series: [ {
-					name: '<?php _e( 'Posts', 'posts-and-users-stats' ); ?>',
+					name: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					foreach ( $statuses as $status_slug => $status_name ) {
@@ -695,7 +695,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 			});
 		});
 		</script>
-		<h3><?php _e( 'Posts per Status', 'posts-and-users-stats' ); ?>
+		<h3><?php esc_html_e( 'Posts per Status', 'posts-and-users-stats' ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
 				'csv-status',
@@ -707,8 +707,8 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 		<table id="table-status" class="wp-list-table widefat">
 			<thead>
 				<tr>
-					<th scope="col"><?php _e( 'Status', 'posts-and-users-stats' ); ?></th>
-					<th scope="col"><?php _e( 'Posts', 'posts-and-users-stats' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Status', 'posts-and-users-stats' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>

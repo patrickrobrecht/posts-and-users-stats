@@ -26,13 +26,6 @@
         <!-- fix necessary -->
         <exclude-pattern>posts.php</exclude-pattern>
     </rule>
-    <rule ref="WordPress.XSS.EscapeOutput.UnsafePrintingFunction">
-        <!-- fix necessary -->
-        <exclude-pattern>comments.php</exclude-pattern>
-        <exclude-pattern>posts.php</exclude-pattern>
-        <exclude-pattern>users.php</exclude-pattern>
-        <exclude-pattern>posts-and-users-stats.php</exclude-pattern>
-    </rule>
     <rule ref="WordPress.VIP.DirectDatabaseQuery.NoCaching">
         <exclude-pattern>comments.php</exclude-pattern>
         <exclude-pattern>posts.php</exclude-pattern>

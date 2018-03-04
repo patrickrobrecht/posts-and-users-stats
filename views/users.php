@@ -24,7 +24,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 }
 ?>
 <div class="wrap posts-and-users-stats">
-	<h1><?php _e( 'Users Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $tabs[ $selected_tab ] ); ?></h1>
+	<h1><?php esc_html_e( 'Users Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $tabs[ $selected_tab ] ); ?></h1>
 
 	<h2 class="nav-tab-wrapper">
 	<?php foreach ( $tabs as $tab_slug => $tab_title ) { ?>
@@ -48,7 +48,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 					type: 'column'
 				},
 				title: {
-					text: '<?php _e( 'Users per Role', 'posts-and-users-stats' ); ?>'
+					text: '<?php esc_html_e( 'Users per Role', 'posts-and-users-stats' ); ?>'
 				},
 				subtitle: {
 					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
@@ -64,7 +64,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 				},
 				yAxis: {
 					title: {
-						text: '<?php _e( 'Users', 'posts-and-users-stats' ); ?>'
+						text: '<?php esc_html_e( 'Users', 'posts-and-users-stats' ); ?>'
 					},
 					min: 0
 				},
@@ -89,7 +89,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 			});
 		});
 		</script>
-		<h3><?php _e( 'Users per Role', 'posts-and-users-stats' ); ?>
+		<h3><?php esc_html_e( 'Users per Role', 'posts-and-users-stats' ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
 				'csv-users-per-role',
@@ -110,8 +110,8 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 		<table id="table-users-per-role" class="wp-list-table widefat">
 			<thead>
 				<tr>
-					<th scope="col"><?php _e( 'Role', 'posts-and-users-stats' ); ?></th>
-					<th scope="col"><?php _e( 'Number of users', 'posts-and-users-stats' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Role', 'posts-and-users-stats' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Number of users', 'posts-and-users-stats' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -144,7 +144,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 					type: 'spline'
 				},
 				title: {
-					text: '<?php _e( 'Users over Time', 'posts-and-users-stats' ); ?>'
+					text: '<?php esc_html_e( 'Users over Time', 'posts-and-users-stats' ); ?>'
 				},
 				subtitle: {
 					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
@@ -155,20 +155,20 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 						month: '%m \'%y'
 					},
 					title: {
-						text: '<?php _e( 'Users over Time', 'posts-and-users-stats' ); ?>'
+						text: '<?php esc_html_e( 'Users over Time', 'posts-and-users-stats' ); ?>'
 					}
 				},
 				yAxis: {
 					title: {
-						text: '<?php _e( 'Users', 'posts-and-users-stats' ); ?>'
+						text: '<?php esc_html_e( 'Users', 'posts-and-users-stats' ); ?>'
 					},
 					min: 0
 				},
 				legend: {
-					enabled: false,
+					enabled: false
 				},
 				series: [ {
-					name: '<?php _e( 'Users', 'posts-and-users-stats' ); ?>',
+					name: '<?php esc_html_e( 'Users', 'posts-and-users-stats' ); ?>',
 					data: [ 
 					<?php
 					$users = 0;
@@ -192,7 +192,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 			});
 		});
 		</script>
-		<h3><?php _e( 'Users over Time', 'posts-and-users-stats' ); ?>
+		<h3><?php esc_html_e( 'Users over Time', 'posts-and-users-stats' ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
 				'csv-users-date',
@@ -204,8 +204,8 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 		<table id="table-users-date" class="wp-list-table widefat">
 			<thead>
 				<tr>
-					<th><?php _e( 'Date', 'posts-and-users-stats' ); ?></th>
-					<th><?php _e( 'Number of new users', 'posts-and-users-stats' ); ?></th>
+					<th><?php esc_html_e( 'Date', 'posts-and-users-stats' ); ?></th>
+					<th><?php esc_html_e( 'Number of new users', 'posts-and-users-stats' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
