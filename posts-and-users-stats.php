@@ -31,79 +31,108 @@ add_action( 'init', 'posts_and_users_stats_load_plugin_textdomain' );
  * Register and load the style sheet.
  */
 function posts_and_users_stats_register_and_load_css() {
-	wp_register_style(
-		'posts-and-users-stats',
-		plugins_url(
-			'/css/style.css',
-			__FILE__
-		),
-		array()
-	);
-
-	wp_enqueue_style( 'posts-and-users-stats' );
+	if ( posts_and_users_stats_current_user_can() ) {
+		wp_enqueue_style(
+			'posts-and-users-stats',
+			plugins_url(
+				'/css/style.css',
+				__FILE__
+			),
+			array()
+		);
+		wp_enqueue_style(
+			'chartist-css',
+			plugins_url(
+				'/vendor/npm-asset/chartist/dist/chartist.css',
+				__FILE__
+			)
+		);
+	}
 }
-// Load css file.
-add_action( 'admin_print_styles', 'posts_and_users_stats_register_and_load_css' );
 
 /**
  * Register the Highcharts libraries and load these and JQuery.
  */
 function posts_and_users_stats_register_and_load_scripts() {
-	wp_register_script(
-		'highcharts',
-		plugins_url(
-			'/js/highcharts.js',
-			__FILE__
-		),
-		array( 'jquery' )
-	);
-	wp_register_script(
-		'highcharts-exporting',
-		plugins_url(
-			'/js/exporting.js',
-			__FILE__
-		)
-	);
-	wp_register_script(
-		'table-to-csv',
-		plugins_url(
-			'/js/table-to-csv.js',
-			__FILE__
-		)
-	);
-
-	wp_enqueue_script( 'highcharts' );
-	wp_enqueue_script( 'highcharts-exporting' );
-	wp_enqueue_script( 'table-to-csv' );
+	if ( posts_and_users_stats_current_user_can() ) {
+		wp_enqueue_script(
+			'highcharts',
+			plugins_url(
+				'/js/highcharts.js',
+				__FILE__
+			),
+			array( 'jquery' )
+		);
+		wp_enqueue_script(
+			'highcharts-exporting',
+			plugins_url(
+				'/js/exporting.js',
+				__FILE__
+			)
+		);
+		wp_enqueue_script(
+			'chartist',
+			plugins_url(
+				'/vendor/npm-asset/chartist/dist/chartist.js',
+				__FILE__
+			)
+		);
+		wp_enqueue_script(
+			'chartist-plugin-axistitle',
+			plugins_url(
+				'/vendor/npm-asset/chartist-plugin-axistitle/dist/chartist-plugin-axistitle.js',
+				__FILE__
+			)
+		);
+		wp_enqueue_script(
+			'moment',
+			plugins_url(
+				'/vendor/npm-asset/moment/moment.js',
+				__FILE__
+			)
+		);
+		wp_enqueue_script(
+			'posts-and-users-stats-functions',
+			plugins_url(
+				'/js/functions.js',
+				__FILE__
+			)
+		);
+	}
 }
-// Load JavaScript libraries.
-add_action( 'admin_print_scripts', 'posts_and_users_stats_register_and_load_scripts' );
 
 /**
  * Create an item and submenu items in the WordPress admin menu.
  */
 function posts_and_users_stats_add_menu() {
-	add_management_page(
+	$page_hook_suffixes = array();
+	$page_hook_suffixes[] = add_management_page(
 		__( 'Posts Statistics', 'posts-and-users-stats' ),
 		__( 'Posts Statistics', 'posts-and-users-stats' ),
 		'export',
 		'posts_and_users_stats_posts',
 		'posts_and_users_stats_show_posts'
 	);
-	add_management_page(
+	$page_hook_suffixes[] = add_management_page(
 		__( 'Comments Statistics', 'posts-and-users-stats' ),
 		__( 'Comments Statistics', 'posts-and-users-stats' ),
 		'export',
 		'posts_and_users_stats_comments',
 		'posts_and_users_stats_show_comments'
 	);
-	add_management_page(
+	$page_hook_suffixes[] = add_management_page(
 		__( 'Users Statistics', 'posts-and-users-stats' ),
 		__( 'Users Statistics', 'posts-and-users-stats' ),
 		'export',
 		'posts_and_users_stats_users',
 		'posts_and_users_stats_show_users'
 	);
+
+	// Load CSS and JavaScript on plugin pages.
+	foreach ( $page_hook_suffixes as $page_hook_suffix ) {
+		add_action( "admin_print_styles-{$page_hook_suffix}", 'posts_and_users_stats_register_and_load_css' );
+		add_action( "admin_print_scripts-{$page_hook_suffix}", 'posts_and_users_stats_register_and_load_scripts' );
+	}
 }
 // Register the menu building function.
 add_action( 'admin_menu', 'posts_and_users_stats_add_menu' );

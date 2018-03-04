@@ -75,7 +75,28 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 		<?php } ?>
 		</ul>
 	</nav>
-	<section>	
+	<section>
+		<div class="chart-container">
+			<div class="chart-title">
+				<?php echo esc_html( get_bloginfo( 'name' ) ); ?>:
+				TITLE
+			</div>
+			<div id="chart-users-roles"></div>
+			<script>
+				posts_and_users_stats_bar_chart(
+					'#chart-users-roles',
+					[
+						XDATA
+					],
+					[
+						YDATA
+					],
+					'XTITLE',
+					'YTITLE'
+				)
+			</script>
+		</div>
+
 		<div id="chart-monthly" class="chart"></div>
 		<script>
 		jQuery(function() {

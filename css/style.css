@@ -10,3 +10,14 @@
 .posts-and-users-stats tr:nth-child(2n){background:#ddd;}
 .posts-and-users-stats th,.posts-and-users-stats td{padding:.7em;vertical-align:top;}
 .posts-and-users-stats .number{text-align:right;}
+
+.chart-container {
+    background: #fff;
+    margin: 1em 0;
+}
+
+.chart-title {
+    text-align: center;
+    font-size: 1.5em;
+    padding: 0.5em 0;
+}

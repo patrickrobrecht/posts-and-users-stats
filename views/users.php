@@ -40,55 +40,34 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 		$roles = array_diff( $roles, array( 0 ) ); // removes roles with count = 0.
 	?>
 	<section>
-		<div id="chart-roles" class="chart"></div>
-		<script>
-		jQuery(function() {
-			jQuery('#chart-roles').highcharts({
-				chart: {
-					type: 'column'
-				},
-				title: {
-					text: '<?php esc_html_e( 'Users per Role', 'posts-and-users-stats' ); ?>'
-				},
-				subtitle: {
-					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
-				},
-				xAxis: {
-					categories: [
+		<div class="chart-container">
+			<div class="chart-title">
+				<?php echo esc_html( get_bloginfo( 'name' ) ); ?>:
+				<?php esc_html_e( 'Users per Role', 'posts-and-users-stats' ); ?>
+			</div>
+			<div id="chart-users-roles"></div>
+			<script>
+				posts_and_users_stats_bar_chart(
+					'#chart-users-roles',
+					[
 						<?php
 						foreach ( $roles as $role => $count ) {
 							echo "'" . esc_js( $role ) . "',";
 						}
 						?>
-					]
-				},
-				yAxis: {
-					title: {
-						text: '<?php esc_html_e( 'Users', 'posts-and-users-stats' ); ?>'
-					},
-					min: 0
-				},
-				legend: {
-					enabled: false
-				},
-				series: [ {
-					data: [ 
-					<?php
-					foreach ( $roles as $role => $count ) {
-						echo esc_js( $count ) . ',';
-					}
-					?>
-					]
-				} ],
-				credits: {
-					enabled: false
-				},
-				exporting: {
-					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( __( 'Users per Role', 'posts-and-users-stats' ) ) ); ?>'
-				}
-			});
-		});
-		</script>
+					],
+					[
+						<?php
+						foreach ( $roles as $role => $count ) {
+							echo esc_js( $count ) . ',';
+						}
+						?>
+					],
+					'<?php esc_html_e( 'Role', 'posts-and-users-stats' ); ?>',
+					'<?php esc_html_e( 'Users', 'posts-and-users-stats' ); ?>'
+				)
+			</script>
+		</div>
 		<h3><?php esc_html_e( 'Users per Role', 'posts-and-users-stats' ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
@@ -105,8 +84,8 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 			esc_html( __( 'There are %s total users.', 'posts-and-users-stats' ) ),
 			esc_html( $users['total_users'] )
 		);
-			?>
-			</p>
+		?>
+		</p>
 		<table id="table-users-per-role" class="wp-list-table widefat">
 			<thead>
 				<tr>
@@ -136,62 +115,35 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 		);
 	?>
 	<section>
-		<div id="chart-users-date" class="chart"></div>
-		<script>
-		jQuery(function() {
-			jQuery('#chart-users-date').highcharts({
-				chart: {
-					type: 'spline'
-				},
-				title: {
-					text: '<?php esc_html_e( 'Users over Time', 'posts-and-users-stats' ); ?>'
-				},
-				subtitle: {
-					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
-				},
-				xAxis: {
-					type: 'datetime',
-					dateTimeLabelFormats: {
-						month: '%m \'%y'
-					},
-					title: {
-						text: '<?php esc_html_e( 'Users over Time', 'posts-and-users-stats' ); ?>'
-					}
-				},
-				yAxis: {
-					title: {
-						text: '<?php esc_html_e( 'Users', 'posts-and-users-stats' ); ?>'
-					},
-					min: 0
-				},
-				legend: {
-					enabled: false
-				},
-				series: [ {
-					name: '<?php esc_html_e( 'Users', 'posts-and-users-stats' ); ?>',
-					data: [ 
-					<?php
-					$users = 0;
-					foreach ( $user_registration_dates as $registration ) {
-						$date = strtotime( $registration->date );
-						$year = date( 'Y', $date );
-						$month = date( 'm', $date );
-						$day = date( 'd', $date );
-						$users += $registration->count;
-						echo '[Date.UTC(' . esc_js( $year ) . ',' . esc_js( $month - 1 ) . ',' . esc_js( $day ) . '), ' . esc_js( $users ) . '], ';
-					}
-					?>
-					]
-				} ],
-				credits: {
-					enabled: false
-				},
-				exporting: {
-					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( __( 'Users over Time', 'posts-and-users-stats' ) ) ); ?>'
-				}
-			});
-		});
-		</script>
+		<div class="chart-container">
+			<div class="chart-title">
+				<?php echo esc_html( get_bloginfo( 'name' ) ); ?>:
+				<?php esc_html_e( 'Users over Time', 'posts-and-users-stats' ); ?>
+			</div>
+			<div id="chart-users-time"></div>
+			<script>
+				posts_and_users_stats_time_line_chart(
+					'#chart-users-time',
+					[
+						<?php
+						$users = 0;
+						foreach ( $user_registration_dates as $registration ) {
+							$date = strtotime( $registration->date );
+							$year = date( 'Y', $date );
+							$month = date( 'm', $date );
+							$day = date( 'd', $date );
+							$users += $registration->count;
+							echo '{x: new Date(' . esc_js( $year ) . ',' . esc_js( $month - 1 ) . ',' . esc_js( $day ) . '), y: ' . esc_js( $users ) . '},';
+						}
+						?>
+					],
+					'Y-MM-DD',
+					'<?php esc_html_e( 'Users over Time', 'posts-and-users-stats' ); ?>',
+					'<?php esc_html_e( 'Users', 'posts-and-users-stats' ); ?>'
+				)
+			</script>
+		</div>
+
 		<h3><?php esc_html_e( 'Users over Time', 'posts-and-users-stats' ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
