@@ -110,7 +110,7 @@ if ( 'date' == $selected_tab ) {
 			posts_and_users_stats_echo_export_button(
 				'csv-monthly',
 				'table-monthly',
-				posts_and_users_stats_get_export_file_name( $per_month_string )
+				$per_month_string
 			);
 			?>
 		</h3>
@@ -131,17 +131,16 @@ if ( 'date' == $selected_tab ) {
 					?>
 				<tr>
 					<th scope="row"><a href="#<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></a></th>
-					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
-					<td class="number">
 					<?php
-					$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
-					if ( array_key_exists( $date, $comments_per_month ) ) {
-						echo esc_html( $comments_per_month[ $date ]->count );
-					} else {
-						echo 0;
-					}
+					foreach ( range( 1, 12, 1 ) as $month ) {
+						$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
+						if ( array_key_exists( $date, $comments_per_month ) ) {
+							$count = $comments_per_month[ $date ]->count;
+						} else {
+							$count = 0;
+						}
 					?>
-					</td>
+					<td class="number"><?php echo esc_html( $count ); ?></td>
 					<?php } ?>
 					<td class="number"><?php echo esc_html( $year_object->count ); ?></td>
 				</tr>
@@ -161,7 +160,7 @@ if ( 'date' == $selected_tab ) {
 			posts_and_users_stats_echo_export_button(
 				'csv-daily-' . $year,
 				'table-daily-' . $year,
-				posts_and_users_stats_get_export_file_name( $per_date_string . '-' . $year )
+				$per_date_string . '-' . $year
 			);
 			?>
 			</h3>
@@ -178,37 +177,35 @@ if ( 'date' == $selected_tab ) {
 				<?php foreach ( range( 1, 31, 1 ) as $day ) { ?>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Day', 'posts-and-users-stats' ); ?> <?php echo esc_html( $day ); ?></th>
-					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
-					<td class="number">
 					<?php
-					if ( checkdate( $month, $day, $year ) ) {
-						$date = date( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $day ) );
-						if ( array_key_exists( $date, $comments_per_date ) ) {
-							echo esc_html( $comments_per_date[ $date ]->count );
+					foreach ( range( 1, 12, 1 ) as $month ) {
+						if ( checkdate( $month, $day, $year ) ) {
+							$date = date( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $day ) );
+							if ( array_key_exists( $date, $comments_per_date ) ) {
+								$count = $comments_per_date[ $date ]->count;
+							} else {
+								$count = 0;
+							}
 						} else {
-							echo 0;
+							$count = '&mdash;';
 						}
-					} else {
-						echo '&mdash;';
-					}
-							?>
-							</td>
+					?>
+					<td class="number"><?php echo esc_html( $count ); ?></td>
 					<?php } ?>
 				</tr>
 				<?php } ?>
 				<tr>
 					<th scope="row"><strong><?php esc_html_e( 'Sum', 'posts-and-users-stats' ); ?></strong></th>
-					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
-					<td class="number"><strong>
 					<?php
-					$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
-					if ( array_key_exists( $date, $comments_per_month ) ) {
-						echo esc_html( $comments_per_month[ $date ]->count );
-					} else {
-						echo 0;
-					}
+					foreach ( range( 1, 12, 1 ) as $month ) {
+						$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
+						if ( array_key_exists( $date, $comments_per_month ) ) {
+							$count = $comments_per_month[ $date ]->count;
+						} else {
+							$count = 0;
+						}
 					?>
-					</strong></td>
+					<td class="number"><strong><?php echo esc_html( $count ); ?></strong></td>
 					<?php } ?>
 				</tr>
 			</tbody>
@@ -262,7 +259,7 @@ if ( 'date' == $selected_tab ) {
 			posts_and_users_stats_echo_export_button(
 				'csv-authors',
 				'table-authors',
-				posts_and_users_stats_get_export_file_name( __( 'Comments per Author', 'posts-and-users-stats' ) )
+				__( 'Comments per Author', 'posts-and-users-stats' )
 			);
 			?>
 		</h3>
@@ -332,7 +329,7 @@ if ( 'date' == $selected_tab ) {
 			posts_and_users_stats_echo_export_button(
 				'csv-status',
 				'table-status',
-				posts_and_users_stats_get_export_file_name( __( 'Comments per Status', 'posts-and-users-stats' ) )
+				__( 'Comments per Status', 'posts-and-users-stats' )
 			);
 			?>
 		</h3>

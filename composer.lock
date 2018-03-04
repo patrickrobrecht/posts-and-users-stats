@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6f558aec2eaf9ea9094760e2e28616b",
+    "content-hash": "46b524daf7abc699546e9f01ef45ed2f",
     "packages": [
         {
             "name": "npm-asset/chartist",

@@ -73,7 +73,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 			posts_and_users_stats_echo_export_button(
 				'csv-users-per-role',
 				'table-users-per-role',
-				posts_and_users_stats_get_export_file_name( __( 'Users per Role', 'posts-and-users-stats' ) )
+				__( 'Users per Role', 'posts-and-users-stats' )
 			);
 			?>
 			</h3>
@@ -149,7 +149,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 			posts_and_users_stats_echo_export_button(
 				'csv-users-date',
 				'table-users-date',
-				posts_and_users_stats_get_export_file_name( __( 'Users over Time', 'posts-and-users-stats' ) )
+				__( 'Users over Time', 'posts-and-users-stats' )
 			);
 			?>
 			</h3>

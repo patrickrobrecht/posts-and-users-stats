@@ -4,7 +4,7 @@ Tags: dashboard, statistics
 Requires at least: 4.4
 Tested up to: 4.9
 Requires PHP: 5.6
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -23,8 +23,8 @@ Posts and Users Stats offers statistics about the content and the users of a Wor
 * Comments per Status
 * Users per Role
 * Users over Time
-* Diagrams which can be exported as image or PDF
-* CSV export
+
+All statistics are available as a diagram and as a table (which can be exported as CSV).
 
 After the installation you can find the statistics as subpages of *Tools*.
 
@@ -48,6 +48,9 @@ After the installation you can find the statistics as subpages of *Tools*.
 == Changelog ==
 
 If interested, please check up the [changelog at GitHub](https://github.com/patrickrobrecht/posts-and-users-stats#changelog).
+
+= 1.1 =
+* New charts library
 
 = 1.0 =
 * Comments per Date

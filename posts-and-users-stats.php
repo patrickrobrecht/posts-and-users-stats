@@ -3,7 +3,7 @@
  * Plugin Name: Posts and Users Stats
  * Plugin URI: https://patrick-robrecht.de/wordpress/
  * Description: Statistics about the number of posts and users, provided as diagrams, tables and csv export.
- * Version: 1.0
+ * Version: 1.1
  * Author: Patrick Robrecht
  * Author URI: https://patrick-robrecht.de/
  * License: GPLv3
@@ -151,16 +151,6 @@ function posts_and_users_stats_show_users() {
 }
 
 /**
- * Returns a file name for the export (without file extension).
- *
- * @param string $name the name of the export.
- * @return string the file name
- */
-function posts_and_users_stats_get_export_file_name( $name ) {
-	return str_replace( ' ', '-', get_bloginfo( 'name' ) . '-' . $name ) . '-' . date( 'Y-m-d-H-i-s' );
-}
-
-/**
  * Echo the class attribute of a navigation tab.
  *
  * @param bool $is_active_tab true if and only if the tab is active.
@@ -173,23 +163,14 @@ function posts_and_users_stats_echo_tab_class( $is_active_tab ) {
 }
 
 /**
- * Outputs a link to the given URL.
- *
- * @param string     $url the URL.
- * @param string|int $text the text of the link.
- */
-function posts_and_users_stats_echo_link( $url, $text ) {
-	echo '<a href="' . esc_url( $url ) . '">' . esc_html( $text ) . '</a>';
-}
-
-/**
  * Output the link to a csv export.
  *
  * @param string $button_id the ID of the link.
  * @param string $table_id the ID of the table to export.
- * @param string $filename the file name.
+ * @param string $name the file name.
  */
-function posts_and_users_stats_echo_export_button( $button_id, $table_id, $filename ) { ?>
+function posts_and_users_stats_echo_export_button( $button_id, $table_id, $name ) {
+	$filename = str_replace( ' ', '-', get_bloginfo( 'name' ) . '-' . $name ) . '-' . date( 'Y-m-d-H-i-s' ); ?>
 	<a class="page-title-action" href="#" id="<?php echo esc_attr( $button_id ); ?>" role="button"><?php esc_html_e( 'Export as CSV', 'posts-and-users-stats' ); ?></a>
 	<script type='text/javascript'>
 	jQuery(document).ready(function () {

@@ -174,15 +174,16 @@ if ( 'date' == $selected_tab ) {
 				)
 			</script>
 		</div>
-		<h3 id="monthly"><?php echo esc_html( $per_month_string ); ?>
+		<h3 id="monthly">
+			<?php echo esc_html( $per_month_string ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
 				'csv-monthly',
 				'table-monthly',
-				posts_and_users_stats_get_export_file_name( $per_month_string )
+				$per_month_string
 			);
 			?>
-			</h3>
+		</h3>
 		<table id="table-monthly" class="wp-list-table widefat">
 			<thead>
 				<tr>
@@ -200,19 +201,18 @@ if ( 'date' == $selected_tab ) {
 				?>
 				<tr>
 					<th scope="row"><a href="#<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></a></th>
-					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
-					<td class="number">
-						<?php
+					<?php
+					foreach ( range( 1, 12, 1 ) as $month ) {
 						$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
 						if ( array_key_exists( $date, $posts_per_month ) ) {
-							posts_and_users_stats_echo_link( get_month_link( $year, $month ), $posts_per_month[ $date ]->count );
+							$count = $posts_per_month[ $date ]->count;
 						} else {
-							echo 0;
+							$count = 0;
 						}
-						?>
-					</td>
+					?>
+					<td class="number"><?php echo esc_html( $count ); ?></td>
 					<?php } ?>
-					<td class="number"><?php posts_and_users_stats_echo_link( get_year_link( $year ), $year_object->count ); ?></td>
+					<td class="number"><?php echo esc_html( $year_object->count ); ?></td>
 				</tr>
 				<?php } ?>
 			</tbody>
@@ -230,7 +230,7 @@ if ( 'date' == $selected_tab ) {
 			posts_and_users_stats_echo_export_button(
 				'csv-daily-' . $year,
 				'table-daily-' . $year,
-				posts_and_users_stats_get_export_file_name( $per_date_string . '-' . $year )
+				$per_date_string . '-' . $year
 			);
 			?>
 		</h3>
@@ -247,37 +247,35 @@ if ( 'date' == $selected_tab ) {
 				<?php foreach ( range( 1, 31, 1 ) as $day ) { ?>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Day', 'posts-and-users-stats' ); ?> <?php echo esc_html( $day ); ?></th>
-					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
-					<td class="number">
 					<?php
-					if ( checkdate( $month, $day, $year ) ) {
-						$date = date( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $day ) );
-						if ( array_key_exists( $date, $posts_per_date ) ) {
-							posts_and_users_stats_echo_link( get_day_link( $year, $month, $day ), $posts_per_date[ $date ]->count );
+					foreach ( range( 1, 12, 1 ) as $month ) {
+						if ( checkdate( $month, $day, $year ) ) {
+							$date = date( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $day ) );
+							if ( array_key_exists( $date, $posts_per_date ) ) {
+								$count = $posts_per_date[ $date ]->count;
+							} else {
+								$count = 0;
+							}
 						} else {
-							echo 0;
+							$count = '&mdash;';
 						}
-					} else {
-						echo '&mdash;';
-					}
-					?>
-					</td>
+						?>
+					<td class="number"><?php echo esc_html( $count ); ?></td>
 					<?php } ?>
 				</tr>
 				<?php } ?>
 				<tr>
 					<th scope="row"><strong><?php esc_html_e( 'Sum', 'posts-and-users-stats' ); ?></strong></th>
-					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
-					<td class="number"><strong>
-						<?php
+					<?php
+					foreach ( range( 1, 12, 1 ) as $month ) {
 						$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
 						if ( array_key_exists( $date, $posts_per_month ) ) {
-							posts_and_users_stats_echo_link( get_month_link( $year, $month ), $posts_per_month[ $date ]->count );
+							$sum = $posts_per_month[ $date ]->count;
 						} else {
-							echo 0;
+							$sum = 0;
 						}
-						?>
-						</strong></td>
+					?>
+					<td class="number"><strong><?php echo esc_html( $sum ); ?></strong></td>
 					<?php } ?>
 				</tr>
 			</tbody>
@@ -349,7 +347,7 @@ if ( 'date' == $selected_tab ) {
 				posts_and_users_stats_echo_export_button(
 					'csv-' . $taxonomy,
 					'table-' . $taxonomy,
-					posts_and_users_stats_get_export_file_name( $headline )
+					$headline
 				);
 				?>
 			</h3>
@@ -470,7 +468,7 @@ if ( 'date' == $selected_tab ) {
 			posts_and_users_stats_echo_export_button(
 				'csv-authors-and-types',
 				'table-authors-and-types',
-				posts_and_users_stats_get_export_file_name( __( 'Posts per Author and Post Type', 'posts-and-users-stats' ) )
+				__( 'Posts per Author and Post Type', 'posts-and-users-stats' )
 			);
 			?>
 		</h3>
@@ -491,16 +489,15 @@ if ( 'date' == $selected_tab ) {
 				<?php foreach ( $posts_per_author as $author ) { ?>
 				<tr>
 					<td><?php echo esc_html( $author['name'] ); ?></td>
-					<?php foreach ( $post_types as $post_type ) { ?>
-					<td class="number">
-						<?php
+					<?php
+					foreach ( $post_types as $post_type ) {
 						if ( 'post' == $post_type ) {
-							posts_and_users_stats_echo_link( get_author_posts_url( $author['ID'] ), $author['post'] );
+							$count = $author['post'];
 						} else {
-							echo esc_html( $author[ $post_type ] );
+							$count = $author[ $post_type ];
 						}
-						?>
-						</td>
+					?>
+					<td class="number"><?php echo esc_html( $count ); ?></td>
 					<?php } ?>
 					<td class="number"><strong><?php echo esc_html( $author['total'] ); ?></strong></td>
 				</tr>
@@ -559,7 +556,7 @@ if ( 'date' == $selected_tab ) {
 			posts_and_users_stats_echo_export_button(
 				'csv-status',
 				'table-status',
-				posts_and_users_stats_get_export_file_name( __( 'Posts per Status', 'posts-and-users-stats' ) )
+				__( 'Posts per Status', 'posts-and-users-stats' )
 			);
 			?>
 		</h3>
