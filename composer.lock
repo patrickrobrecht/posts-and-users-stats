@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "294893d4229e663243be2d31928e6d4e",
+    "content-hash": "c6f558aec2eaf9ea9094760e2e28616b",
     "packages": [
         {
             "name": "npm-asset/chartist",
@@ -35,25 +35,6 @@
                 "shasum": null
             },
             "type": "npm-asset"
-        },
-        {
-            "name": "npm-asset/chartist-plugin-tooltips",
-            "version": "v0.0.18",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tmmdata/chartist-plugin-tooltip.git",
-                "reference": "9917bad5e271b9e7cad289ca2ff0f07a8f8f5231"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tmmdata/chartist-plugin-tooltip/zipball/9917bad5e271b9e7cad289ca2ff0f07a8f8f5231",
-                "reference": "9917bad5e271b9e7cad289ca2ff0f07a8f8f5231",
-                "shasum": null
-            },
-            "type": "npm-asset",
-            "license": [
-                "MIT"
-            ]
         },
         {
             "name": "npm-asset/moment",

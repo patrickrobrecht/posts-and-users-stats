@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+.posts-and-users-stats nav li {
+    display: inline;
+}
+
+.posts-and-users-stats section {
+    margin-bottom: 3em;
+}
+
+.posts-and-users-stats legend {
+    margin: .5em 0;
+    font-weight: bold;
+}
+
+.posts-and-users-stats .chart {
+    margin: 1em 0;
+}
+
+.posts-and-users-stats table {
+    border-collapse: collapse;
+    clear: both;
+}
+
+.posts-and-users-stats tr:nth-child(2n) {
+    background: #ddd;
+}
+
+.posts-and-users-stats th, .posts-and-users-stats td {
+    padding: .7em;
+    vertical-align: top;
+}
+
+.posts-and-users-stats .number {
+    text-align: right;
+}
+
+.posts-and-users-stats .chart-container {
+    background: #fff;
+    margin: 1em 0;
+}
+
+.posts-and-users-stats .chart-title {
+    text-align: center;
+    font-size: 1.5em;
+    padding: 0.5em 0;
+}

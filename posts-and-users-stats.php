@@ -28,14 +28,14 @@ function posts_and_users_stats_load_plugin_textdomain() {
 add_action( 'init', 'posts_and_users_stats_load_plugin_textdomain' );
 
 /**
- * Register and load the style sheet.
+ * Load CSS and JavaScript libraries.
  */
-function posts_and_users_stats_register_and_load_css() {
+function posts_and_users_stats_load_assets() {
 	if ( posts_and_users_stats_current_user_can() ) {
 		wp_enqueue_style(
-			'posts-and-users-stats',
+			'posts-and-users-stats-css',
 			plugins_url(
-				'/css/style.css',
+				'/assets/style.min.css',
 				__FILE__
 			),
 			array()
@@ -47,29 +47,7 @@ function posts_and_users_stats_register_and_load_css() {
 				__FILE__
 			)
 		);
-	}
-}
 
-/**
- * Register the Highcharts libraries and load these and JQuery.
- */
-function posts_and_users_stats_register_and_load_scripts() {
-	if ( posts_and_users_stats_current_user_can() ) {
-		wp_enqueue_script(
-			'highcharts',
-			plugins_url(
-				'/js/highcharts.js',
-				__FILE__
-			),
-			array( 'jquery' )
-		);
-		wp_enqueue_script(
-			'highcharts-exporting',
-			plugins_url(
-				'/js/exporting.js',
-				__FILE__
-			)
-		);
 		wp_enqueue_script(
 			'chartist',
 			plugins_url(
@@ -94,7 +72,7 @@ function posts_and_users_stats_register_and_load_scripts() {
 		wp_enqueue_script(
 			'posts-and-users-stats-functions',
 			plugins_url(
-				'/js/functions.js',
+				'/assets/functions.min.js',
 				__FILE__
 			)
 		);
@@ -130,8 +108,7 @@ function posts_and_users_stats_add_menu() {
 
 	// Load CSS and JavaScript on plugin pages.
 	foreach ( $page_hook_suffixes as $page_hook_suffix ) {
-		add_action( "admin_print_styles-{$page_hook_suffix}", 'posts_and_users_stats_register_and_load_css' );
-		add_action( "admin_print_scripts-{$page_hook_suffix}", 'posts_and_users_stats_register_and_load_scripts' );
+		add_action( "admin_print_styles-{$page_hook_suffix}", 'posts_and_users_stats_load_assets' );
 	}
 }
 // Register the menu building function.
