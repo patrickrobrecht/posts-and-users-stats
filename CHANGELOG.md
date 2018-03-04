@@ -1,24 +1,40 @@
 # Posts and Users Stats - Changelog
+All notable changes to this WordPress plugin will be documented in this file.
 
-## Version 1.x
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### Version 1.0
+## Unreleased
+
+### Changed
+* Code compliant to WordPress Coding Standards, ensured via Travis build
+
+
+## Version 1.0
+
+## Added
 * comments per date
 * comments per author
 * comments per status
 * consistent formatting of the source code
 
 
-## Version 0.x
+## Version 0.3
 
-### Version 0.3
+### Changed
 * improved styles and readme.txt documentation
 
-### Version 0.2
+
+## Version 0.2
+
+### Added
 * CSV export for all table data (client-side via JavaScript)
 * posts per publication date: selection of one post type possible
 
-### Version 0.1
+
+## Version 0.1
+
+### Added
 * posts per publication date
 * posts per taxonomies, i. e. per category, per tag and per custom taxonomy
 * posts per author and post type

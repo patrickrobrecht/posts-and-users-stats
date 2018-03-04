@@ -6,7 +6,7 @@
  * Version: 1.0
  * Author: Patrick Robrecht
  * Author URI: https://patrick-robrecht.de/
- * License: GPLv2 or later
+ * License: GPLv3
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain: posts-and-users-stats
  *

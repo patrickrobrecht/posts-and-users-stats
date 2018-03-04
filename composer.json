@@ -1,5 +1,8 @@
 {
-  "name": "patrickrobrecht/extended-evaluation-for-statify",
+  "name": "patrickrobrecht/posts-and-users-stats",
+  "description": "A WordPress plugin for statistics on posts, comments and users",
+  "license": "GPL-3.0-only",
+  "type": "wordpress-plugin",
   "authors": [
     {
       "name": "Patrick Robrecht",
@@ -7,6 +10,10 @@
       "role": "Developer"
     }
   ],
+  "support": {
+    "issues": "https://github.com/patrickrobrecht/posts-and-users-stats/issues",
+    "source": "https://github.com/patrickrobrecht/posts-and-users-stats"
+  },
   "require": {
     "php": "^5.6|^7"
   },
