@@ -3,7 +3,7 @@
  * Plugin Name: Posts and Users Stats
  * Plugin URI: https://patrick-robrecht.de/wordpress/
  * Description: Statistics about the number of posts and users, provided as diagrams, tables and csv export.
- * Version: 1.0
+ * Version: 1.1
  * Author: Patrick Robrecht
  * Author URI: https://patrick-robrecht.de/
  * License: GPLv3
@@ -28,82 +28,88 @@ function posts_and_users_stats_load_plugin_textdomain() {
 add_action( 'init', 'posts_and_users_stats_load_plugin_textdomain' );
 
 /**
- * Register and load the style sheet.
+ * Load CSS and JavaScript libraries.
  */
-function posts_and_users_stats_register_and_load_css() {
-	wp_register_style(
-		'posts-and-users-stats',
-		plugins_url(
-			'/css/style.css',
-			__FILE__
-		),
-		array()
-	);
+function posts_and_users_stats_load_assets() {
+	if ( posts_and_users_stats_current_user_can() ) {
+		wp_enqueue_style(
+			'posts-and-users-stats-css',
+			plugins_url(
+				'/assets/style.min.css',
+				__FILE__
+			),
+			array()
+		);
+		wp_enqueue_style(
+			'chartist-css',
+			plugins_url(
+				'/lib/chartist.min.css',
+				__FILE__
+			)
+		);
 
-	wp_enqueue_style( 'posts-and-users-stats' );
+		wp_enqueue_script(
+			'chartist',
+			plugins_url(
+				'/lib/chartist.min.js',
+				__FILE__
+			)
+		);
+		wp_enqueue_script(
+			'chartist-plugin-axistitle',
+			plugins_url(
+				'/lib/chartist-plugin-axistitle.min.js',
+				__FILE__
+			)
+		);
+		wp_enqueue_script(
+			'moment',
+			plugins_url(
+				'/lib/moment.min.js',
+				__FILE__
+			)
+		);
+		wp_enqueue_script(
+			'posts-and-users-stats-functions',
+			plugins_url(
+				'/assets/functions.min.js',
+				__FILE__
+			)
+		);
+	}
 }
-// Load css file.
-add_action( 'admin_print_styles', 'posts_and_users_stats_register_and_load_css' );
-
-/**
- * Register the Highcharts libraries and load these and JQuery.
- */
-function posts_and_users_stats_register_and_load_scripts() {
-	wp_register_script(
-		'highcharts',
-		plugins_url(
-			'/js/highcharts.js',
-			__FILE__
-		),
-		array( 'jquery' )
-	);
-	wp_register_script(
-		'highcharts-exporting',
-		plugins_url(
-			'/js/exporting.js',
-			__FILE__
-		)
-	);
-	wp_register_script(
-		'table-to-csv',
-		plugins_url(
-			'/js/table-to-csv.js',
-			__FILE__
-		)
-	);
-
-	wp_enqueue_script( 'highcharts' );
-	wp_enqueue_script( 'highcharts-exporting' );
-	wp_enqueue_script( 'table-to-csv' );
-}
-// Load JavaScript libraries.
-add_action( 'admin_print_scripts', 'posts_and_users_stats_register_and_load_scripts' );
 
 /**
  * Create an item and submenu items in the WordPress admin menu.
  */
 function posts_and_users_stats_add_menu() {
-	add_management_page(
+	$page_hook_suffixes = array();
+	$page_hook_suffixes[] = add_management_page(
 		__( 'Posts Statistics', 'posts-and-users-stats' ),
 		__( 'Posts Statistics', 'posts-and-users-stats' ),
 		'export',
 		'posts_and_users_stats_posts',
 		'posts_and_users_stats_show_posts'
 	);
-	add_management_page(
+	$page_hook_suffixes[] = add_management_page(
 		__( 'Comments Statistics', 'posts-and-users-stats' ),
 		__( 'Comments Statistics', 'posts-and-users-stats' ),
 		'export',
 		'posts_and_users_stats_comments',
 		'posts_and_users_stats_show_comments'
 	);
-	add_management_page(
+	$page_hook_suffixes[] = add_management_page(
 		__( 'Users Statistics', 'posts-and-users-stats' ),
 		__( 'Users Statistics', 'posts-and-users-stats' ),
 		'export',
 		'posts_and_users_stats_users',
 		'posts_and_users_stats_show_users'
 	);
+
+	// Load CSS and JavaScript on plugin pages.
+	foreach ( $page_hook_suffixes as $page_hook_suffix ) {
+		add_action( "admin_print_styles-{$page_hook_suffix}", 'posts_and_users_stats_load_assets' );
+	}
 }
 // Register the menu building function.
 add_action( 'admin_menu', 'posts_and_users_stats_add_menu' );
@@ -145,16 +151,6 @@ function posts_and_users_stats_show_users() {
 }
 
 /**
- * Returns a file name for the export (without file extension).
- *
- * @param string $name the name of the export.
- * @return string the file name
- */
-function posts_and_users_stats_get_export_file_name( $name ) {
-	return str_replace( ' ', '-', get_bloginfo( 'name' ) . '-' . $name ) . '-' . date( 'Y-m-d-H-i-s' );
-}
-
-/**
  * Echo the class attribute of a navigation tab.
  *
  * @param bool $is_active_tab true if and only if the tab is active.
@@ -167,23 +163,14 @@ function posts_and_users_stats_echo_tab_class( $is_active_tab ) {
 }
 
 /**
- * Outputs a link to the given URL.
- *
- * @param string     $url the URL.
- * @param string|int $text the text of the link.
- */
-function posts_and_users_stats_echo_link( $url, $text ) {
-	echo '<a href="' . esc_url( $url ) . '">' . esc_html( $text ) . '</a>';
-}
-
-/**
  * Output the link to a csv export.
  *
  * @param string $button_id the ID of the link.
  * @param string $table_id the ID of the table to export.
- * @param string $filename the file name.
+ * @param string $name the file name.
  */
-function posts_and_users_stats_echo_export_button( $button_id, $table_id, $filename ) { ?>
+function posts_and_users_stats_echo_export_button( $button_id, $table_id, $name ) {
+	$filename = str_replace( ' ', '-', get_bloginfo( 'name' ) . '-' . $name ) . '-' . date( 'Y-m-d-H-i-s' ); ?>
 	<a class="page-title-action" href="#" id="<?php echo esc_attr( $button_id ); ?>" role="button"><?php esc_html_e( 'Export as CSV', 'posts-and-users-stats' ); ?></a>
 	<script type='text/javascript'>
 	jQuery(document).ready(function () {

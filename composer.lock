@@ -4,8 +4,53 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "73face3da1fd6edce7553c9f77d99a16",
-    "packages": [],
+    "content-hash": "46b524daf7abc699546e9f01ef45ed2f",
+    "packages": [
+        {
+            "name": "npm-asset/chartist",
+            "version": "0.11.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/chartist/-/chartist-0.11.0.tgz",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT OR WTFPL"
+            ]
+        },
+        {
+            "name": "npm-asset/chartist-plugin-axistitle",
+            "version": "0.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/alexstanbury/chartist-plugin-axistitle.git",
+                "reference": "03b5ab4b50372a8b6dfb3add13e853b3abbb9b50"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/alexstanbury/chartist-plugin-axistitle/zipball/03b5ab4b50372a8b6dfb3add13e853b3abbb9b50",
+                "reference": "03b5ab4b50372a8b6dfb3add13e853b3abbb9b50",
+                "shasum": null
+            },
+            "type": "npm-asset"
+        },
+        {
+            "name": "npm-asset/moment",
+            "version": "2.21.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/moment/-/moment-2.21.0.tgz",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        }
+    ],
     "packages-dev": [
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",

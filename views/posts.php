@@ -25,8 +25,8 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 	$selected_tab = 'date';
 }
 
-// Get the list of all post types, including custom post types, but without revisions and menu items.
-$post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' ) );
+// Get the list of all post types, including custom post types except the listed ones.
+$post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'oembed_cache' ) );
 ?>
 <div class="wrap posts-and-users-stats">
 	<h1><?php esc_html_e( 'Posts Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $tabs[ $selected_tab ] ); ?></h1>
@@ -38,59 +38,59 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 	<?php } ?>
 	</h2>
 
-	<?php
-	if ( 'date' == $selected_tab ) {
-		// Get the selected post type.
-		if ( isset( $_POST['type'] ) && check_admin_referer( 'posts_and_users_stats' ) && in_array( wp_unslash( $_POST['type'] ), $post_types ) ) {
-			$selected_post_type = sanitize_text_field( wp_unslash( $_POST['type'] ) );
-		} else {
-			$selected_post_type = '';
-		}
+<?php
+if ( 'date' == $selected_tab ) {
+	// Get the selected post type.
+	if ( isset( $_POST['type'] ) && check_admin_referer( 'posts_and_users_stats' ) && in_array( wp_unslash( $_POST['type'] ), $post_types ) ) {
+		$selected_post_type = sanitize_text_field( wp_unslash( $_POST['type'] ) );
+	} else {
+		$selected_post_type = '';
+	}
 
-		// Get the numbers of posts per date, month, year.
-		if ( '' == $selected_post_type ) {
-			$post_type_query = '';
-			$selected_post_type_name = __( 'Content', 'posts-and-users-stats' );
-		} else {
-			$post_type_query = " AND post_type = '" . $selected_post_type . "'";
-			$selected_post_type_object = get_post_type_object( $selected_post_type );
-			$selected_post_type_labels = $selected_post_type_object->labels;
-			$selected_post_type_name = $selected_post_type_object->label;
-		}
+	// Get the numbers of posts per date, month, year.
+	if ( '' == $selected_post_type ) {
+		$post_type_query = '';
+		$selected_post_type_name = __( 'Content', 'posts-and-users-stats' );
+	} else {
+		$post_type_query = " AND post_type = '" . $selected_post_type . "'";
+		$selected_post_type_object = get_post_type_object( $selected_post_type );
+		$selected_post_type_labels = $selected_post_type_object->labels;
+		$selected_post_type_name = $selected_post_type_object->label;
+	}
 
-		global $wpdb;
-		$posts_per_date = $wpdb->get_results(
-			"SELECT DATE(post_date) as date, count(ID) as count
-				FROM {$wpdb->posts}
-				WHERE post_status = 'publish'" . $post_type_query .
-				'GROUP BY date',
-			OBJECT_K
-		);
-		$posts_per_month = $wpdb->get_results(
-			"SELECT DATE_FORMAT(post_date, '%Y-%m') as month, count(ID) as count
-				FROM {$wpdb->posts}
-				WHERE post_status = 'publish'" . $post_type_query .
-				'GROUP BY month',
-			OBJECT_K
-		);
-		$posts_per_year = $wpdb->get_results(
-			"SELECT YEAR(post_date) as year, count(ID) as count
-				FROM {$wpdb->posts}
-				WHERE post_status = 'publish'" . $post_type_query .
-				'GROUP BY year
-				ORDER BY year DESC',
-			OBJECT_K
-		);
+	global $wpdb;
+	$posts_per_date = $wpdb->get_results(
+		"SELECT DATE(post_date) as date, count(ID) as count
+            FROM {$wpdb->posts}
+            WHERE post_status = 'publish'" . $post_type_query .
+			'GROUP BY date',
+		OBJECT_K
+	);
+	$posts_per_month = $wpdb->get_results(
+		"SELECT DATE_FORMAT(post_date, '%Y-%m') as month, count(ID) as count
+            FROM {$wpdb->posts}
+            WHERE post_status = 'publish'" . $post_type_query .
+			'GROUP BY month',
+		OBJECT_K
+	);
+	$posts_per_year = $wpdb->get_results(
+		"SELECT YEAR(post_date) as year, count(ID) as count
+            FROM {$wpdb->posts}
+            WHERE post_status = 'publish'" . $post_type_query .
+			'GROUP BY year
+            ORDER BY year DESC',
+		OBJECT_K
+	);
 
-		$per_date_string = sprintf(
-			// translators: post type.
-			__( '%s per Date', 'posts-and-users-stats' ), $selected_post_type_name
-		);
-		$per_month_string = sprintf(
-			// translators: post type.
-			__( '%s per Month', 'posts-and-users-stats' ), $selected_post_type_name
-		);
-	?>
+	$per_date_string = sprintf(
+		// translators: post type.
+		__( '%s per Date', 'posts-and-users-stats' ), $selected_post_type_name
+	);
+	$per_month_string = sprintf(
+		// translators: post type.
+		__( '%s per Month', 'posts-and-users-stats' ), $selected_post_type_name
+	);
+?>
 	<form method="POST" action="">
 		<?php wp_nonce_field( 'posts_and_users_stats' ); ?>
 		<fieldset>
@@ -110,133 +110,80 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 		<?php } else { ?>
 		<ul>
 			<li><a href="#monthly"><?php echo esc_html( $per_month_string ); ?></a>
-		<?php foreach ( $posts_per_year as $year_object ) { ?>
-			<li><a href="#<?php echo esc_attr( $year_object->year ); ?>"><?php esc_html_e( 'Year', 'posts-and-users-stats' ); ?> <?php echo esc_html( $year_object->year ); ?></a></li>
-		<?php } ?>
+			<?php foreach ( $posts_per_year as $year_object ) { ?>
+				<li><a href="#<?php echo esc_attr( $year_object->year ); ?>"><?php esc_html_e( 'Year', 'posts-and-users-stats' ); ?> <?php echo esc_html( $year_object->year ); ?></a></li>
+			<?php } ?>
 		</ul>
 	</nav>	
-	<section>	
-		<div id="chart-monthly" class="chart"></div>
-		<script>
-		jQuery(function() {
-			jQuery('#chart-monthly').highcharts({
-				chart: {
-					type: 'column'
-				},
-				title: {
-					text: '<?php echo esc_js( $per_month_string ); ?>'
-				},
-				subtitle: {
-					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
-				},
-				xAxis: {
-					type: 'datetime',
-					dateTimeLabelFormats: {
-						month: '%m/%Y'
-					},
-					title: {
-						text: '<?php esc_html_e( 'Month', 'posts-and-users-stats' ); ?>'
-					}
-				},
-				yAxis: {
-					title: {
-						text: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
-					},
-					min: 0
-				},
-				legend: {
-					enabled: false
-				},
-				series: [ {
-					name: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>',
-					data: [ 
-					<?php
-					foreach ( $posts_per_month as $posts_of_month ) {
-						$date = strtotime( $posts_of_month->month . '-01' );
-						$year = date( 'Y', $date );
-						$month = date( 'm', $date );
-						echo '[Date.UTC(' . esc_js( $year ) . ',' . esc_js( $month - 1 ) . ',1),' . esc_js( $posts_of_month->count ) . '], ';
-					}
-					?>
-					]
-				} ],
-				credits: {
-					enabled: false
-				},
-				exporting: {
-					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( $per_month_string ) ); ?>'
-				}
-			});
-		});
-		</script>
-		
-		<div id="chart-daily" class="chart"></div>
-		<script>
-		jQuery(function() {
-			jQuery('#chart-daily').highcharts({
-				chart: {
-					type: 'column'
-				},
-				title: {
-					text: '<?php echo esc_js( $per_date_string ); ?>'
-				},
-				subtitle: {
-					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
-				},
-				xAxis: {
-					type: 'datetime',
-					title: {
-						text: '<?php esc_html_e( 'Date', 'posts-and-users-stats' ); ?>'
-					}
-				},
-				yAxis: {
-					title: {
-						text: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
-					},
-					min: 0
-				},
-				plotOptions: {
-					spline: {
-						marker: {
-							enabled: true
+	<section>
+		<div class="chart-container">
+			<div class="chart-title">
+				<?php echo esc_html( get_bloginfo( 'name' ) ); ?>:
+				<?php echo esc_html( $per_month_string ); ?>
+			</div>
+			<div id="chart-posts-monthly"></div>
+			<script>
+				posts_and_users_stats_bar_chart(
+					'#chart-posts-monthly',
+					[
+						<?php
+						foreach ( $posts_per_month as $posts_of_month ) {
+							$date = strtotime( $posts_of_month->month . '-01' );
+							echo "'" . esc_js( date( 'm-Y', $date ) ) . "',";
 						}
-					}
-				},
-				legend: {
-					enabled: false
-				},
-				series: [ {
-					name: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>',
-					data: [ 
-					<?php
-					foreach ( $posts_per_date as $posts_of_date ) {
-						$date = strtotime( $posts_of_date->date );
-						$year = date( 'Y', $date );
-						$month = date( 'm', $date );
-						$day = date( 'd', $date );
-						echo '[Date.UTC(' . esc_js( $year ) . ',' . esc_js( $month - 1 ) . ',' . esc_js( $day ) . '),' . esc_js( $posts_of_date->count ) . '], ';
-					}
-					?>
-					]
-				} ],
-				credits: {
-					enabled: false	
-				},
-				exporting: {
-					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( $per_date_string ) ); ?>'
-				}
-			});
-		});
-		</script>
-		<h3 id="monthly"><?php echo esc_html( $per_month_string ); ?>
+						?>
+					],
+					[
+						<?php
+						foreach ( $posts_per_month as $posts_of_month ) {
+							echo esc_js( $posts_of_month->count ) . ',';
+						}
+						?>
+					],
+					'<?php esc_html_e( 'Month', 'posts-and-users-stats' ); ?>',
+					'<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
+				)
+			</script>
+		</div>
+
+		<div class="chart-container">
+			<div class="chart-title">
+				<?php echo esc_html( get_bloginfo( 'name' ) ); ?>:
+				<?php echo esc_html( $per_date_string ); ?>
+			</div>
+			<div id="chart-posts-time"></div>
+			<script>
+				posts_and_users_stats_time_line_chart(
+					'#chart-posts-time',
+					[
+						<?php
+						$posts = 0;
+						foreach ( $posts_per_date as $posts_of_date ) {
+							$date = strtotime( $posts_of_date->date );
+							$year = date( 'Y', $date );
+							$month = date( 'm', $date );
+							$day = date( 'd', $date );
+							$posts += $posts_of_date->count;
+							echo '{x: new Date(' . esc_js( $year ) . ',' . esc_js( $month - 1 ) . ',' . esc_js( $day ) . '), y: ' . esc_js( $posts ) . '},';
+						}
+						?>
+					],
+					'Y-MM-DD',
+					'<?php esc_html_e( 'Published Posts over Time', 'posts-and-users-stats' ); ?>',
+					'<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
+				)
+			</script>
+		</div>
+		<h3 id="monthly">
+			<?php echo esc_html( $per_month_string ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
 				'csv-monthly',
 				'table-monthly',
-				posts_and_users_stats_get_export_file_name( $per_month_string )
+				$per_month_string
 			);
 			?>
-			</h3>
+		</h3>
 		<table id="table-monthly" class="wp-list-table widefat">
 			<thead>
 				<tr>
@@ -254,19 +201,18 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 				?>
 				<tr>
 					<th scope="row"><a href="#<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></a></th>
-					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
-					<td class="number">
-						<?php
+					<?php
+					foreach ( range( 1, 12, 1 ) as $month ) {
 						$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
 						if ( array_key_exists( $date, $posts_per_month ) ) {
-							posts_and_users_stats_echo_link( get_month_link( $year, $month ), $posts_per_month[ $date ]->count );
+							$count = $posts_per_month[ $date ]->count;
 						} else {
-							echo 0;
+							$count = 0;
 						}
-						?>
-					</td>
+					?>
+					<td class="number"><?php echo esc_html( $count ); ?></td>
 					<?php } ?>
-					<td class="number"><?php posts_and_users_stats_echo_link( get_year_link( $year ), $year_object->count ); ?></td>
+					<td class="number"><?php echo esc_html( $year_object->count ); ?></td>
 				</tr>
 				<?php } ?>
 			</tbody>
@@ -284,10 +230,10 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 			posts_and_users_stats_echo_export_button(
 				'csv-daily-' . $year,
 				'table-daily-' . $year,
-				posts_and_users_stats_get_export_file_name( $per_date_string . '-' . $year )
+				$per_date_string . '-' . $year
 			);
 			?>
-			</h3>
+		</h3>
 		<table id="table-daily-<?php echo esc_attr( $year ); ?>" class="wp-list-table widefat">
 			<thead>
 				<tr>
@@ -301,53 +247,48 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 				<?php foreach ( range( 1, 31, 1 ) as $day ) { ?>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Day', 'posts-and-users-stats' ); ?> <?php echo esc_html( $day ); ?></th>
-					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
-					<td class="number">
 					<?php
-					if ( checkdate( $month, $day, $year ) ) {
-						$date = date( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $day ) );
-						if ( array_key_exists( $date, $posts_per_date ) ) {
-							posts_and_users_stats_echo_link( get_day_link( $year, $month, $day ), $posts_per_date[ $date ]->count );
+					foreach ( range( 1, 12, 1 ) as $month ) {
+						if ( checkdate( $month, $day, $year ) ) {
+							$date = date( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $day ) );
+							if ( array_key_exists( $date, $posts_per_date ) ) {
+								$count = $posts_per_date[ $date ]->count;
+							} else {
+								$count = 0;
+							}
 						} else {
-							echo 0;
+							$count = '&mdash;';
 						}
-					} else {
-						echo '&mdash;';
-					}
-					?>
-					</td>
+						?>
+					<td class="number"><?php echo esc_html( $count ); ?></td>
 					<?php } ?>
 				</tr>
 				<?php } ?>
 				<tr>
 					<th scope="row"><strong><?php esc_html_e( 'Sum', 'posts-and-users-stats' ); ?></strong></th>
-					<?php foreach ( range( 1, 12, 1 ) as $month ) { ?>
-					<td class="number"><strong>
-						<?php
+					<?php
+					foreach ( range( 1, 12, 1 ) as $month ) {
 						$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
 						if ( array_key_exists( $date, $posts_per_month ) ) {
-							posts_and_users_stats_echo_link( get_month_link( $year, $month ), $posts_per_month[ $date ]->count );
+							$sum = $posts_per_month[ $date ]->count;
 						} else {
-							echo 0;
+							$sum = 0;
 						}
-						?>
-						</strong></td>
+					?>
+					<td class="number"><strong><?php echo esc_html( $sum ); ?></strong></td>
 					<?php } ?>
 				</tr>
 			</tbody>
 		</table>
 	</section>
 		<?php
-		}
-} // end if
+		} // endforeach (years)
+} // end if (post per date > 0)
+} else if ( 'taxonomy' == $selected_tab ) {
+	// Get the list of all taxonomies except nav_menu and link_category.
+	$taxonomies = get_taxonomies();
+	$taxonomies = array_diff( $taxonomies, array( 'nav_menu', 'link_category' ) );
 ?>
-	
-	<?php
-	} else if ( 'taxonomy' == $selected_tab ) {
-		// Get the list of all taxonomies except nav_menu and link_category.
-		$taxonomies = get_taxonomies();
-		$taxonomies = array_diff( $taxonomies, array( 'nav_menu', 'link_category' ) );
-	?>
 	<nav>
 		<ul>
 		<?php foreach ( $taxonomies as $taxonomy ) { ?>
@@ -355,198 +296,150 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 		<?php } ?>
 		</ul>
 	</nav>
-		<?php
-		foreach ( $taxonomies as $taxonomy ) {
-			$taxonomy_labels = get_taxonomy( $taxonomy )->labels;
-			$headline = sprintf(
-				// translators: taxonomy label.
-				__( 'Published Posts per %s', 'posts-and-users-stats' ), $taxonomy_labels->singular_name
-			);
-			$terms = get_terms( $taxonomy );
-		?>
-		<?php if ( ! is_array( $terms ) || count( $terms ) <= 0 ) { ?>
-	<section>
-		<h3 id="<?php echo esc_attr( $taxonomy ); ?>"><?php echo esc_html( $headline ); ?></h3>
-		<p><?php echo esc_html( $taxonomy_labels->not_found ); ?></p>
-	</section>
-		<?php } else { ?>
-	<section>
-		<div id="chart-<?php echo esc_attr( $taxonomy ); ?>" class="chart"></div>
-		<script>
-		jQuery(function() {
-			jQuery('#chart-<?php echo esc_js( $taxonomy ); ?>').highcharts({
-				chart: {
-					type: 'column'
-				},
-				title: {
-					text: '<?php echo esc_js( $headline ); ?>'
-				},
-				subtitle: {
-					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
-				},
-				xAxis: {
-					categories: [ 
-						<?php
-						foreach ( $terms as $term ) {
-							echo "'" . esc_js( $term->name ) . "',";
-						}
-						?>
-					]
-				},
-				yAxis: {
-					title: {
-						text: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
-					},
-					min: 0
-				},
-				legend: {
-					enabled: false
-				},
-				series: [ {
-					name: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>',
-					data: [ 
-					<?php
-					foreach ( $terms as $term ) {
-						echo esc_js( $term->count ) . ',';
-					}
-					?>
-					]
-				} ],
-				credits: {
-					enabled: false	
-				},
-				exporting: {
-					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( $headline ) ); ?>'
-				}
-			});
-		});
-		</script>
-		<h3 id="<?php echo esc_attr( $taxonomy ); ?>">
-			<?php echo esc_html( $headline ); ?>
-			<?php
-			posts_and_users_stats_echo_export_button(
-				'csv-' . $taxonomy,
-				'table-' . $taxonomy,
-				posts_and_users_stats_get_export_file_name( $headline )
-			);
-			?>
-			</h3>
-		<table id="table-<?php echo esc_attr( $taxonomy ); ?>" class="wp-list-table widefat">
-			<thead>
-				<tr>
-					<th scope="col"><?php echo esc_html( $taxonomy_labels->singular_name ); ?></th>
-					<th scope="col"><?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ( $terms as $term ) { ?>
-				<tr>
-					<td><?php echo esc_html( $term->name ); ?></td>
-					<td class="number"><?php echo esc_html( $term->count ); ?></td>
-				<?php } ?>
-				</tr>
-			</tbody>
-		</table>
-	</section>
-		<?php
-}
-		}
-		?>
-	
 	<?php
-	} else if ( 'author' == $selected_tab ) {
-		// Get the total number of published posts per post type.
-		$posts_per_type = array();
+	foreach ( $taxonomies as $taxonomy ) {
+		$taxonomy_labels = get_taxonomy( $taxonomy )->labels;
+		$headline = sprintf(
+			// translators: taxonomy label.
+			__( 'Published Posts per %s', 'posts-and-users-stats' ), $taxonomy_labels->singular_name
+		);
+		$terms = get_terms( $taxonomy );
+	?>
+		<?php if ( ! is_array( $terms ) || count( $terms ) <= 0 ) { ?>
+		<section>
+			<h3 id="<?php echo esc_attr( $taxonomy ); ?>"><?php echo esc_html( $headline ); ?></h3>
+			<p><?php echo esc_html( $taxonomy_labels->not_found ); ?></p>
+		</section>
+		<?php } else { ?>
+		<section>
+			<div class="chart-container">
+				<div class="chart-title">
+					<?php echo esc_html( get_bloginfo( 'name' ) ); ?>:
+					<?php echo esc_html( $headline ); ?>
+				</div>
+				<div id="chart-<?php echo esc_attr( $taxonomy ); ?>"></div>
+				<script>
+					posts_and_users_stats_bar_chart(
+						'#chart-<?php echo esc_attr( $taxonomy ); ?>',
+						[
+							<?php
+							foreach ( $terms as $term ) {
+								echo "'" . esc_js( $term->name ) . "',";
+							}
+							?>
+						],
+						[
+							<?php
+							foreach ( $terms as $term ) {
+								echo esc_js( $term->count ) . ',';
+							}
+							?>
+						],
+						'<?php echo esc_html( $taxonomy_labels->singular_name ); ?>',
+						'<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
+					)
+				</script>
+			</div>
+
+			<h3 id="<?php echo esc_attr( $taxonomy ); ?>">
+				<?php echo esc_html( $headline ); ?>
+				<?php
+				posts_and_users_stats_echo_export_button(
+					'csv-' . $taxonomy,
+					'table-' . $taxonomy,
+					$headline
+				);
+				?>
+			</h3>
+
+			<table id="table-<?php echo esc_attr( $taxonomy ); ?>" class="wp-list-table widefat">
+				<thead>
+					<tr>
+						<th scope="col"><?php echo esc_html( $taxonomy_labels->singular_name ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $terms as $term ) { ?>
+					<tr>
+						<td><?php echo esc_html( $term->name ); ?></td>
+						<td class="number"><?php echo esc_html( $term->count ); ?></td>
+					<?php } ?>
+					</tr>
+				</tbody>
+			</table>
+		</section>
+		<?php
+} // end if count( $terms) > 0
+	} // end loop over taxonomies
+} else if ( 'author' == $selected_tab ) {
+	// Get the total number of published posts per post type.
+	$posts_per_type = array();
+	$total = 0;
+	foreach ( $post_types as $post_type ) {
+		$type_object = get_post_type_object( $post_type );
+		$count = wp_count_posts( $post_type )->publish;
+		$posts_per_type[ $type_object->label ] = $count;
+		$total += $count;
+	}
+	$posts_per_type['total'] = $total;
+
+	// Get the number of published posts per author (per post type and total count for the author).
+	$posts_per_author = array();
+	foreach ( get_users() as $user ) {
+		$user_data = array(
+			'ID'    => $user->ID,
+			'name'  => $user->display_name,
+		);
 		$total = 0;
 		foreach ( $post_types as $post_type ) {
-			$type_object = get_post_type_object( $post_type );
-			$count = wp_count_posts( $post_type )->publish;
-			$posts_per_type[ $type_object->label ] = $count;
+			$count = intval( count_user_posts( $user->ID, $post_type, true ) );
+			$user_data[ $post_type ] = $count;
 			$total += $count;
 		}
-		$posts_per_type['total'] = $total;
-
-		// Get the number of published posts per author (per post type and total count for the author).
-		$posts_per_author = array();
-		foreach ( get_users() as $user ) {
-			$user_data = array(
-				'ID'    => $user->ID,
-				'name'  => $user->display_name,
-			);
-			$total = 0;
-			foreach ( $post_types as $post_type ) {
-				$count = intval( count_user_posts( $user->ID, $post_type, true ) );
-				$user_data[ $post_type ] = $count;
-				$total += $count;
-			}
-			$user_data['total'] = $total;
-			array_push( $posts_per_author, $user_data );
-		}
-	?>
+		$user_data['total'] = $total;
+		array_push( $posts_per_author, $user_data );
+	}
+?>
 	<section>
-		<div id="chart-authors" class="chart"></div>
-		<div id="chart-types" class="chart"></div>
-		<script>
-		jQuery(function() {
-			jQuery('#chart-authors').highcharts({
-				chart: {
-					type: 'column'
-				},
-				title: {
-					text: '<?php esc_html_e( 'Posts per Author', 'posts-and-users-stats' ); ?>'
-				},
-				subtitle: {
-					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
-				},
-				xAxis: {
-					categories: [
+		<div class="chart-container">
+			<div class="chart-title">
+				<?php echo esc_html( get_bloginfo( 'name' ) ); ?>:
+				<?php esc_html_e( 'Posts per Author', 'posts-and-users-stats' ); ?>
+			</div>
+			<div id="chart-posts-authors"></div>
+			<script>
+				posts_and_users_stats_bar_chart(
+					'#chart-posts-authors',
+					[
 						<?php
 						foreach ( $posts_per_author as $author ) {
 							echo "'" . esc_js( $author['name'] ) . "',";
 						}
 						?>
-					]
-				},
-				yAxis: {
-					title: {
-						text: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
-					},
-					min: 0
-				},
-				legend: {
-					enabled: false
-				},
-				series: [ {
-					name: 'all',
-					data: [ 
-					<?php
-					foreach ( $posts_per_author as $author ) {
-						echo esc_js( $author['total'] ) . ',';
-					}
-					?>
-					]
-				} ],
-				credits: {
-					enabled: false
-				},
-				exporting: {
-					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( __( 'Posts per Author', 'posts-and-users-stats' ) ) ); ?>'
-				}
-			});
-		});
-		jQuery(function() {
-			jQuery('#chart-types').highcharts({
-				chart: {
-					type: 'column'
-				},
-				title: {
-					text: '<?php esc_html_e( 'Posts per Type', 'posts-and-users-stats' ); ?>'
-				},
-				subtitle: {
-					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
-				},
-				xAxis: {
-					categories: [ 
+					],
+					[
+						<?php
+						foreach ( $posts_per_author as $author ) {
+							echo esc_js( $author['total'] ) . ',';
+						}
+						?>
+					],
+					'<?php esc_html_e( 'Author', 'posts-and-users-stats' ); ?>',
+					'<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
+				)
+			</script>
+		</div>
+		<div class="chart-container">
+			<div class="chart-title">
+				<?php echo esc_html( get_bloginfo( 'name' ) ); ?>:
+				<?php esc_html_e( 'Posts per Type', 'posts-and-users-stats' ); ?>
+			</div>
+			<div id="chart-posts-types"></div>
+			<script>
+				posts_and_users_stats_bar_chart(
+					'#chart-posts-types',
+					[
 						<?php
 						foreach ( $posts_per_type as $type => $count ) {
 							if ( 'total' != $type && $count > 0 ) {
@@ -554,47 +447,31 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 							}
 						}
 						?>
-					]
-				},
-				yAxis: {
-					title: {
-						text: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
-					},
-					min: 0
-				},
-				legend: {
-					enabled: false
-				},
-				series: [ {
-					name: 'all',
-					data: [ 
-					<?php
-					foreach ( $posts_per_type as $type => $count ) {
-						if ( 'total' != $type && $count > 0 ) {
-							echo esc_js( $count ) . ',';
+					],
+					[
+						<?php
+						foreach ( $posts_per_type as $type => $count ) {
+							if ( 'total' != $type && $count > 0 ) {
+								echo esc_js( $count ) . ',';
+							}
 						}
-					}
-					?>
-					]
-				} ],
-				credits: {
-					enabled: false	
-				},
-				exporting: {
-					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( __( 'Posts per Type', 'posts-and-users-stats' ) ) ); ?>'
-				}
-			});
-		});
-		</script>
-		<h3><?php esc_html_e( 'Posts per Author and Post Type', 'posts-and-users-stats' ); ?>
+						?>
+					],
+					'<?php esc_html_e( 'Post type', 'posts-and-users-stats' ); ?>',
+					'<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
+				)
+			</script>
+		</div>
+		<h3>
+			<?php esc_html_e( 'Posts per Author and Post Type', 'posts-and-users-stats' ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
 				'csv-authors-and-types',
 				'table-authors-and-types',
-				posts_and_users_stats_get_export_file_name( __( 'Posts per Author and Post Type', 'posts-and-users-stats' ) )
+				__( 'Posts per Author and Post Type', 'posts-and-users-stats' )
 			);
 			?>
-			</h3>
+		</h3>
 		<table id="table-authors-and-types" class="wp-list-table widefat">
 			<thead>
 				<tr>
@@ -602,7 +479,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 					<?php
 					foreach ( $post_types as $post_type ) {
 						$type_object = get_post_type_object( $post_type );
-						?>
+					?>
 					<th><?php echo esc_html( $type_object->label ); ?></th>
 					<?php } ?>
 					<th><?php esc_html_e( 'all post types', 'posts-and-users-stats' ); ?></th>
@@ -612,16 +489,15 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 				<?php foreach ( $posts_per_author as $author ) { ?>
 				<tr>
 					<td><?php echo esc_html( $author['name'] ); ?></td>
-					<?php foreach ( $post_types as $post_type ) { ?>
-					<td class="number">
-						<?php
+					<?php
+					foreach ( $post_types as $post_type ) {
 						if ( 'post' == $post_type ) {
-							posts_and_users_stats_echo_link( get_author_posts_url( $author['ID'] ), $author['post'] );
+							$count = $author['post'];
 						} else {
-							echo esc_html( $author[ $post_type ] );
+							$count = $author[ $post_type ];
 						}
-						?>
-						</td>
+					?>
+					<td class="number"><?php echo esc_html( $count ); ?></td>
 					<?php } ?>
 					<td class="number"><strong><?php echo esc_html( $author['total'] ); ?></strong></td>
 				</tr>
@@ -636,75 +512,54 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 		</table>
 	</section>
 	
-	<?php
-	} else if ( 'status' == $selected_tab ) {
-		// Get a full list of possible post status.
-		$statuses = get_post_statuses();
-		$statuses['future'] = __( 'Published in the future', 'posts-and-users-stats' );
+<?php
+} else if ( 'status' == $selected_tab ) {
+	// Get a full list of possible post status.
+	$statuses = get_post_statuses();
+	$statuses['future'] = __( 'Published in the future', 'posts-and-users-stats' );
 
-		// Get the number of posts per status.
-		$posts_per_status = wp_count_posts();
-	?>
+	// Get the number of posts per status.
+	$posts_per_status = wp_count_posts();
+?>
 	<section>
-		<div id="chart-status" class="chart"></div>
-		<script>
-		jQuery(function() {
-			jQuery('#chart-status').highcharts({
-				chart: {
-					type: 'column'
-				},
-				title: {
-					text: '<?php esc_html_e( 'Posts per Status', 'posts-and-users-stats' ); ?>'
-				},
-				subtitle: {
-					text: '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>'
-				},
-				xAxis: {
-					categories: [ 
+		<div class="chart-container">
+			<div class="chart-title">
+				<?php echo esc_html( get_bloginfo( 'name' ) ); ?>:
+				<?php esc_html_e( 'Posts per Status', 'posts-and-users-stats' ); ?>
+			</div>
+			<div id="chart-posts-status"></div>
+			<script>
+				posts_and_users_stats_bar_chart(
+					'#chart-posts-status',
+					[
 						<?php
 						foreach ( $statuses as $status_slug => $status_name ) {
 							echo "'" . esc_js( $status_name ) . "',";
 						}
 						?>
-					]
-				},
-				yAxis: {
-					title: {
-						text: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
-					},
-					min: 0
-				},
-				legend: {
-					enabled: false
-				},
-				series: [ {
-					name: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>',
-					data: [ 
-					<?php
-					foreach ( $statuses as $status_slug => $status_name ) {
-						echo esc_js( $posts_per_status->$status_slug ) . ',';
-					}
-					?>
-					]
-				} ],
-				credits: {
-					enabled: false
-				},
-				exporting: {
-					filename: '<?php echo esc_js( posts_and_users_stats_get_export_file_name( __( 'Posts per Status', 'posts-and-users-stats' ) ) ); ?>'
-				}
-			});
-		});
-		</script>
-		<h3><?php esc_html_e( 'Posts per Status', 'posts-and-users-stats' ); ?>
+					],
+					[
+						<?php
+						foreach ( $statuses as $status_slug => $status_name ) {
+							echo esc_js( $posts_per_status->$status_slug ) . ',';
+						}
+						?>
+					],
+					'<?php esc_html_e( 'Post type', 'posts-and-users-stats' ); ?>',
+					'<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
+				)
+			</script>
+		</div>
+		<h3>
+			<?php esc_html_e( 'Posts per Status', 'posts-and-users-stats' ); ?>
 			<?php
 			posts_and_users_stats_echo_export_button(
 				'csv-status',
 				'table-status',
-				posts_and_users_stats_get_export_file_name( __( 'Posts per Status', 'posts-and-users-stats' ) )
+				__( 'Posts per Status', 'posts-and-users-stats' )
 			);
 			?>
-			</h3>
+		</h3>
 		<table id="table-status" class="wp-list-table widefat">
 			<thead>
 				<tr>
