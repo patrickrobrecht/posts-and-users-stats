@@ -43,7 +43,7 @@ function posts_and_users_stats_load_assets() {
 		wp_enqueue_style(
 			'chartist-css',
 			plugins_url(
-				'/vendor/npm-asset/chartist/dist/chartist.css',
+				'/lib/chartist.min.css',
 				__FILE__
 			)
 		);
@@ -51,21 +51,21 @@ function posts_and_users_stats_load_assets() {
 		wp_enqueue_script(
 			'chartist',
 			plugins_url(
-				'/vendor/npm-asset/chartist/dist/chartist.js',
+				'/lib/chartist.min.js',
 				__FILE__
 			)
 		);
 		wp_enqueue_script(
 			'chartist-plugin-axistitle',
 			plugins_url(
-				'/vendor/npm-asset/chartist-plugin-axistitle/dist/chartist-plugin-axistitle.js',
+				'/lib/chartist-plugin-axistitle.min.js',
 				__FILE__
 			)
 		);
 		wp_enqueue_script(
 			'moment',
 			plugins_url(
-				'/vendor/npm-asset/moment/moment.js',
+				'/lib/moment.min.js',
 				__FILE__
 			)
 		);
