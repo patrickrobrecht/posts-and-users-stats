@@ -157,7 +157,7 @@ function posts_and_users_stats_get_export_file_name( $name ) {
 /**
  * Echo the class attribute of a navigation tab.
  *
- * @param unknown $is_active_tab true if and only if the tab is active.
+ * @param bool $is_active_tab true if and only if the tab is active.
  */
 function posts_and_users_stats_echo_tab_class( $is_active_tab ) {
 	echo 'nav-tab';
@@ -179,9 +179,9 @@ function posts_and_users_stats_echo_link( $url, $text ) {
 /**
  * Output the link to a csv export.
  *
- * @param unknown $button_id the ID of the link.
- * @param unknown $table_id the ID of the table to export.
- * @param unknown $filename the file name.
+ * @param string $button_id the ID of the link.
+ * @param string $table_id the ID of the table to export.
+ * @param string $filename the file name.
  */
 function posts_and_users_stats_echo_export_button( $button_id, $table_id, $filename ) { ?>
 	<a class="page-title-action" href="#" id="<?php echo esc_attr( $button_id ); ?>" role="button"><?php esc_html_e( 'Export as CSV', 'posts-and-users-stats' ); ?></a>

@@ -190,7 +190,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 				},
 				yAxis: {
 					title: {
-						text: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>',
+						text: '<?php esc_html_e( 'Posts', 'posts-and-users-stats' ); ?>'
 					},
 					min: 0
 				},
@@ -265,7 +265,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 						?>
 					</td>
 					<?php } ?>
-					<td class="number"><?php echo esc_js( posts_and_users_stats_echo_link( get_year_link( $year ), $year_object->count ) ); ?></td>
+					<td class="number"><?php posts_and_users_stats_echo_link( get_year_link( $year ), $year_object->count ); ?></td>
 				</tr>
 				<?php } ?>
 			</tbody>
@@ -474,7 +474,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 			);
 			$total = 0;
 			foreach ( $post_types as $post_type ) {
-				$count = count_user_posts( $user->ID, $post_type, true );
+				$count = intval( count_user_posts( $user->ID, $post_type, true ) );
 				$user_data[ $post_type ] = $count;
 				$total += $count;
 			}

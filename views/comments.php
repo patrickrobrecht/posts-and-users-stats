@@ -100,7 +100,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 				},
 				yAxis: {
 					title: {
-						text: '<?php esc_html_e( 'Comments', 'posts-and-users-stats' ); ?>',
+						text: '<?php esc_html_e( 'Comments', 'posts-and-users-stats' ); ?>'
 					},
 					min: 0
 				},
@@ -151,7 +151,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 				},
 				yAxis: {
 					title: {
-						text: '<?php esc_html_e( 'Comments', 'posts-and-users-stats' ); ?>',
+						text: '<?php esc_html_e( 'Comments', 'posts-and-users-stats' ); ?>'
 					},
 					min: 0
 				},
