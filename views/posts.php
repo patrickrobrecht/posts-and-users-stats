@@ -41,7 +41,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 	<?php
 	if ( 'date' == $selected_tab ) {
 		// Get the selected post type.
-		if ( isset( $_POST['type'] ) && in_array( wp_unslash( $_POST['type'] ), $post_types ) ) {
+		if ( isset( $_POST['type'] ) && check_admin_referer( 'posts_and_users_stats' ) && in_array( wp_unslash( $_POST['type'] ), $post_types ) ) {
 			$selected_post_type = sanitize_text_field( wp_unslash( $_POST['type'] ) );
 		} else {
 			$selected_post_type = '';
@@ -92,6 +92,7 @@ $post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item' )
 		);
 	?>
 	<form method="POST" action="">
+		<?php wp_nonce_field( 'posts_and_users_stats' ); ?>
 		<fieldset>
 			<legend><?php esc_html_e( 'With a selection only the posts defined are counted, otherwise any content.', 'posts-and-users-stats' ); ?></legend>
 			<select id="type" name="type">
