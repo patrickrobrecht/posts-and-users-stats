@@ -104,7 +104,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 		</table>
 	</section>
 	
-	<?php
+		<?php
 	} else if ( 'date' == $selected_tab ) {
 		global $wpdb;
 		$user_registration_dates = $wpdb->get_results(
@@ -113,7 +113,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 				GROUP BY date ASC',
 			OBJECT_K
 		);
-	?>
+		?>
 	<section>
 		<div class="chart-container">
 			<div class="chart-title">
@@ -138,7 +138,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 						?>
 					],
 					'Y-MM-DD',
-					'<?php esc_html_e( 'Users over Time', 'posts-and-users-stats' ); ?>',
+					'<?php esc_html_e( 'Time', 'posts-and-users-stats' ); ?>',
 					'<?php esc_html_e( 'Users', 'posts-and-users-stats' ); ?>'
 				)
 			</script>

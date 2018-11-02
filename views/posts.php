@@ -90,7 +90,7 @@ if ( 'date' == $selected_tab ) {
 		// translators: post type.
 		__( '%s per Month', 'posts-and-users-stats' ), $selected_post_type_name
 	);
-?>
+	?>
 	<form method="POST" action="">
 		<?php wp_nonce_field( 'posts_and_users_stats' ); ?>
 		<fieldset>
@@ -198,7 +198,7 @@ if ( 'date' == $selected_tab ) {
 				<?php
 				foreach ( $posts_per_year as $year_object ) {
 					$year = $year_object->year;
-				?>
+					?>
 				<tr>
 					<th scope="row"><a href="#<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></a></th>
 					<?php
@@ -209,7 +209,7 @@ if ( 'date' == $selected_tab ) {
 						} else {
 							$count = 0;
 						}
-					?>
+						?>
 					<td class="number"><?php echo esc_html( $count ); ?></td>
 					<?php } ?>
 					<td class="number"><?php echo esc_html( $year_object->count ); ?></td>
@@ -221,7 +221,7 @@ if ( 'date' == $selected_tab ) {
 		<?php
 		foreach ( $posts_per_year as $year_object ) {
 			$year = $year_object->year;
-		?>
+			?>
 	<section>
 		<h3 id="<?php echo esc_attr( $year ); ?>">
 			<?php
@@ -274,21 +274,21 @@ if ( 'date' == $selected_tab ) {
 						} else {
 							$sum = 0;
 						}
-					?>
+						?>
 					<td class="number"><strong><?php echo esc_html( $sum ); ?></strong></td>
 					<?php } ?>
 				</tr>
 			</tbody>
 		</table>
 	</section>
-		<?php
+			<?php
 		} // endforeach (years)
 } // end if (post per date > 0)
 } else if ( 'taxonomy' == $selected_tab ) {
 	// Get the list of all taxonomies except nav_menu and link_category.
 	$taxonomies = get_taxonomies();
 	$taxonomies = array_diff( $taxonomies, array( 'nav_menu', 'link_category' ) );
-?>
+	?>
 	<nav>
 		<ul>
 		<?php foreach ( $taxonomies as $taxonomy ) { ?>
@@ -304,7 +304,7 @@ if ( 'date' == $selected_tab ) {
 			__( 'Published Posts per %s', 'posts-and-users-stats' ), $taxonomy_labels->singular_name
 		);
 		$terms = get_terms( $taxonomy );
-	?>
+		?>
 		<?php if ( ! is_array( $terms ) || count( $terms ) <= 0 ) { ?>
 		<section>
 			<h3 id="<?php echo esc_attr( $taxonomy ); ?>"><?php echo esc_html( $headline ); ?></h3>
@@ -400,7 +400,7 @@ if ( 'date' == $selected_tab ) {
 		$user_data['total'] = $total;
 		array_push( $posts_per_author, $user_data );
 	}
-?>
+	?>
 	<section>
 		<div class="chart-container">
 			<div class="chart-title">
@@ -479,7 +479,7 @@ if ( 'date' == $selected_tab ) {
 					<?php
 					foreach ( $post_types as $post_type ) {
 						$type_object = get_post_type_object( $post_type );
-					?>
+						?>
 					<th><?php echo esc_html( $type_object->label ); ?></th>
 					<?php } ?>
 					<th><?php esc_html_e( 'all post types', 'posts-and-users-stats' ); ?></th>
@@ -496,7 +496,7 @@ if ( 'date' == $selected_tab ) {
 						} else {
 							$count = $author[ $post_type ];
 						}
-					?>
+						?>
 					<td class="number"><?php echo esc_html( $count ); ?></td>
 					<?php } ?>
 					<td class="number"><strong><?php echo esc_html( $author['total'] ); ?></strong></td>
@@ -512,7 +512,7 @@ if ( 'date' == $selected_tab ) {
 		</table>
 	</section>
 	
-<?php
+	<?php
 } else if ( 'status' == $selected_tab ) {
 	// Get a full list of possible post status.
 	$statuses = get_post_statuses();
@@ -520,7 +520,7 @@ if ( 'date' == $selected_tab ) {
 
 	// Get the number of posts per status.
 	$posts_per_status = wp_count_posts();
-?>
+	?>
 	<section>
 		<div class="chart-container">
 			<div class="chart-title">
