@@ -36,9 +36,16 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 	<?php
 	if ( 'role' == $selected_tab ) {
 		$users = count_users();
-		$roles = $users['avail_roles'];
-		$roles = array_diff( $roles, array( 0 ) ); // removes roles with count = 0.
-	?>
+		$users_per_role = $users['avail_roles']; // extract users per role.
+		$users_per_role = array_diff( $users_per_role, array( 0 ) ); // remove roles with count = 0.
+
+		$role_data = get_editable_roles();
+
+		$roles = array();
+		foreach ( $users_per_role as $role => $count ) {
+			$roles[ translate_user_role( $role_data[ $role ]['name'] ) ] = $count;
+		}
+		?>
 	<section>
 		<div class="chart-container">
 			<div class="chart-title">
