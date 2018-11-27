@@ -26,7 +26,18 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 }
 
 // Get the list of all post types, including custom post types except the listed ones.
-$post_types = array_diff( get_post_types(), array( 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset', 'oembed_cache' ) );
+$post_types = array_diff(
+	get_post_types(),
+	array(
+		'custom_css',
+		'customize_changeset',
+		'nav_menu_item',
+		'oembed_cache',
+		'revision',
+		'user_request',
+		'wp_block',
+	)
+);
 ?>
 <div class="wrap posts-and-users-stats">
 	<h1><?php esc_html_e( 'Posts Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $tabs[ $selected_tab ] ); ?></h1>
