@@ -1,8 +1,16 @@
 # Posts and Users Stats - Changelog
 All notable changes to this WordPress plugin will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## Version 1.1.1
+
+### Changed
+* Updated libraries
+* Bugfix: Translate role names
+* Compatible with WordPress 5.0
+
 
 ## Version 1.1
 

@@ -36,9 +36,16 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 	<?php
 	if ( 'role' == $selected_tab ) {
 		$users = count_users();
-		$roles = $users['avail_roles'];
-		$roles = array_diff( $roles, array( 0 ) ); // removes roles with count = 0.
-	?>
+		$users_per_role = $users['avail_roles']; // extract users per role.
+		$users_per_role = array_diff( $users_per_role, array( 0 ) ); // remove roles with count = 0.
+
+		$role_data = get_editable_roles();
+
+		$roles = array();
+		foreach ( $users_per_role as $role => $count ) {
+			$roles[ translate_user_role( $role_data[ $role ]['name'] ) ] = $count;
+		}
+		?>
 	<section>
 		<div class="chart-container">
 			<div class="chart-title">
@@ -104,7 +111,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 		</table>
 	</section>
 	
-	<?php
+		<?php
 	} else if ( 'date' == $selected_tab ) {
 		global $wpdb;
 		$user_registration_dates = $wpdb->get_results(
@@ -113,7 +120,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 				GROUP BY date ASC',
 			OBJECT_K
 		);
-	?>
+		?>
 	<section>
 		<div class="chart-container">
 			<div class="chart-title">
@@ -138,7 +145,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 						?>
 					],
 					'Y-MM-DD',
-					'<?php esc_html_e( 'Users over Time', 'posts-and-users-stats' ); ?>',
+					'<?php esc_html_e( 'Time', 'posts-and-users-stats' ); ?>',
 					'<?php esc_html_e( 'Users', 'posts-and-users-stats' ); ?>'
 				)
 			</script>

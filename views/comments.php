@@ -61,7 +61,7 @@ if ( 'date' == $selected_tab ) {
 
 	$per_date_string = __( 'Comments per Date', 'posts-and-users-stats' );
 	$per_month_string = __( 'Comments per Month', 'posts-and-users-stats' );
-?>
+	?>
 	<nav>
 		<?php if ( ! is_array( $comments_per_date ) || count( $comments_per_date ) <= 0 ) { ?>
 		<p><?php esc_html_e( 'No approved comments found!', 'posts-and-users-stats' ); ?>
@@ -139,7 +139,7 @@ if ( 'date' == $selected_tab ) {
 						} else {
 							$count = 0;
 						}
-					?>
+						?>
 					<td class="number"><?php echo esc_html( $count ); ?></td>
 					<?php } ?>
 					<td class="number"><?php echo esc_html( $year_object->count ); ?></td>
@@ -151,7 +151,7 @@ if ( 'date' == $selected_tab ) {
 		<?php
 		foreach ( $comments_per_year as $year_object ) {
 			$year = $year_object->year;
-		?>
+			?>
 	<section>
 		<h3 id="<?php echo esc_attr( $year ); ?>">
 			<?php
@@ -189,7 +189,7 @@ if ( 'date' == $selected_tab ) {
 						} else {
 							$count = '&mdash;';
 						}
-					?>
+						?>
 					<td class="number"><?php echo esc_html( $count ); ?></td>
 					<?php } ?>
 				</tr>
@@ -204,14 +204,14 @@ if ( 'date' == $selected_tab ) {
 						} else {
 							$count = 0;
 						}
-					?>
+						?>
 					<td class="number"><strong><?php echo esc_html( $count ); ?></strong></td>
 					<?php } ?>
 				</tr>
 			</tbody>
 		</table>
 	</section>
-		<?php
+			<?php
 		} // end loop
 } // end if
 } else if ( 'author' == $selected_tab ) {
@@ -223,7 +223,7 @@ if ( 'date' == $selected_tab ) {
             GROUP BY author",
 		OBJECT_K
 	);
-?>
+	?>
 	<section>
 		<div class="chart-container">
 			<div class="chart-title">
@@ -281,7 +281,7 @@ if ( 'date' == $selected_tab ) {
 		</table>
 	</section>
 
-<?php
+	<?php
 } else if ( 'status' == $selected_tab ) {
 	$comments_per_status = wp_count_comments();
 
@@ -293,7 +293,7 @@ if ( 'date' == $selected_tab ) {
 		'post-trashed' => __( 'Post trashed', 'posts-and-users-stats' ),
 		'moderated' => __( 'Pending', 'posts-and-users-stats' ),
 	);
-?>
+	?>
 	<section>
 		<div class="chart-container">
 			<div class="chart-title">
