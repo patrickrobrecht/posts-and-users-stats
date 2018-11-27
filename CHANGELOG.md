@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 * Updated libraries
 * Bugfix: Translate role names
+* Compatible with WordPress 5.0
 
 
 ## Version 1.1
