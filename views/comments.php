@@ -37,6 +37,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 <?php
 if ( 'date' == $selected_tab ) {
 	global $wpdb;
+	// phpcs:disable WordPress.VIP.DirectDatabaseQuery.NoCaching
 	$comments_per_date = $wpdb->get_results(
 		"SELECT DATE(comment_date) as date, count(comment_ID) as count
             FROM {$wpdb->comments}
@@ -58,6 +59,7 @@ if ( 'date' == $selected_tab ) {
             GROUP BY year",
 		OBJECT_K
 	);
+	// phpcs:enable WordPress.VIP.DirectDatabaseQuery.NoCaching
 
 	$per_date_string = __( 'Comments per Date', 'posts-and-users-stats' );
 	$per_month_string = __( 'Comments per Month', 'posts-and-users-stats' );
@@ -216,6 +218,7 @@ if ( 'date' == $selected_tab ) {
 } // end if
 } else if ( 'author' == $selected_tab ) {
 	global $wpdb;
+	// phpcs:ignore WordPress.VIP.DirectDatabaseQuery.NoCaching
 	$comments_per_author = $wpdb->get_results(
 		"SELECT comment_author as author, count(comment_ID) as count
             FROM {$wpdb->comments}

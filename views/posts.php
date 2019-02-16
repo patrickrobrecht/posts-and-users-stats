@@ -70,6 +70,8 @@ if ( 'date' == $selected_tab ) {
 	}
 
 	global $wpdb;
+	// phpcs:disable WordPress.WP.PreparedSQL.NotPrepared
+    // phpcs:disable WordPress.VIP.DirectDatabaseQuery.NoCaching
 	$posts_per_date = $wpdb->get_results(
 		"SELECT DATE(post_date) as date, count(ID) as count
             FROM {$wpdb->posts}
@@ -92,6 +94,8 @@ if ( 'date' == $selected_tab ) {
             ORDER BY year DESC',
 		OBJECT_K
 	);
+	// phpcs:enable WordPress.WP.PreparedSQL.NotPrepared
+    // phpcs:enable WordPress.VIP.DirectDatabaseQuery.NoCaching
 
 	$per_date_string = sprintf(
 		// translators: post type.
@@ -404,7 +408,10 @@ if ( 'date' == $selected_tab ) {
 		);
 		$total = 0;
 		foreach ( $post_types as $post_type ) {
-			$count = intval( count_user_posts( $user->ID, $post_type, true ) );
+			$count = intval(
+				// phpcs:ignore WordPress.VIP.RestrictedFunctions.count_user_posts_count_user_posts
+				count_user_posts( $user->ID, $post_type, true )
+			);
 			$user_data[ $post_type ] = $count;
 			$total += $count;
 		}

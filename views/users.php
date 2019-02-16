@@ -114,6 +114,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 		<?php
 	} else if ( 'date' == $selected_tab ) {
 		global $wpdb;
+		// phpcs:ignore WordPress.VIP.DirectDatabaseQuery.NoCaching
 		$user_registration_dates = $wpdb->get_results(
 			'SELECT DATE(user_registered) AS date, count(*) as count
 				FROM ' . $wpdb->prefix . 'users
