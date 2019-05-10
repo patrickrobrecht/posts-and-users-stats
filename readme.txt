@@ -49,6 +49,9 @@ After the installation you can find the statistics as subpages of *Tools*.
 
 If interested, please check up the [changelog at GitHub](https://github.com/patrickrobrecht/posts-and-users-stats#changelog).
 
+= 1.1.2 =
+* Enhancement: Compliance with latest WP coding guidelines
+
 = 1.1.1 =
 * Updated libraries
 * Bugfix: Translate role names
