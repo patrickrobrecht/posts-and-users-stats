@@ -3,7 +3,7 @@
  * Plugin Name: Posts and Users Stats
  * Plugin URI: https://patrick-robrecht.de/wordpress/
  * Description: Statistics about the number of posts and users, provided as diagrams, tables and csv export.
- * Version: 1.1.1
+ * Version: 1.1.2
  * Author: Patrick Robrecht
  * Author URI: https://patrick-robrecht.de/
  * License: GPLv3
@@ -14,9 +14,9 @@
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
+
+define( 'POSTS_AND_USERS_STATS_VERSION', '1.1.2' );
 
 /**
  * Load text domain for translation.
@@ -32,51 +32,69 @@ add_action( 'init', 'posts_and_users_stats_load_plugin_textdomain' );
  */
 function posts_and_users_stats_load_assets() {
 	if ( posts_and_users_stats_current_user_can() ) {
-		wp_enqueue_style(
+		posts_and_users_stats_enqueue_style(
 			'posts-and-users-stats-css',
-			plugins_url(
-				'/assets/style.min.css',
-				__FILE__
-			),
-			array()
+			'/assets/style.min.css'
 		);
-		wp_enqueue_style(
+		posts_and_users_stats_enqueue_style(
 			'chartist-css',
-			plugins_url(
-				'/lib/chartist.min.css',
-				__FILE__
-			)
+			'/lib/chartist.min.css'
 		);
 
-		wp_enqueue_script(
+		posts_and_users_stats_enqueue_script(
 			'chartist',
-			plugins_url(
-				'/lib/chartist.min.js',
-				__FILE__
-			)
+			'/lib/chartist.min.js'
 		);
-		wp_enqueue_script(
+		posts_and_users_stats_enqueue_script(
 			'chartist-plugin-axistitle',
-			plugins_url(
-				'/lib/chartist-plugin-axistitle.min.js',
-				__FILE__
-			)
+			'/lib/chartist-plugin-axistitle.min.js'
 		);
-		wp_enqueue_script(
+		posts_and_users_stats_enqueue_script(
 			'moment',
-			plugins_url(
-				'/lib/moment.min.js',
-				__FILE__
-			)
+			'/lib/moment.min.js'
 		);
-		wp_enqueue_script(
+		posts_and_users_stats_enqueue_script(
 			'posts-and-users-stats-functions',
-			plugins_url(
-				'/assets/functions.min.js',
-				__FILE__
-			)
+			'/assets/functions.min.js'
 		);
 	}
+}
+
+/**
+ * Loads the CSS file.
+ *
+ * @param string $style_name the name of the style.
+ * @param string $style_path the plugin-relative path of the CSS file.
+ */
+function posts_and_users_stats_enqueue_style( $style_name, $style_path ) {
+	wp_enqueue_style(
+		$style_name,
+		plugins_url(
+			$style_path,
+			__FILE__
+		),
+		[],
+		POSTS_AND_USERS_STATS_VERSION
+	);
+}
+
+/**
+ * Loads the JavaScript file.
+ *
+ * @param string $script_name the name of the script.
+ * @param string $script_path the plugin-relative path of the JavaScript.
+ * @param array  $dependencies the dependencies.
+ */
+function posts_and_users_stats_enqueue_script( $script_name, $script_path, $dependencies = [] ) {
+	wp_enqueue_script(
+		$script_name,
+		plugins_url(
+			$script_path,
+			__FILE__
+		),
+		$dependencies,
+		POSTS_AND_USERS_STATS_VERSION
+	);
 }
 
 /**

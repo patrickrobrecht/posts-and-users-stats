@@ -2,9 +2,9 @@
 Contributors: patrickrobrecht
 Tags: dashboard, statistics
 Requires at least: 4.4
-Tested up to: 5.1
+Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -48,6 +48,9 @@ After the installation you can find the statistics as subpages of *Tools*.
 == Changelog ==
 
 If interested, please check up the [changelog at GitHub](https://github.com/patrickrobrecht/posts-and-users-stats#changelog).
+
+= 1.1.2 =
+* Enhancement: Compliance with latest WP coding guidelines
 
 = 1.1.1 =
 * Updated libraries

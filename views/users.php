@@ -11,27 +11,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define tabs.
-$tabs = array(
+$users_tabs = array(
 	'role'      => __( 'Users per Role', 'posts-and-users-stats' ),
 	'date'      => __( 'Users over Time', 'posts-and-users-stats' ),
 );
 
 // Get the selected tab.
-if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tabs ) ) {
+if ( isset( $_GET['tab'] ) && array_key_exists( sanitize_text_field( wp_unslash( $_GET['tab'] ) ), $users_tabs ) ) {
 	$selected_tab = sanitize_text_field( wp_unslash( $_GET['tab'] ) );
 } else {
 	$selected_tab = 'role';
 }
 ?>
 <div class="wrap posts-and-users-stats">
-	<h1><?php esc_html_e( 'Users Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $tabs[ $selected_tab ] ); ?></h1>
+	<h1><?php esc_html_e( 'Users Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $users_tabs[ $selected_tab ] ); ?></h1>
 
-	<h2 class="nav-tab-wrapper">
-	<?php foreach ( $tabs as $tab_slug => $tab_title ) { ?>
+	<nav class="nav-tab-wrapper">
+	<?php foreach ( $users_tabs as $tab_slug => $tab_title ) { ?>
 		<a href="<?php echo esc_url( admin_url( 'tools.php?page=posts_and_users_stats_users&tab=' ) . sanitize_text_field( $tab_slug ) ); ?>"
 			class="<?php posts_and_users_stats_echo_tab_class( $selected_tab == $tab_slug ); ?>"><?php echo esc_html( $tab_title ); ?></a>
 	<?php } ?>
-	</h2>
+	</nav>
 	
 	<?php
 	if ( 'role' == $selected_tab ) {
@@ -42,8 +42,8 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 		$role_data = get_editable_roles();
 
 		$roles = array();
-		foreach ( $users_per_role as $role => $count ) {
-			$roles[ translate_user_role( $role_data[ $role ]['name'] ) ] = $count;
+		foreach ( $users_per_role as $user_role => $count ) {
+			$roles[ translate_user_role( $role_data[ $user_role ]['name'] ) ] = $count;
 		}
 		?>
 	<section>
@@ -58,14 +58,14 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 					'#chart-users-roles',
 					[
 						<?php
-						foreach ( $roles as $role => $count ) {
-							echo "'" . esc_js( $role ) . "',";
+						foreach ( $roles as $user_role => $count ) {
+							echo "'" . esc_js( $user_role ) . "',";
 						}
 						?>
 					],
 					[
 						<?php
-						foreach ( $roles as $role => $count ) {
+						foreach ( $roles as $user_role => $count ) {
 							echo esc_js( $count ) . ',';
 						}
 						?>
@@ -101,9 +101,9 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ( $roles as $role => $count ) { ?>
+				<?php foreach ( $roles as $user_role => $count ) { ?>
 					<tr>
-						<td><?php echo esc_html( translate_user_role( $role ) ); ?></td>
+						<td><?php echo esc_html( translate_user_role( $user_role ) ); ?></td>
 						<td><?php echo esc_html( $count ); ?></td>
 					</tr>
 				<?php } ?>
@@ -137,11 +137,11 @@ if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tab
 						$users = 0;
 						foreach ( $user_registration_dates as $registration ) {
 							$date = strtotime( $registration->date );
-							$year = date( 'Y', $date );
-							$month = date( 'm', $date );
-							$day = date( 'd', $date );
 							$users += $registration->count;
-							echo '{x: new Date(' . esc_js( $year ) . ',' . esc_js( $month - 1 ) . ',' . esc_js( $day ) . '), y: ' . esc_js( $users ) . '},';
+							echo '{x: new Date(' . esc_js( date( 'Y', $date ) )
+								 . ',' . esc_js( date( 'm', $date ) - 1 ) . ','
+								 . esc_js( date( 'd', $date ) ) . '), y: '
+								 . esc_js( $users ) . '},';
 						}
 						?>
 					],

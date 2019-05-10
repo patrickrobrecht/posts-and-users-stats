@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define tabs.
-$tabs = array(
+$posts_tabs = array(
 	'date'      => __( 'Posts per Publication Date', 'posts-and-users-stats' ),
 	'taxonomy'  => __( 'Posts per Category and Tag', 'posts-and-users-stats' ),
 	'author'    => __( 'Posts per Author and Post Type', 'posts-and-users-stats' ),
@@ -19,7 +19,7 @@ $tabs = array(
 );
 
 // Get the selected tab.
-if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tabs ) ) {
+if ( isset( $_GET['tab'] ) && array_key_exists( sanitize_text_field( wp_unslash( $_GET['tab'] ) ), $posts_tabs ) ) {
 	$selected_tab = sanitize_text_field( wp_unslash( $_GET['tab'] ) );
 } else {
 	$selected_tab = 'date';
@@ -40,14 +40,14 @@ $post_types = array_diff(
 );
 ?>
 <div class="wrap posts-and-users-stats">
-	<h1><?php esc_html_e( 'Posts Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $tabs[ $selected_tab ] ); ?></h1>
+	<h1><?php esc_html_e( 'Posts Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $posts_tabs[ $selected_tab ] ); ?></h1>
 
-	<h2 class="nav-tab-wrapper">
-	<?php foreach ( $tabs as $tab_slug => $tab_title ) { ?>
+	<nav class="nav-tab-wrapper">
+	<?php foreach ( $posts_tabs as $tab_slug => $tab_title ) { ?>
 		<a href="<?php echo esc_url( admin_url( 'tools.php?page=posts_and_users_stats_posts' ) . '&tab=' . sanitize_text_field( $tab_slug ) ); ?>"
 			class="<?php posts_and_users_stats_echo_tab_class( $selected_tab == $tab_slug ); ?>"><?php echo esc_html( $tab_title ); ?></a>
 	<?php } ?>
-	</h2>
+	</nav>
 
 <?php
 if ( 'date' == $selected_tab ) {
@@ -70,7 +70,7 @@ if ( 'date' == $selected_tab ) {
 	}
 
 	global $wpdb;
-	// phpcs:disable WordPress.WP.PreparedSQL.NotPrepared
+	// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
     // phpcs:disable WordPress.VIP.DirectDatabaseQuery.NoCaching
 	$posts_per_date = $wpdb->get_results(
 		"SELECT DATE(post_date) as date, count(ID) as count
@@ -94,16 +94,18 @@ if ( 'date' == $selected_tab ) {
             ORDER BY year DESC',
 		OBJECT_K
 	);
-	// phpcs:enable WordPress.WP.PreparedSQL.NotPrepared
+	// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared
     // phpcs:enable WordPress.VIP.DirectDatabaseQuery.NoCaching
 
 	$per_date_string = sprintf(
 		// translators: post type.
-		__( '%s per Date', 'posts-and-users-stats' ), $selected_post_type_name
+		__( '%s per Date', 'posts-and-users-stats' ),
+		$selected_post_type_name
 	);
 	$per_month_string = sprintf(
 		// translators: post type.
-		__( '%s per Month', 'posts-and-users-stats' ), $selected_post_type_name
+		__( '%s per Month', 'posts-and-users-stats' ),
+		$selected_post_type_name
 	);
 	?>
 	<form method="POST" action="">
@@ -233,21 +235,21 @@ if ( 'date' == $selected_tab ) {
 			</tbody>
 		</table>
 	</section>	
-		<?php
-		foreach ( $posts_per_year as $year_object ) {
-			$year = $year_object->year;
-			?>
+			<?php
+			foreach ( $posts_per_year as $year_object ) {
+				$year = $year_object->year;
+				?>
 	<section>
 		<h3 id="<?php echo esc_attr( $year ); ?>">
-			<?php
-			esc_html_e( 'Year', 'posts-and-users-stats' );
-			echo ' ' . esc_html( $year );
-			posts_and_users_stats_echo_export_button(
-				'csv-daily-' . $year,
-				'table-daily-' . $year,
-				$per_date_string . '-' . $year
-			);
-			?>
+				<?php
+				esc_html_e( 'Year', 'posts-and-users-stats' );
+				echo ' ' . esc_html( $year );
+				posts_and_users_stats_echo_export_button(
+					'csv-daily-' . $year,
+					'table-daily-' . $year,
+					$per_date_string . '-' . $year
+				);
+				?>
 		</h3>
 		<table id="table-daily-<?php echo esc_attr( $year ); ?>" class="wp-list-table widefat">
 			<thead>
@@ -281,24 +283,24 @@ if ( 'date' == $selected_tab ) {
 				<?php } ?>
 				<tr>
 					<th scope="row"><strong><?php esc_html_e( 'Sum', 'posts-and-users-stats' ); ?></strong></th>
-					<?php
-					foreach ( range( 1, 12, 1 ) as $month ) {
-						$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
-						if ( array_key_exists( $date, $posts_per_month ) ) {
-							$sum = $posts_per_month[ $date ]->count;
-						} else {
-							$sum = 0;
-						}
-						?>
+						<?php
+						foreach ( range( 1, 12, 1 ) as $month ) {
+							$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
+							if ( array_key_exists( $date, $posts_per_month ) ) {
+								$sum = $posts_per_month[ $date ]->count;
+							} else {
+								$sum = 0;
+							}
+							?>
 					<td class="number"><strong><?php echo esc_html( $sum ); ?></strong></td>
-					<?php } ?>
+						<?php } ?>
 				</tr>
 			</tbody>
 		</table>
 	</section>
-			<?php
-		} // endforeach (years)
-} // end if (post per date > 0)
+				<?php
+			} // endforeach (years)
+		} // end if (post per date > 0)
 } else if ( 'taxonomy' == $selected_tab ) {
 	// Get the list of all taxonomies except nav_menu and link_category.
 	$taxonomies = get_taxonomies();
@@ -316,7 +318,8 @@ if ( 'date' == $selected_tab ) {
 		$taxonomy_labels = get_taxonomy( $taxonomy )->labels;
 		$headline = sprintf(
 			// translators: taxonomy label.
-			__( 'Published Posts per %s', 'posts-and-users-stats' ), $taxonomy_labels->singular_name
+			__( 'Published Posts per %s', 'posts-and-users-stats' ),
+			$taxonomy_labels->singular_name
 		);
 		$terms = get_terms( $taxonomy );
 		?>
@@ -384,8 +387,8 @@ if ( 'date' == $selected_tab ) {
 				</tbody>
 			</table>
 		</section>
-		<?php
-} // end if count( $terms) > 0
+			<?php
+		} // end if count( $terms) > 0
 	} // end loop over taxonomies
 } else if ( 'author' == $selected_tab ) {
 	// Get the total number of published posts per post type.

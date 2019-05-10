@@ -11,28 +11,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define tabs.
-$tabs = array(
+$comments_tabs = array(
 	'date'      => __( 'Comments per Date', 'posts-and-users-stats' ),
 	'author'    => __( 'Comments per Author', 'posts-and-users-stats' ),
 	'status'    => __( 'Comments per Status', 'posts-and-users-stats' ),
 );
 
 // Get the selected tab.
-if ( isset( $_GET['tab'] ) && array_key_exists( wp_unslash( $_GET['tab'] ), $tabs ) ) {
+if ( isset( $_GET['tab'] ) && array_key_exists( sanitize_text_field( wp_unslash( $_GET['tab'] ) ), $comments_tabs ) ) {
 	$selected_tab = sanitize_text_field( wp_unslash( $_GET['tab'] ) );
 } else {
 	$selected_tab = 'date';
 }
 ?>
 <div class="wrap posts-and-users-stats">
-	<h1><?php esc_html_e( 'Comments Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $tabs[ $selected_tab ] ); ?></h1>
+	<h1><?php esc_html_e( 'Comments Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $comments_tabs[ $selected_tab ] ); ?></h1>
 	
-	<h2 class="nav-tab-wrapper">
-	<?php foreach ( $tabs as $tab_slug => $tab_title ) { ?>
+	<nav class="nav-tab-wrapper">
+	<?php foreach ( $comments_tabs as $tab_slug => $tab_title ) { ?>
 		<a href="<?php echo esc_url( admin_url( 'tools.php?page=posts_and_users_stats_comments&tab=' ) . sanitize_text_field( $tab_slug ) ); ?>"
 			class="<?php posts_and_users_stats_echo_tab_class( $selected_tab == $tab_slug ); ?>"><?php echo esc_html( $tab_title ); ?></a>
 	<?php } ?>
-	</h2>
+	</nav>
 
 <?php
 if ( 'date' == $selected_tab ) {
@@ -70,7 +70,7 @@ if ( 'date' == $selected_tab ) {
 		<?php } else { ?>
 		<ul>
 			<li><a href="#monthly"><?php echo esc_html( $per_month_string ); ?></a>
-		<?php foreach ( $comments_per_year as $year_object ) { ?>
+			<?php foreach ( $comments_per_year as $year_object ) { ?>
 			<li><a href="#<?php echo esc_attr( $year_object->year ); ?>">
 					<?php esc_html_e( 'Year', 'posts-and-users-stats' ); ?>
 					<?php echo esc_html( $year_object->year ); ?></a></li>
@@ -89,14 +89,14 @@ if ( 'date' == $selected_tab ) {
 					'#chart-comments-time',
 					[
 						<?php
-						$comments = 0;
+						$comments_count = 0;
 						foreach ( $comments_per_date as $comments_of_date ) {
-							$date = strtotime( $comments_of_date->date );
-							$year = date( 'Y', $date );
-							$month = date( 'm', $date );
-							$day = date( 'd', $date );
-							$comments += $comments_of_date->count;
-							echo '{x: new Date(' . esc_js( $year ) . ',' . esc_js( $month - 1 ) . ',' . esc_js( $day ) . '), y: ' . esc_js( $comments ) . '},';
+							$date           = strtotime( $comments_of_date->date );
+							$comments_count += $comments_of_date->count;
+							echo '{x: new Date(' . esc_js( date( 'Y', $date ) ) . ','
+								 . esc_js( date( 'm', $date ) - 1 ) . ','
+								 . esc_js( date( 'd', $date ) ) . '), y: '
+								 . esc_js( $comments_count ) . '},';
 						}
 						?>
 					],
@@ -129,13 +129,13 @@ if ( 'date' == $selected_tab ) {
 			<tbody>
 				<?php
 				foreach ( $comments_per_year as $year_object ) {
-					$year = $year_object->year;
+					$comment_year = $year_object->year;
 					?>
 				<tr>
-					<th scope="row"><a href="#<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></a></th>
+					<th scope="row"><a href="#<?php echo esc_attr( $comment_year ); ?>"><?php echo esc_html( $comment_year ); ?></a></th>
 					<?php
 					foreach ( range( 1, 12, 1 ) as $month ) {
-						$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
+						$date = date( 'Y-m', strtotime( $comment_year . '-' . $month . '-1' ) );
 						if ( array_key_exists( $date, $comments_per_month ) ) {
 							$count = $comments_per_month[ $date ]->count;
 						} else {
@@ -150,23 +150,23 @@ if ( 'date' == $selected_tab ) {
 			</tbody>
 		</table>
 	</section>	
-		<?php
-		foreach ( $comments_per_year as $year_object ) {
-			$year = $year_object->year;
-			?>
-	<section>
-		<h3 id="<?php echo esc_attr( $year ); ?>">
 			<?php
-			esc_html_e( 'Year', 'posts-and-users-stats' );
-			echo ' ' . esc_html( $year );
-			posts_and_users_stats_echo_export_button(
-				'csv-daily-' . $year,
-				'table-daily-' . $year,
-				$per_date_string . '-' . $year
-			);
-			?>
+			foreach ( $comments_per_year as $year_object ) {
+				$comment_year = $year_object->year;
+				?>
+	<section>
+		<h3 id="<?php echo esc_attr( $comment_year ); ?>">
+				<?php
+				esc_html_e( 'Year', 'posts-and-users-stats' );
+				echo ' ' . esc_html( $comment_year );
+				posts_and_users_stats_echo_export_button(
+					'csv-daily-' . $comment_year,
+					'table-daily-' . $comment_year,
+					$per_date_string . '-' . $comment_year
+				);
+				?>
 			</h3>
-		<table id="table-daily-<?php echo esc_attr( $year ); ?>" class="wp-list-table widefat">
+		<table id="table-daily-<?php echo esc_attr( $comment_year ); ?>" class="wp-list-table widefat">
 			<thead>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Month', 'posts-and-users-stats' ); ?></th>
@@ -181,8 +181,8 @@ if ( 'date' == $selected_tab ) {
 					<th scope="row"><?php esc_html_e( 'Day', 'posts-and-users-stats' ); ?> <?php echo esc_html( $day ); ?></th>
 					<?php
 					foreach ( range( 1, 12, 1 ) as $month ) {
-						if ( checkdate( $month, $day, $year ) ) {
-							$date = date( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $day ) );
+						if ( checkdate( $month, $day, $comment_year ) ) {
+							$date = date( 'Y-m-d', strtotime( $comment_year . '-' . $month . '-' . $day ) );
 							if ( array_key_exists( $date, $comments_per_date ) ) {
 								$count = $comments_per_date[ $date ]->count;
 							} else {
@@ -198,24 +198,24 @@ if ( 'date' == $selected_tab ) {
 				<?php } ?>
 				<tr>
 					<th scope="row"><strong><?php esc_html_e( 'Sum', 'posts-and-users-stats' ); ?></strong></th>
-					<?php
-					foreach ( range( 1, 12, 1 ) as $month ) {
-						$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
-						if ( array_key_exists( $date, $comments_per_month ) ) {
-							$count = $comments_per_month[ $date ]->count;
-						} else {
-							$count = 0;
-						}
-						?>
+						<?php
+						foreach ( range( 1, 12, 1 ) as $month ) {
+							$date = date( 'Y-m', strtotime( $comment_year . '-' . $month . '-1' ) );
+							if ( array_key_exists( $date, $comments_per_month ) ) {
+								$count = $comments_per_month[ $date ]->count;
+							} else {
+								$count = 0;
+							}
+							?>
 					<td class="number"><strong><?php echo esc_html( $count ); ?></strong></td>
-					<?php } ?>
+						<?php } ?>
 				</tr>
 			</tbody>
 		</table>
 	</section>
-			<?php
-		} // end loop
-} // end if
+				<?php
+			} // end loop
+		} // end if
 } else if ( 'author' == $selected_tab ) {
 	global $wpdb;
 	// phpcs:ignore WordPress.VIP.DirectDatabaseQuery.NoCaching
@@ -309,15 +309,15 @@ if ( 'date' == $selected_tab ) {
 					'#chart-comments-status',
 					[
 						<?php
-						foreach ( $comment_statuses as $status => $name ) {
+						foreach ( $comment_statuses as $comment_status_key => $name ) {
 							echo "'" . esc_js( $name ) . "',";
 						}
 						?>
 					],
 					[
 						<?php
-						foreach ( $comment_statuses as $status => $name ) {
-							echo esc_js( $comments_per_status->$status ) . ',';
+						foreach ( $comment_statuses as $comment_status_key => $name ) {
+							echo esc_js( $comments_per_status->$comment_status_key ) . ',';
 						}
 						?>
 					],
@@ -344,10 +344,10 @@ if ( 'date' == $selected_tab ) {
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ( $comment_statuses as $status => $name ) { ?>
+				<?php foreach ( $comment_statuses as $comment_status_key => $name ) { ?>
 				<tr>
 					<td><?php echo esc_html( $name ); ?></td>
-					<td class="number"><?php echo esc_html( $comments_per_status->$status ); ?></td>
+					<td class="number"><?php echo esc_html( $comments_per_status->$comment_status_key ); ?></td>
 				</tr>
 				<?php } ?>
 			</tbody>
