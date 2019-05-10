@@ -26,12 +26,12 @@ if ( isset( $_GET['tab'] ) && array_key_exists( sanitize_text_field( wp_unslash(
 <div class="wrap posts-and-users-stats">
 	<h1><?php esc_html_e( 'Users Statistics', 'posts-and-users-stats' ); ?> &rsaquo; <?php echo esc_html( $users_tabs[ $selected_tab ] ); ?></h1>
 
-	<h2 class="nav-tab-wrapper">
+	<nav class="nav-tab-wrapper">
 	<?php foreach ( $users_tabs as $tab_slug => $tab_title ) { ?>
 		<a href="<?php echo esc_url( admin_url( 'tools.php?page=posts_and_users_stats_users&tab=' ) . sanitize_text_field( $tab_slug ) ); ?>"
 			class="<?php posts_and_users_stats_echo_tab_class( $selected_tab == $tab_slug ); ?>"><?php echo esc_html( $tab_title ); ?></a>
 	<?php } ?>
-	</h2>
+	</nav>
 	
 	<?php
 	if ( 'role' == $selected_tab ) {
