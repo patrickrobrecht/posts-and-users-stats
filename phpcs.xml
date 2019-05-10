@@ -26,6 +26,9 @@
             <property name="text_domain" type="array" value="posts-and-users-stats" />
         </properties>
     </rule>
+    <rule ref="WordPress.WP.GlobalVariablesOverride.Prohibited">
+        <exclude-pattern>posts.php</exclude-pattern>
+    </rule>
 
     <!-- Include sniffs for PHP cross-version compatibility. -->
     <config name="testVersion" value="5.6-"/>
