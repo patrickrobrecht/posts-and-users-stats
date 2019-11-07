@@ -4,14 +4,14 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2ac6659ecf065fcdc3aa35e9d2bfdf86",
+    "content-hash": "ba204f650c4b9d1deb2b48ca8a35bfec",
     "packages": [
         {
             "name": "npm-asset/chartist",
-            "version": "0.11.0",
+            "version": "0.11.4",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/chartist/-/chartist-0.11.0.tgz"
+                "url": "https://registry.npmjs.org/chartist/-/chartist-0.11.4.tgz"
             },
             "type": "npm-asset",
             "license": [
@@ -20,16 +20,16 @@
         },
         {
             "name": "npm-asset/chartist-plugin-axistitle",
-            "version": "0.0.5",
+            "version": "0.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alexstanbury/chartist-plugin-axistitle.git",
-                "reference": "03b5ab4b50372a8b6dfb3add13e853b3abbb9b50"
+                "reference": "5406e7423c675a732ecfe6b84fd8f833a9944238"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alexstanbury/chartist-plugin-axistitle/zipball/03b5ab4b50372a8b6dfb3add13e853b3abbb9b50",
-                "reference": "03b5ab4b50372a8b6dfb3add13e853b3abbb9b50"
+                "url": "https://api.github.com/repos/alexstanbury/chartist-plugin-axistitle/zipball/5406e7423c675a732ecfe6b84fd8f833a9944238",
+                "reference": "5406e7423c675a732ecfe6b84fd8f833a9944238"
             },
             "type": "npm-asset"
         },
@@ -226,16 +226,16 @@
         },
         {
             "name": "phpcompatibility/php-compatibility",
-            "version": "9.1.1",
+            "version": "9.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCompatibility/PHPCompatibility.git",
-                "reference": "2b63c5d284ab8857f7b1d5c240ddb507a6b2293c"
+                "reference": "bfca2be3992f40e92206e5a7ebe5eaee37280b58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibility/zipball/2b63c5d284ab8857f7b1d5c240ddb507a6b2293c",
-                "reference": "2b63c5d284ab8857f7b1d5c240ddb507a6b2293c",
+                "url": "https://api.github.com/repos/PHPCompatibility/PHPCompatibility/zipball/bfca2be3992f40e92206e5a7ebe5eaee37280b58",
+                "reference": "bfca2be3992f40e92206e5a7ebe5eaee37280b58",
                 "shasum": ""
             },
             "require": {
@@ -249,7 +249,7 @@
                 "phpunit/phpunit": "~4.5 || ^5.0 || ^6.0 || ^7.0"
             },
             "suggest": {
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically.",
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.5 || This Composer plugin will sort out the PHPCS 'installed_paths' automatically.",
                 "roave/security-advisories": "dev-master || Helps prevent installing dependencies with known security issues."
             },
             "type": "phpcodesniffer-standard",
@@ -259,10 +259,6 @@
             ],
             "authors": [
                 {
-                    "name": "Contributors",
-                    "homepage": "https://github.com/PHPCompatibility/PHPCompatibility/graphs/contributors"
-                },
-                {
                     "name": "Wim Godden",
                     "homepage": "https://github.com/wimg",
                     "role": "lead"
@@ -271,6 +267,10 @@
                     "name": "Juliette Reinders Folmer",
                     "homepage": "https://github.com/jrfnl",
                     "role": "lead"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/PHPCompatibility/PHPCompatibility/graphs/contributors"
                 }
             ],
             "description": "A set of sniffs for PHP_CodeSniffer that checks for PHP cross-version compatibility.",
@@ -280,29 +280,30 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-12-30T23:16:27+00:00"
+            "time": "2019-10-16T21:24:24+00:00"
         },
         {
             "name": "slowprog/composer-copy-file",
-            "version": "0.2.1",
+            "version": "0.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slowprog/CopyFile.git",
-                "reference": "400c2b7c9f9f8ed8195217ae143ffbf3fec84c31"
+                "reference": "5a82ba4613948f70b2d4b041c13c1c9259fc6477"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slowprog/CopyFile/zipball/400c2b7c9f9f8ed8195217ae143ffbf3fec84c31",
-                "reference": "400c2b7c9f9f8ed8195217ae143ffbf3fec84c31",
+                "url": "https://api.github.com/repos/slowprog/CopyFile/zipball/5a82ba4613948f70b2d4b041c13c1c9259fc6477",
+                "reference": "5a82ba4613948f70b2d4b041c13c1c9259fc6477",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.6"
             },
             "require-dev": {
                 "composer/composer": "1.0.*@dev",
                 "mikey179/vfsstream": "~1",
-                "phpunit/phpunit": "~5.0",
+                "php-mock/php-mock-phpunit": "~1",
+                "phpunit/phpunit": "5.7.27",
                 "symfony/filesystem": "~2.7",
                 "symfony/finder": "~2.7"
             },
@@ -327,20 +328,20 @@
             "keywords": [
                 "copy file"
             ],
-            "time": "2017-12-07T13:18:47+00:00"
+            "time": "2019-01-10T05:06:10+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.4.2",
+            "version": "3.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "b8a7362af1cc1aadb5bd36c3defc4dda2cf5f0a8"
+                "reference": "65b12cdeaaa6cd276d4c3033a95b9b88b12701e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/b8a7362af1cc1aadb5bd36c3defc4dda2cf5f0a8",
-                "reference": "b8a7362af1cc1aadb5bd36c3defc4dda2cf5f0a8",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/65b12cdeaaa6cd276d4c3033a95b9b88b12701e7",
+                "reference": "65b12cdeaaa6cd276d4c3033a95b9b88b12701e7",
                 "shasum": ""
             },
             "require": {
@@ -378,20 +379,20 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2019-04-10T23:49:02+00:00"
+            "time": "2019-10-28T04:36:32+00:00"
         },
         {
             "name": "wp-coding-standards/wpcs",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git",
-                "reference": "8c7a2e7682de9ef5955251874b639deda51ef470"
+                "url": "https://github.com/WordPress/WordPress-Coding-Standards.git",
+                "reference": "bd9c33152115e6741e3510ff7189605b35167908"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WordPress-Coding-Standards/WordPress-Coding-Standards/zipball/8c7a2e7682de9ef5955251874b639deda51ef470",
-                "reference": "8c7a2e7682de9ef5955251874b639deda51ef470",
+                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/bd9c33152115e6741e3510ff7189605b35167908",
+                "reference": "bd9c33152115e6741e3510ff7189605b35167908",
                 "shasum": ""
             },
             "require": {
@@ -423,7 +424,7 @@
                 "standards",
                 "wordpress"
             ],
-            "time": "2019-04-08T10:53:57+00:00"
+            "time": "2019-05-21T02:50:00+00:00"
         }
     ],
     "aliases": [],
@@ -432,7 +433,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^5.6|^7"
+        "php": ">=5.6"
     },
     "platform-dev": []
 }
