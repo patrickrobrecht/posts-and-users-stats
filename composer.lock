@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "84620e55f8310f0bd0fc89df1b9d1bd8",
+    "content-hash": "ba204f650c4b9d1deb2b48ca8a35bfec",
     "packages": [
         {
             "name": "npm-asset/chartist",
@@ -433,7 +433,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^5.6|^7"
+        "php": ">=5.6"
     },
     "platform-dev": []
 }
