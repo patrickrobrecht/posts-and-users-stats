@@ -35,7 +35,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( sanitize_text_field( wp_unslash(
 	</nav>
 
 <?php
-if ( 'date' == $selected_tab ) {
+if ( 'date' === $selected_tab ) {
 	global $wpdb;
 	// phpcs:disable WordPress.VIP.DirectDatabaseQuery.NoCaching
 	$comments_per_date = $wpdb->get_results(
@@ -93,9 +93,9 @@ if ( 'date' == $selected_tab ) {
 						foreach ( $comments_per_date as $comments_of_date ) {
 							$date           = strtotime( $comments_of_date->date );
 							$comments_count += $comments_of_date->count;
-							echo '{x: new Date(' . esc_js( date( 'Y', $date ) ) . ','
-								 . esc_js( date( 'm', $date ) - 1 ) . ','
-								 . esc_js( date( 'd', $date ) ) . '), y: '
+							echo '{x: new Date(' . esc_js( gmdate( 'Y', $date ) ) . ','
+								 . esc_js( gmdate( 'm', $date ) - 1 ) . ','
+								 . esc_js( gmdate( 'd', $date ) ) . '), y: '
 								 . esc_js( $comments_count ) . '},';
 						}
 						?>
@@ -135,7 +135,7 @@ if ( 'date' == $selected_tab ) {
 					<th scope="row"><a href="#<?php echo esc_attr( $comment_year ); ?>"><?php echo esc_html( $comment_year ); ?></a></th>
 					<?php
 					foreach ( range( 1, 12, 1 ) as $month ) {
-						$date = date( 'Y-m', strtotime( $comment_year . '-' . $month . '-1' ) );
+						$date = gmdate( 'Y-m', strtotime( $comment_year . '-' . $month . '-1' ) );
 						if ( array_key_exists( $date, $comments_per_month ) ) {
 							$count = $comments_per_month[ $date ]->count;
 						} else {
@@ -182,7 +182,7 @@ if ( 'date' == $selected_tab ) {
 					<?php
 					foreach ( range( 1, 12, 1 ) as $month ) {
 						if ( checkdate( $month, $day, $comment_year ) ) {
-							$date = date( 'Y-m-d', strtotime( $comment_year . '-' . $month . '-' . $day ) );
+							$date = gmdate( 'Y-m-d', strtotime( $comment_year . '-' . $month . '-' . $day ) );
 							if ( array_key_exists( $date, $comments_per_date ) ) {
 								$count = $comments_per_date[ $date ]->count;
 							} else {
@@ -200,7 +200,7 @@ if ( 'date' == $selected_tab ) {
 					<th scope="row"><strong><?php esc_html_e( 'Sum', 'posts-and-users-stats' ); ?></strong></th>
 						<?php
 						foreach ( range( 1, 12, 1 ) as $month ) {
-							$date = date( 'Y-m', strtotime( $comment_year . '-' . $month . '-1' ) );
+							$date = gmdate( 'Y-m', strtotime( $comment_year . '-' . $month . '-1' ) );
 							if ( array_key_exists( $date, $comments_per_month ) ) {
 								$count = $comments_per_month[ $date ]->count;
 							} else {
@@ -216,7 +216,7 @@ if ( 'date' == $selected_tab ) {
 				<?php
 			} // end loop
 		} // end if
-} else if ( 'author' == $selected_tab ) {
+} else if ( 'author' === $selected_tab ) {
 	global $wpdb;
 	// phpcs:ignore WordPress.VIP.DirectDatabaseQuery.NoCaching
 	$comments_per_author = $wpdb->get_results(
@@ -285,7 +285,7 @@ if ( 'date' == $selected_tab ) {
 	</section>
 
 	<?php
-} else if ( 'status' == $selected_tab ) {
+} else if ( 'status' === $selected_tab ) {
 	$comments_per_status = wp_count_comments();
 
 	$wp_comment_statuses = get_comment_statuses();

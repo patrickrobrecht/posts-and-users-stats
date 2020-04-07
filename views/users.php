@@ -138,9 +138,9 @@ if ( isset( $_GET['tab'] ) && array_key_exists( sanitize_text_field( wp_unslash(
 						foreach ( $user_registration_dates as $registration ) {
 							$date = strtotime( $registration->date );
 							$users += $registration->count;
-							echo '{x: new Date(' . esc_js( date( 'Y', $date ) )
-								 . ',' . esc_js( date( 'm', $date ) - 1 ) . ','
-								 . esc_js( date( 'd', $date ) ) . '), y: '
+							echo '{x: new Date(' . esc_js( gmdate( 'Y', $date ) )
+								 . ',' . esc_js( gmdate( 'm', $date ) - 1 ) . ','
+								 . esc_js( gmdate( 'd', $date ) ) . '), y: '
 								 . esc_js( $users ) . '},';
 						}
 						?>
