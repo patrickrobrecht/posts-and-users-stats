@@ -20,7 +20,10 @@
 
     <!-- WordPress coding standards -->
     <config name="minimum_supported_wp_version" value="4.7" />
-    <rule ref="WordPress" />
+    <rule ref="WordPress">
+        <exclude name="Generic.Arrays.DisallowShortArraySyntax.Found" />
+        <exclude name="WordPress.DateTime.RestrictedFunctions.date_date" />
+    </rule>
     <rule ref="WordPress.WP.I18n">
         <properties>
             <property name="text_domain" type="array" value="posts-and-users-stats" />
