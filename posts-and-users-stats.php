@@ -188,12 +188,12 @@ function posts_and_users_stats_echo_tab_class( $is_active_tab ) {
  * @param string $name the file name.
  */
 function posts_and_users_stats_echo_export_button( $button_id, $table_id, $name ) {
-	$filename = str_replace( ' ', '-', get_bloginfo( 'name' ) . '-' . $name ) . '-' . date( 'Y-m-d-H-i-s' ); ?>
+	$filename = str_replace( ' ', '-', get_bloginfo( 'name' ) . '-' . $name ) . '-' . gmdate( 'Y-m-d-H-i-s' ); ?>
 	<a class="page-title-action" href="#" id="<?php echo esc_attr( $button_id ); ?>" role="button"><?php esc_html_e( 'Export as CSV', 'posts-and-users-stats' ); ?></a>
 	<script type='text/javascript'>
 	jQuery(document).ready(function () {
 		jQuery("#<?php echo esc_attr( $button_id ); ?>").click(function (event) {
-			exportTableToCSV.apply(this, [jQuery('#<?php echo esc_attr( $table_id ); ?>'), '<?php echo esc_attr( $filename ); ?>.csv']);
+			posts_and_users_stats_export_table_to_csv.apply(this, [jQuery('#<?php echo esc_attr( $table_id ); ?>'), '<?php echo esc_attr( $filename ); ?>.csv']);
 		});
 	});
 	</script>

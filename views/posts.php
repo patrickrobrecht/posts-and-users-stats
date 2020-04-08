@@ -50,7 +50,7 @@ $post_types = array_diff(
 	</nav>
 
 <?php
-if ( 'date' == $selected_tab ) {
+if ( 'date' === $selected_tab ) {
 	// Get the selected post type.
 	if ( isset( $_POST['type'] ) && check_admin_referer( 'posts_and_users_stats' ) && in_array( wp_unslash( $_POST['type'] ), $post_types ) ) {
 		$selected_post_type = sanitize_text_field( wp_unslash( $_POST['type'] ) );
@@ -146,7 +146,7 @@ if ( 'date' == $selected_tab ) {
 						<?php
 						foreach ( $posts_per_month as $posts_of_month ) {
 							$date = strtotime( $posts_of_month->month . '-01' );
-							echo "'" . esc_js( date( 'm-Y', $date ) ) . "',";
+							echo "'" . esc_js( gmdate( 'm-Y', $date ) ) . "',";
 						}
 						?>
 					],
@@ -177,9 +177,9 @@ if ( 'date' == $selected_tab ) {
 						$posts = 0;
 						foreach ( $posts_per_date as $posts_of_date ) {
 							$date = strtotime( $posts_of_date->date );
-							$year = date( 'Y', $date );
-							$month = date( 'm', $date );
-							$day = date( 'd', $date );
+							$year = gmdate( 'Y', $date );
+							$month = gmdate( 'm', $date );
+							$day = gmdate( 'd', $date );
 							$posts += $posts_of_date->count;
 							echo '{x: new Date(' . esc_js( $year ) . ',' . esc_js( $month - 1 ) . ',' . esc_js( $day ) . '), y: ' . esc_js( $posts ) . '},';
 						}
@@ -220,7 +220,7 @@ if ( 'date' == $selected_tab ) {
 					<th scope="row"><a href="#<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></a></th>
 					<?php
 					foreach ( range( 1, 12, 1 ) as $month ) {
-						$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
+						$date = gmdate( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
 						if ( array_key_exists( $date, $posts_per_month ) ) {
 							$count = $posts_per_month[ $date ]->count;
 						} else {
@@ -267,7 +267,7 @@ if ( 'date' == $selected_tab ) {
 					<?php
 					foreach ( range( 1, 12, 1 ) as $month ) {
 						if ( checkdate( $month, $day, $year ) ) {
-							$date = date( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $day ) );
+							$date = gmdate( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $day ) );
 							if ( array_key_exists( $date, $posts_per_date ) ) {
 								$count = $posts_per_date[ $date ]->count;
 							} else {
@@ -285,7 +285,7 @@ if ( 'date' == $selected_tab ) {
 					<th scope="row"><strong><?php esc_html_e( 'Sum', 'posts-and-users-stats' ); ?></strong></th>
 						<?php
 						foreach ( range( 1, 12, 1 ) as $month ) {
-							$date = date( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
+							$date = gmdate( 'Y-m', strtotime( $year . '-' . $month . '-1' ) );
 							if ( array_key_exists( $date, $posts_per_month ) ) {
 								$sum = $posts_per_month[ $date ]->count;
 							} else {
@@ -301,7 +301,7 @@ if ( 'date' == $selected_tab ) {
 				<?php
 			} // endforeach (years)
 		} // end if (post per date > 0)
-} else if ( 'taxonomy' == $selected_tab ) {
+} else if ( 'taxonomy' === $selected_tab ) {
 	// Get the list of all taxonomies except nav_menu and link_category.
 	$taxonomies = get_taxonomies();
 	$taxonomies = array_diff( $taxonomies, array( 'nav_menu', 'link_category' ) );
@@ -390,7 +390,7 @@ if ( 'date' == $selected_tab ) {
 			<?php
 		} // end if count( $terms) > 0
 	} // end loop over taxonomies
-} else if ( 'author' == $selected_tab ) {
+} else if ( 'author' === $selected_tab ) {
 	// Get the total number of published posts per post type.
 	$posts_per_type = array();
 	$total = 0;
@@ -463,7 +463,7 @@ if ( 'date' == $selected_tab ) {
 					[
 						<?php
 						foreach ( $posts_per_type as $type => $count ) {
-							if ( 'total' != $type && $count > 0 ) {
+							if ( 'total' !== $type && $count > 0 ) {
 								echo "'" . esc_js( $type ) . "',";
 							}
 						}
@@ -472,7 +472,7 @@ if ( 'date' == $selected_tab ) {
 					[
 						<?php
 						foreach ( $posts_per_type as $type => $count ) {
-							if ( 'total' != $type && $count > 0 ) {
+							if ( 'total' !== $type && $count > 0 ) {
 								echo esc_js( $count ) . ',';
 							}
 						}
@@ -512,7 +512,7 @@ if ( 'date' == $selected_tab ) {
 					<td><?php echo esc_html( $author['name'] ); ?></td>
 					<?php
 					foreach ( $post_types as $post_type ) {
-						if ( 'post' == $post_type ) {
+						if ( 'post' === $post_type ) {
 							$count = $author['post'];
 						} else {
 							$count = $author[ $post_type ];
@@ -534,7 +534,7 @@ if ( 'date' == $selected_tab ) {
 	</section>
 	
 	<?php
-} else if ( 'status' == $selected_tab ) {
+} else if ( 'status' === $selected_tab ) {
 	// Get a full list of possible post status.
 	$statuses = get_post_statuses();
 	$statuses['future'] = __( 'Published in the future', 'posts-and-users-stats' );
