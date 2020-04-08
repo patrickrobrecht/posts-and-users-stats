@@ -1,32 +1,32 @@
-function exportTableToCSV($table, filename) {
-	var tmpColDelim = String.fromCharCode(11), tmpRowDelim = String.fromCharCode(0), // Temporary delimiters unlikely to be typed by keyboard to avoid accidentally splitting the actual contents
-	colDelim = '","', rowDelim = '"\r\n"', // actual delimiters for CSV
-	$rows = $table.find('tr'),
-	csv = '"' + $rows.map(function(i, row) {
-		var $row = jQuery(row), $cols = $row.find('td,th');
-		return $cols.map(function(j, col) {
-			var $col = jQuery(col), text = $col.text();
-			return text.replace(/"/g, '""'); // escape double quotes
-		}).get().join(tmpColDelim);
-	}).get().join(tmpRowDelim).split(tmpRowDelim)
-			.join(rowDelim).split(tmpColDelim)
-			.join(colDelim) + '"',
-	csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
-	jQuery(this).attr({
-		'download' : filename,
-		'href' : csvData
-	});
+function posts_and_users_stats_export_table_to_csv(table, filename) {
+    const tmpColDelim = String.fromCharCode(11), tmpRowDelim = String.fromCharCode(0), // Temporary delimiters unlikely to be typed by keyboard to avoid accidentally splitting the actual contents
+        colDelim = '","', rowDelim = '"\r\n"', // actual delimiters for CSV
+        rows = table.find('tr'),
+        csv = '"' + rows.map(function (i, row) {
+            const $row = jQuery(row), $cols = $row.find('td,th');
+            return $cols.map(function (j, col) {
+                const $col = jQuery(col), text = $col.text();
+                return text.replace(/"/g, '""'); // escape double quotes
+            }).get().join(tmpColDelim);
+        }).get().join(tmpRowDelim).split(tmpRowDelim)
+            .join(rowDelim).split(tmpColDelim)
+            .join(colDelim) + '"',
+        csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
+    jQuery(this).attr({
+        'download': filename,
+        'href': csvData
+    });
 }
 
 function posts_and_users_stats_bar_chart(div, xData, yData, xAxisTitle, yAxisTitle) {
-    var data = {
+    const data = {
         labels: xData,
-    	series: [
-        	yData
-		]
-	};
+        series: [
+            yData
+        ]
+    };
 
-    var options = {
+    const options = {
         seriesBarDistance: 20,
         chartPadding: {
             top: 20,
@@ -61,7 +61,7 @@ function posts_and_users_stats_bar_chart(div, xData, yData, xAxisTitle, yAxisTit
         ]
     };
 
-    var responsiveOptions = [
+    const responsiveOptions = [
         ['screen and (max-width: 640px)', {
             seriesBarDistance: 5,
             axisX: {
@@ -76,7 +76,7 @@ function posts_and_users_stats_bar_chart(div, xData, yData, xAxisTitle, yAxisTit
 }
 
 function posts_and_users_stats_time_line_chart(div, seriesData, dateFormat, xAxisTitle, yAxisTitle) {
-    var data = {
+    const data = {
         series: [
             {
                 name: 'series-1',
@@ -85,7 +85,7 @@ function posts_and_users_stats_time_line_chart(div, seriesData, dateFormat, xAxi
         ]
     };
 
-    var options = {
+    const options = {
         chartPadding: {
             top: 20,
             right: 30,
@@ -95,7 +95,7 @@ function posts_and_users_stats_time_line_chart(div, seriesData, dateFormat, xAxi
         axisX: {
             type: Chartist.FixedScaleAxis,
             divisor: 5,
-            labelInterpolationFnc: function(value) {
+            labelInterpolationFnc: function (value) {
                 return moment(value).format(dateFormat);
             }
         },
