@@ -2,7 +2,7 @@
 Contributors: patrickrobrecht
 Tags: dashboard, statistics
 Requires at least: 4.4
-Tested up to: 5.5
+Tested up to: 5.6
 Requires PHP: 5.6
 Stable tag: 1.1.3
 License: GPLv3
