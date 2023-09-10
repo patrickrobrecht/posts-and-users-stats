@@ -60,6 +60,11 @@
       "minifyjs assets/functions.js > assets/functions.min.js"
     ]
   },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
   "extra": {
     "copy-file": {
       "vendor/npm-asset/chartist/dist/chartist.min.css": "lib/",
