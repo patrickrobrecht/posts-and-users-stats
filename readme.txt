@@ -2,9 +2,9 @@
 Contributors: patrickrobrecht
 Tags: dashboard, statistics
 Requires at least: 4.4
-Tested up to: 6.1
+Tested up to: 6.3
 Requires PHP: 5.6
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -48,6 +48,9 @@ After the installation you can find the statistics as subpages of *Tools*.
 == Changelog ==
 
 If interested, please check up the [changelog at GitHub](https://github.com/patrickrobrecht/posts-and-users-stats#changelog).
+
+= 1.1.4 =
+* Security fix: Precede cell values starting with = or another spreadsheet meta-character with a single quote to avoid CSV injection of formulas within a user's display name, category names, and tag names
 
 = 1.1.3 =
 * Enhancement: Compliance with latest WP coding guidelines and other code style improvements

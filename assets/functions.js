@@ -1,15 +1,36 @@
 function posts_and_users_stats_export_table_to_csv(table, filename) {
-    const tmpColDelim = String.fromCharCode(11), tmpRowDelim = String.fromCharCode(0), // Temporary delimiters unlikely to be typed by keyboard to avoid accidentally splitting the actual contents
-        colDelim = '","', rowDelim = '"\r\n"', // actual delimiters for CSV
+    // Temporary delimiters unlikely to be typed by keyboard to avoid accidentally splitting the actual contents
+    const tmpColDelim = String.fromCharCode(11),
+        tmpRowDelim = String.fromCharCode(0),
+        // actual delimiters for CSV
+        colDelim = '","',
+        rowDelim = '"\r\n"',
+        forbiddenStartCharacters = ['+', '-', '=', '@'],
         rows = table.find('tr'),
-        csv = '"' + rows.map(function (i, row) {
-            const $row = jQuery(row), $cols = $row.find('td,th');
-            return $cols.map(function (j, col) {
-                const $col = jQuery(col), text = $col.text();
-                return text.replace(/"/g, '""'); // escape double quotes
-            }).get().join(tmpColDelim);
-        }).get().join(tmpRowDelim).split(tmpRowDelim)
-            .join(rowDelim).split(tmpColDelim)
+        csv = '"' + rows
+            .map(function (i, row) {
+                const $row = jQuery(row),
+                    $cols = $row.find('td,th');
+                return $cols
+                    .map(function (j, col) {
+                        const $col = jQuery(col);
+                        let text = $col.text();
+                        // Escape double quotes and trim result.
+                        text = text.replace(/"/g, '""').trim();
+                        // Prevent CSV injection.
+                        let startCharacter = text.substring(0, 1);
+                        if (forbiddenStartCharacters.includes(startCharacter)) {
+                            text = "'" + text;
+                        }
+                        return text;
+                    })
+                    .get()
+                    .join(tmpColDelim);
+            }).get()
+            .join(tmpRowDelim)
+            .split(tmpRowDelim)
+            .join(rowDelim)
+            .split(tmpColDelim)
             .join(colDelim) + '"',
         csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
     jQuery(this).attr({

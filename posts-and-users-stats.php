@@ -3,7 +3,7 @@
  * Plugin Name: Posts and Users Stats
  * Plugin URI: https://patrick-robrecht.de/wordpress/
  * Description: Statistics about the number of posts and users, provided as diagrams, tables and csv export.
- * Version: 1.1.3
+ * Version: 1.1.4
  * Author: Patrick Robrecht
  * Author URI: https://patrick-robrecht.de/
  * License: GPLv3
@@ -16,7 +16,7 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-define( 'POSTS_AND_USERS_STATS_VERSION', '1.1.3' );
+define( 'POSTS_AND_USERS_STATS_VERSION', '1.1.4' );
 
 /**
  * Load text domain for translation.
