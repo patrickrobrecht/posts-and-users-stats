@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version 1.1.4
 
-## Security
+### Security
 - Precede cell values starting with = or another spreadsheet meta-character with a single quote to avoid CSV injection of formulas within a user's display name, category names, and tag names
 
 
