@@ -43,15 +43,18 @@ function posts_and_users_stats_load_assets() {
 
 		posts_and_users_stats_enqueue_script(
 			'chartist',
-			'/lib/chartist.min.js'
+			'/lib/chartist.min.js',
+			[
+				/**
+				 * Moment is registered by WordPress Core
+				 * https://core.trac.wordpress.org/browser/trunk/src/wp-includes/script-loader.php
+				 */
+				'moment',
+			]
 		);
 		posts_and_users_stats_enqueue_script(
 			'chartist-plugin-axistitle',
 			'/lib/chartist-plugin-axistitle.min.js'
-		);
-		posts_and_users_stats_enqueue_script(
-			'moment',
-			'/lib/moment.min.js'
 		);
 		posts_and_users_stats_enqueue_script(
 			'posts-and-users-stats-functions',

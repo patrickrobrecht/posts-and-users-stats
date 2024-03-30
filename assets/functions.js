@@ -93,7 +93,7 @@ function posts_and_users_stats_bar_chart(div, xData, yData, xAxisTitle, yAxisTit
         }]
     ];
 
-    new Chartist.Bar(div, data, options, responsiveOptions);
+    new Chartist.BarChart(div, data, options, responsiveOptions);
 }
 
 function posts_and_users_stats_time_line_chart(div, seriesData, dateFormat, xAxisTitle, yAxisTitle) {
@@ -145,5 +145,5 @@ function posts_and_users_stats_time_line_chart(div, seriesData, dateFormat, xAxi
         ]
     };
 
-    new Chartist.Line(div, data, options)
+    new Chartist.LineChart(div, data, options)
 }
