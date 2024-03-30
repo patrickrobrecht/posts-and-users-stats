@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+
+## Version 1.2.0
+
 ### Changed
 - Updated dependencies, including the Chartist library used for the charts
 - Configure CI build via GitHub workflow, setup code style checks for CSS and JavaScript
