@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+- Updated dependencies, including the Chartist library used for the charts
+
 
 ## Version 1.1.4
 

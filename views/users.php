@@ -86,7 +86,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( sanitize_text_field( wp_unslash(
 			</h3>
 		<p>
 		<?php
-		echo sprintf(
+		printf(
 			// translators: the number of users.
 			esc_html( __( 'There are %s total users.', 'posts-and-users-stats' ) ),
 			esc_html( $users['total_users'] )
