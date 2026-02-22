@@ -58,7 +58,11 @@ function posts_and_users_stats_load_assets() {
 		);
 		posts_and_users_stats_enqueue_script(
 			'posts-and-users-stats-functions',
-			'/assets/functions.min.js'
+			'/assets/functions.min.js',
+			[
+				'chartist-plugin-axistitle',
+				'moment',
+			]
 		);
 	}
 }

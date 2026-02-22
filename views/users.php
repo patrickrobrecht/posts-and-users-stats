@@ -32,7 +32,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( sanitize_text_field( wp_unslash(
 			class="<?php posts_and_users_stats_echo_tab_class( $selected_tab == $tab_slug ); ?>"><?php echo esc_html( $tab_title ); ?></a>
 	<?php } ?>
 	</nav>
-	
+
 	<?php
 	if ( 'role' == $selected_tab ) {
 		$users = count_users();
@@ -110,7 +110,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( sanitize_text_field( wp_unslash(
 			</tbody>
 		</table>
 	</section>
-	
+
 		<?php
 	} else if ( 'date' == $selected_tab ) {
 		global $wpdb;
@@ -118,7 +118,7 @@ if ( isset( $_GET['tab'] ) && array_key_exists( sanitize_text_field( wp_unslash(
 		$user_registration_dates = $wpdb->get_results(
 			'SELECT DATE(user_registered) AS date, count(*) as count
 				FROM ' . $wpdb->prefix . 'users
-				GROUP BY date ASC',
+				GROUP BY date',
 			OBJECT_K
 		);
 		?>
