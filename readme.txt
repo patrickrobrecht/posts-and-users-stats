@@ -2,9 +2,9 @@
 Contributors: patrickrobrecht
 Tags: dashboard, statistics
 Requires at least: 5.5
-Tested up to: 6.4
+Tested up to: 6.9
 Requires PHP: 5.6
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -47,7 +47,10 @@ After the installation you can find the statistics as subpages of *Tools*.
 
 == Changelog ==
 
-If interested, please check up the [changelog at GitHub](https://github.com/patrickrobrecht/posts-and-users-stats#changelog).
+If interested, please check up the [changelog at GitHub](https://github.com/patrickrobrecht/posts-and-users-stats).
+
+= 1.1.5 =
+* Update dependencies, including the Chartist library used for the charts
 
 = 1.1.4 =
 * Security fix: Precede cell values starting with = or another spreadsheet meta-character with a single quote to avoid CSV injection of formulas within a user's display name, category names, and tag names
@@ -73,3 +76,5 @@ If interested, please check up the [changelog at GitHub](https://github.com/patr
 
 == Upgrade Notice ==
 
+= 1.1.5 =
+This release contains updated dependencies. All users are encouraged to update to this version.
