@@ -132,18 +132,18 @@ function posts_and_users_stats_time_line_chart(
 	};
 
 	const options = {
-		chartPadding: {
-			top: 20,
-			right: 30,
-			bottom: 30,
-			left: 30,
-		},
 		axisX: {
 			type: Chartist.FixedScaleAxis,
 			divisor: 5,
 			labelInterpolationFnc(value) {
 				return moment(value).format(dateFormat);
 			},
+		},
+		chartPadding: {
+			top: 20,
+			right: 30,
+			bottom: 30,
+			left: 30,
 		},
 		lineSmooth: Chartist.Interpolation.step(),
 		plugins: [
